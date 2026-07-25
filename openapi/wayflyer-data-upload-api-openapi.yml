@@ -1,0 +1,866 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Data Upload API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Data Upload
+paths:
+  /partner/anon-data-upload/file/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_file_upload
+      summary: Initiate file upload
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateFileUploadResponse'
+        '500':
+          description: Internal Server Error
+      description: 'Initiate a file upload of anonymised company data.
+
+
+        Use this endpoint when the amount of data exceeds the size of a single request. Otherwise, use the batch upload
+
+        endpoint.
+
+
+        This allows sharing of anonymised data about companies ahead of time that Wayflyer can use to provide a better
+
+        experience by generating indicative offers, pre-screening, etc.
+
+
+        Divide the file into the number of parts specified by `num_parts` in the response. There will be an equal number
+
+        of `upload_urls`. For each file part, make a `PUT` request to one of the URLs provided in `upload_urls`. Ensure that
+
+        the same URL is not used for multiple parts. After all parts have been uploaded, call the complete upload endpoint.
+
+        At this point, Wayflyer will reassemble the parts into a single file and process it asynchronously.'
+      tags:
+      - Data Upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateFileUploadRequest'
+        required: true
+      security:
+      - PartnerToken: []
+  /partner/anon-data-upload/batch/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_batch_upload
+      summary: Initiate batch upload
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateBatchUploadResponse'
+        '500':
+          description: Internal Server Error
+      description: 'Initiate a batch upload of multiple companys revenue data.
+
+        The number of companies should not be more than 26.000.'
+      tags:
+      - Data Upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/CompanyData'
+              title: Payload
+              type: array
+            example:
+            - company_id: Company id
+              currency: GBP
+              annual_revenue: 14000000
+              revenue_in_period: 7000000
+              shipping_in_period: 60000
+              num_period_months: 6
+              country: AF
+              state: US-AL
+              incorporation_date: '2020-01-15'
+              client_onboarding_date: '2020-06-30'
+        required: true
+      security:
+      - PartnerToken: []
+  /partner/anon-data-upload/upload/{upload_id}/:
+    get:
+      operationId: wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_get_status
+      summary: Get upload status
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: path
+        name: upload_id
+        schema:
+          format: uuid
+          title: Upload Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchStatusResponse'
+        '404':
+          description: Not Found
+      description: Get the status of a file as it is being processed asynchronously.
+      tags:
+      - Data Upload
+      security:
+      - PartnerToken: []
+    patch:
+      operationId: wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_complete_file_upload
+      summary: Complete file upload
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: path
+        name: upload_id
+        schema:
+          format: uuid
+          title: Upload Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      description: 'Once all parts of a file have been uploaded, call this endpoint to complete the upload and begin processing.
+
+
+        The status of the upload can be tracked using the `upload_id` from the initiate file upload endpoint with
+
+        the get upload status endpoint.'
+      tags:
+      - Data Upload
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteFileUploadRequest'
+        required: true
+      security:
+      - PartnerToken: []
+components:
+  schemas:
+    UploadPart:
+      properties:
+        part_number:
+          description: Part number of the upload
+          title: Part Number
+          type: integer
+        etag:
+          description: ETag of the part
+          title: Etag
+          type: string
+      required:
+      - part_number
+      - etag
+      title: UploadPart
+      type: object
+    CompanyData:
+      properties:
+        company_id:
+          description: An identifier in the partner's system that uniquely identifies the company to create a token for
+          title: Company Id
+          type: string
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+          description: ISO 4217 code for currency the company uses primarily
+          examples:
+          - GBP
+        annual_revenue:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Companies annual revenue to the nearest whole number in `currency`
+          examples:
+          - 14000000
+          title: Annual Revenue
+        revenue_in_period:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Revenue for the company in the specified period to the nearest whole number in `currency`
+          examples:
+          - 7000000
+          title: Revenue In Period
+        shipping_in_period:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Shipping amount for the company in the specified period to the nearest whole number in `currency`
+          examples:
+          - 60000
+          title: Shipping In Period
+        num_period_months:
+          anyOf:
+          - maximum: 12
+            minimum: 1
+            type: integer
+          - type: 'null'
+          description: Number of months the `revenue_in_period` and `shipping_in_period` cover
+          examples:
+          - 6
+          title: Num Period Months
+        country:
+          $ref: '#/components/schemas/CountryCode'
+          description: ISO 3166-1 alpha-2 code for the incorporation country of the company
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for the state of the company if applicable
+          title: State
+        incorporation_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Date of incorporation of the company (YYYY-MM-DD). At least one of this or `client_onboarding_date`, with the former taking precedence
+          examples:
+          - '2020-01-15'
+          title: Incorporation Date
+        client_onboarding_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Date of client onboarding (YYYY-MM-DD). At least one of this or `incorporation_date` must be provided, with the latter taking precedence
+          examples:
+          - '2020-06-30'
+          title: Client Onboarding Date
+      required:
+      - company_id
+      - currency
+      - country
+      title: CompanyData
+      type: object
+    USStateCode:
+      enum:
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
+      type: string
+    InitiateFileUploadResponse:
+      properties:
+        upload_id:
+          description: A UUID for the upload. This can be used to identify this file in other endpoints to e.g., track the status of the upload or complete the upload.
+          format: uuid
+          title: Upload Id
+          type: string
+        upload_urls:
+          additionalProperties:
+            type: string
+          description: URLs to upload each part of the file to. There will be exactly one URL for each part of the file.
+          title: Upload Urls
+          type: object
+        num_parts:
+          description: The number of parts the file should be split into.
+          title: Num Parts
+          type: integer
+      required:
+      - upload_id
+      - upload_urls
+      - num_parts
+      title: InitiateFileUploadResponse
+      type: object
+    CompleteFileUploadRequest:
+      properties:
+        parts:
+          description: List of parts to complete the upload
+          items:
+            $ref: '#/components/schemas/UploadPart'
+          title: Parts
+          type: array
+      required:
+      - parts
+      title: CompleteFileUploadRequest
+      type: object
+    InitiateBatchUploadResponse:
+      properties:
+        upload_id:
+          description: UUID of the upload
+          format: uuid
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      title: InitiateBatchUploadResponse
+      type: object
+    BatchStatusResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/BatchStatus'
+          description: Status of the batch upload
+      required:
+      - status
+      title: BatchStatusResponse
+      type: object
+    BatchStatus:
+      enum:
+      - PENDING_UPLOAD
+      - PROCESSING
+      - PROCESSED
+      - ERROR
+      title: BatchStatus
+      type: string
+    CurrencyCode:
+      enum:
+      - USD
+      - EUR
+      - CAD
+      - AUD
+      - GBP
+      - CHF
+      - DKK
+      - NZD
+      - XCD
+      - XAF
+      - XOF
+      - XPF
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BOV
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CDF
+      - CLP
+      - CLF
+      - CNY
+      - COP
+      - COU
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - FJD
+      - FKP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      - XDR
+      title: CurrencyCode
+      type: string
+    CountryCode:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CD
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - VA
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - KP
+      - KR
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - MK
+      - RO
+      - RU
+      - RW
+      - RE
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - US
+      - UM
+      - UY
+      - UZ
+      - VU
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      title: CountryCode
+      type: string
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
+    InitiateFileUploadRequest:
+      properties:
+        file_size_bytes:
+          description: The size of the file in bytes
+          title: File Size Bytes
+          type: integer
+        schema_code:
+          $ref: '#/components/schemas/SchemaCode'
+          description: One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer
+      required:
+      - file_size_bytes
+      - schema_code
+      title: InitiateFileUploadRequest
+      type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    SchemaCode:
+      enum:
+      - JSON01
+      title: SchemaCode
+      type: string
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

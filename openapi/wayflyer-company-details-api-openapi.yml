@@ -1,0 +1,792 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Company Details API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Company Details
+paths:
+  /company/company-details/:
+    get:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_details_get_company_details
+      summary: Get company details
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+      description: Get company details for the authenticated company.
+      tags:
+      - Company Details
+      security:
+      - CompanyToken: []
+    put:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_details_update_company_details
+      summary: Update company details
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCompanyDetailsErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '423':
+          description: Locked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCompanyDetailsErrorResponse'
+      description: 'Replace company details for the authenticated company.
+
+
+        Company details can only be updated a limited number of times and cannot be updated after an application is
+
+        submitted.'
+      tags:
+      - Company Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyDetailsRequest'
+        required: true
+      security:
+      - CompanyToken: []
+  /company/company-details/business-types/:
+    get:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_details_get_business_types
+      summary: List business types
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                title: Response
+                type: array
+      description: List valid business types for company details.
+      tags:
+      - Company Details
+      security:
+      - CompanyToken: []
+  /company/company-details/business-models/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_details_determine_business_models
+      summary: Determine business models
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetermineBusinessModelsResponse'
+      description: 'Determine which business models a company is eligible for based on its attributes.
+
+
+        Returns eligible and ineligible business models based on the provided customer
+
+        segments, sales channels, product offerings, and country of incorporation.'
+      tags:
+      - Company Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DetermineBusinessModelsRequest'
+        required: true
+      security:
+      - CompanyToken: []
+components:
+  schemas:
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
+    UpdateCompanyDetailsErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/UpdateCompanyDetailsErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: UpdateCompanyDetailsErrorResponse
+      type: object
+    BusinessType:
+      enum:
+      - limited_partnership
+      - limited_liability_partnership
+      - limited_liability_company
+      - corporation
+      - cooperative
+      - other
+      title: BusinessType
+      type: string
+    CompanyDetailsResponse:
+      properties:
+        country_code:
+          anyOf:
+          - $ref: '#/components/schemas/CountryCode'
+          - type: 'null'
+          description: ISO 3166-1 alpha-2 country code
+        state_code:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for US states or Canadian provinces
+          title: State Code
+        principal_place_of_business:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - type: 'null'
+          description: US state where the company primarily operates
+        legal_name:
+          description: Legal name of the company
+          title: Legal Name
+          type: string
+        registration_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company registration number
+          title: Registration Number
+        business_type:
+          anyOf:
+          - $ref: '#/components/schemas/BusinessType'
+          - type: 'null'
+          description: Legal business type — null for non-US companies
+        revenue:
+          description: Monthly revenue in the smallest whole currency unit
+          exclusiveMinimum: 0
+          title: Revenue
+          type: integer
+        revenue_currency:
+          $ref: '#/components/schemas/SupportedCurrencyCode'
+          description: ISO 4217 currency code
+        industry_code:
+          description: TRBC industry classification code
+          title: Industry Code
+          type: string
+        industry_name:
+          description: Human-readable industry name
+          title: Industry Name
+          type: string
+        date_of_incorporation:
+          description: Date the company was incorporated
+          format: date
+          title: Date Of Incorporation
+          type: string
+        customer_segments:
+          description: Customer segments
+          items:
+            $ref: '#/components/schemas/CustomerSegment'
+          title: Customer Segments
+          type: array
+        sales_channels:
+          description: Sales channels
+          items:
+            $ref: '#/components/schemas/SalesChannel'
+          title: Sales Channels
+          type: array
+        product_offerings:
+          description: Product offerings
+          items:
+            $ref: '#/components/schemas/ProductOffering'
+          title: Product Offerings
+          type: array
+        website_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company website URL
+          title: Website Url
+      required:
+      - legal_name
+      - revenue
+      - revenue_currency
+      - industry_code
+      - industry_name
+      - date_of_incorporation
+      - customer_segments
+      - sales_channels
+      - product_offerings
+      title: CompanyDetailsResponse
+      type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    ProductOffering:
+      enum:
+      - physical
+      - digital_products
+      - services
+      - subscriptions
+      title: ProductOffering
+      type: string
+    SalesChannel:
+      enum:
+      - online
+      - offline
+      title: SalesChannel
+      type: string
+    UpdateCompanyDetailsErrorCode:
+      enum:
+      - too_many_revisions
+      - application_already_submitted
+      - invalid_industry_code
+      title: UpdateCompanyDetailsErrorCode
+      type: string
+    CustomerSegment:
+      enum:
+      - b2c
+      - b2b
+      title: CustomerSegment
+      type: string
+    SupportedCurrencyCode:
+      enum:
+      - USD
+      - CAD
+      - AUD
+      - EUR
+      - GBP
+      - SEK
+      - DKK
+      title: SupportedCurrencyCode
+      type: string
+    USStateCode:
+      enum:
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
+      type: string
+    UniqueList_CustomerSegment__MinLen_min_length_1_:
+      items:
+        $ref: '#/components/schemas/CustomerSegment'
+      type: array
+    DetermineBusinessModelsResponse:
+      properties:
+        eligible:
+          description: Business models the company is eligible for
+          items:
+            $ref: '#/components/schemas/BusinessModel'
+          title: Eligible
+          type: array
+        ineligible:
+          description: Business models the company is ineligible for
+          items:
+            $ref: '#/components/schemas/BusinessModel'
+          title: Ineligible
+          type: array
+      required:
+      - eligible
+      - ineligible
+      title: DetermineBusinessModelsResponse
+      type: object
+    CompanyDetailsRequest:
+      properties:
+        country_code:
+          anyOf:
+          - $ref: '#/components/schemas/CountryCode'
+          - type: 'null'
+          description: ISO 3166-1 alpha-2 country code
+        state_code:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for US states or Canadian provinces
+          title: State Code
+        principal_place_of_business:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - type: 'null'
+          description: Required when country_code is US; must be omitted otherwise
+        legal_name:
+          description: Legal name of the company
+          title: Legal Name
+          type: string
+        registration_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company registration number
+          title: Registration Number
+        business_type:
+          anyOf:
+          - $ref: '#/components/schemas/BusinessType'
+          - type: 'null'
+          description: Legal business type — required when country_code is US; must be null or omitted otherwise
+        revenue:
+          description: Monthly revenue in the smallest whole currency unit
+          exclusiveMinimum: 0
+          title: Revenue
+          type: integer
+        revenue_currency:
+          $ref: '#/components/schemas/SupportedCurrencyCode'
+          description: ISO 4217 currency code
+        industry_code:
+          description: TRBC industry classification code
+          maxLength: 10
+          minLength: 10
+          title: Industry Code
+          type: string
+        date_of_incorporation:
+          description: Date the company was incorporated
+          format: date
+          title: Date Of Incorporation
+          type: string
+        customer_segments:
+          $ref: '#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_'
+          description: Customer segments
+          minItems: 1
+        sales_channels:
+          $ref: '#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_'
+          description: Sales channels
+          minItems: 1
+        product_offerings:
+          $ref: '#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_'
+          description: Product offerings
+          minItems: 1
+        website_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company website URL
+          title: Website Url
+      required:
+      - legal_name
+      - revenue
+      - revenue_currency
+      - industry_code
+      - date_of_incorporation
+      - customer_segments
+      - sales_channels
+      - product_offerings
+      title: CompanyDetailsRequest
+      type: object
+    UniqueList_ProductOffering__MinLen_min_length_1_:
+      items:
+        $ref: '#/components/schemas/ProductOffering'
+      type: array
+    UniqueList_SalesChannel__MinLen_min_length_1_:
+      items:
+        $ref: '#/components/schemas/SalesChannel'
+      type: array
+    CountryCode:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CD
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - VA
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - KP
+      - KR
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - MK
+      - RO
+      - RU
+      - RW
+      - RE
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - US
+      - UM
+      - UY
+      - UZ
+      - VU
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      title: CountryCode
+      type: string
+    BusinessModel:
+      enum:
+      - ecommerce_dtc
+      - wholesale
+      - retail
+      - saas_or_software
+      - service_provider
+      - other_rss
+      - other
+      - unknown
+      title: BusinessModel
+      type: string
+    DetermineBusinessModelsRequest:
+      properties:
+        customer_segments:
+          $ref: '#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_'
+          description: Customer segments
+          minItems: 1
+        sales_channels:
+          $ref: '#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_'
+          description: Sales channels
+          minItems: 1
+        product_offerings:
+          $ref: '#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_'
+          description: Product offerings
+          minItems: 1
+        country_code:
+          anyOf:
+          - $ref: '#/components/schemas/CountryCode'
+          - type: 'null'
+          description: ISO 3166-1 alpha-2 country code
+      required:
+      - customer_segments
+      - sales_channels
+      - product_offerings
+      title: DetermineBusinessModelsRequest
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

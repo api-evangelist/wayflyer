@@ -1,0 +1,458 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Company Search API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Company Search
+paths:
+  /company/company-details/search/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_details_search_search_company_details
+      summary: Search for company registration details
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyDetailsSearchResponse'
+      description: 'Search for company details by name and jurisdiction.
+
+
+        Returns a list of companies that match the search criteria or an empty list if no matches are found.'
+      tags:
+      - Company Search
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyDetailsSearchRequest'
+        required: true
+      security:
+      - CompanyToken: []
+components:
+  schemas:
+    CompanyDetailsSearchRequest:
+      properties:
+        business_name:
+          description: Name of the company to search for
+          maxLength: 200
+          minLength: 3
+          title: Business Name
+          type: string
+        country:
+          $ref: '#/components/schemas/CountryCode'
+          description: ISO 3166-1 alpha-2 country code
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for US states or Canadian provinces
+          title: State
+      required:
+      - business_name
+      - country
+      title: CompanyDetailsSearchRequest
+      type: object
+    USStateCode:
+      enum:
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
+      type: string
+    CompanyDetailsSearchResponse:
+      example:
+        results:
+        - incorporation_date: '2020-01-01'
+          name: Example Company
+          registered_address: 123 Example St, Example City, EX 12345
+          registration_number: '123456789'
+      properties:
+        results:
+          description: List of matching companies
+          items:
+            $ref: '#/components/schemas/CompanyDetailsSearchResult'
+          title: Results
+          type: array
+      required:
+      - results
+      title: CompanyDetailsSearchResponse
+      type: object
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
+    CountryCode:
+      enum:
+      - AF
+      - AX
+      - AL
+      - DZ
+      - AS
+      - AD
+      - AO
+      - AI
+      - AQ
+      - AG
+      - AR
+      - AM
+      - AW
+      - AU
+      - AT
+      - AZ
+      - BS
+      - BH
+      - BD
+      - BB
+      - BY
+      - BE
+      - BZ
+      - BJ
+      - BM
+      - BT
+      - BO
+      - BQ
+      - BA
+      - BW
+      - BV
+      - BR
+      - IO
+      - BN
+      - BG
+      - BF
+      - BI
+      - CV
+      - KH
+      - CM
+      - CA
+      - KY
+      - CF
+      - TD
+      - CL
+      - CN
+      - CX
+      - CC
+      - CO
+      - KM
+      - CD
+      - CG
+      - CK
+      - CR
+      - CI
+      - HR
+      - CU
+      - CW
+      - CY
+      - CZ
+      - DK
+      - DJ
+      - DM
+      - DO
+      - EC
+      - EG
+      - SV
+      - GQ
+      - ER
+      - EE
+      - SZ
+      - ET
+      - FK
+      - FO
+      - FJ
+      - FI
+      - FR
+      - GF
+      - PF
+      - TF
+      - GA
+      - GM
+      - GE
+      - DE
+      - GH
+      - GI
+      - GR
+      - GL
+      - GD
+      - GP
+      - GU
+      - GT
+      - GG
+      - GN
+      - GW
+      - GY
+      - HT
+      - HM
+      - VA
+      - HN
+      - HK
+      - HU
+      - IS
+      - IN
+      - ID
+      - IR
+      - IQ
+      - IE
+      - IM
+      - IL
+      - IT
+      - JM
+      - JP
+      - JE
+      - JO
+      - KZ
+      - KE
+      - KI
+      - KP
+      - KR
+      - KW
+      - KG
+      - LA
+      - LV
+      - LB
+      - LS
+      - LR
+      - LY
+      - LI
+      - LT
+      - LU
+      - MO
+      - MG
+      - MW
+      - MY
+      - MV
+      - ML
+      - MT
+      - MH
+      - MQ
+      - MR
+      - MU
+      - YT
+      - MX
+      - FM
+      - MD
+      - MC
+      - MN
+      - ME
+      - MS
+      - MA
+      - MZ
+      - MM
+      - NA
+      - NR
+      - NP
+      - NL
+      - NC
+      - NZ
+      - NI
+      - NE
+      - NG
+      - NU
+      - NF
+      - MP
+      - 'NO'
+      - OM
+      - PK
+      - PW
+      - PS
+      - PA
+      - PG
+      - PY
+      - PE
+      - PH
+      - PN
+      - PL
+      - PT
+      - PR
+      - QA
+      - MK
+      - RO
+      - RU
+      - RW
+      - RE
+      - BL
+      - SH
+      - KN
+      - LC
+      - MF
+      - PM
+      - VC
+      - WS
+      - SM
+      - ST
+      - SA
+      - SN
+      - RS
+      - SC
+      - SL
+      - SG
+      - SX
+      - SK
+      - SI
+      - SB
+      - SO
+      - ZA
+      - GS
+      - SS
+      - ES
+      - LK
+      - SD
+      - SR
+      - SJ
+      - SE
+      - CH
+      - SY
+      - TW
+      - TJ
+      - TZ
+      - TH
+      - TL
+      - TG
+      - TK
+      - TO
+      - TT
+      - TN
+      - TR
+      - TM
+      - TC
+      - TV
+      - UG
+      - UA
+      - AE
+      - GB
+      - US
+      - UM
+      - UY
+      - UZ
+      - VU
+      - VE
+      - VN
+      - VG
+      - VI
+      - WF
+      - EH
+      - YE
+      - ZM
+      - ZW
+      title: CountryCode
+      type: string
+    CompanyDetailsSearchResult:
+      properties:
+        name:
+          description: Name of the company
+          title: Name
+          type: string
+        registration_number:
+          description: Company registration number
+          title: Registration Number
+          type: string
+        registered_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company registered address
+          title: Registered Address
+        incorporation_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Company incorporation date
+          title: Incorporation Date
+      required:
+      - name
+      - registration_number
+      - registered_address
+      - incorporation_date
+      title: CompanyDetailsSearchResult
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

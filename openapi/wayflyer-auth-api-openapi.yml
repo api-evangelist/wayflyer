@@ -1,0 +1,174 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Auth
+paths:
+  /partner/company-token/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_company_token_create_company_token
+      summary: Create company token
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyTokenResponse'
+        '500':
+          description: Internal Server Error
+      description: 'Create a company token to be used to authenticate requests to company scoped endpoints on behalf of a company.
+
+
+        This should be called server-side and the resulting company token passed to the front end.'
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyTokenRequest'
+        required: true
+      security:
+      - PartnerToken: []
+  /partner-token/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_partner_token_create_partner_token
+      summary: Create partner token
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PartnerTokenResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '429':
+          description: Too Many Requests
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+      description: 'Create a partner token to be used to authenticate requests to partner scoped endpoints.
+
+
+        This should be called server-side. **Never** expose the `partner_id` or `partner_secret` or the resulting partner
+
+        token to the front end.
+
+
+        Requests are limited to 10 requests per IP per hour.'
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerTokenRequest'
+        required: true
+components:
+  schemas:
+    CompanyTokenRequest:
+      properties:
+        company_id:
+          description: An identifier in the partner's system that uniquely identifies the company to create a token for
+          title: Company Id
+          type: string
+        user_id:
+          description: An identifier in the partner's system that uniquely identifies the specific user for the company
+          title: User Id
+          type: string
+      required:
+      - company_id
+      - user_id
+      title: CompanyTokenRequest
+      type: object
+    PartnerTokenRequest:
+      properties:
+        partner_id:
+          description: An identifier for the partner created and shared with the partner by Wayflyer during onboarding. **Never** expose this to the front end.
+          title: Partner Id
+          type: string
+        partner_secret:
+          description: A secret that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end.
+          format: password
+          title: Partner Secret
+          type: string
+          writeOnly: true
+      required:
+      - partner_id
+      - partner_secret
+      title: PartnerTokenRequest
+      type: object
+    CompanyTokenResponse:
+      properties:
+        token:
+          description: A token that can be used to authenticate requests to company scoped endpoints. Pass this to the front end
+          title: Token
+          type: string
+        expires_in:
+          description: The number of seconds until the token expires
+          title: Expires In
+          type: integer
+      required:
+      - token
+      - expires_in
+      title: CompanyTokenResponse
+      type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    PartnerTokenResponse:
+      properties:
+        token:
+          description: A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end
+          title: Token
+          type: string
+        expires_in:
+          description: The number of seconds until the token expires
+          title: Expires In
+          type: integer
+      required:
+      - token
+      - expires_in
+      title: PartnerTokenResponse
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

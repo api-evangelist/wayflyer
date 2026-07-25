@@ -1,0 +1,286 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Embedded Application API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Embedded Application
+paths:
+  /company/embedded-application/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_start_embedded_application
+      summary: Start an embedded application
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddedApplicationStatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+      description: 'Start an embedded application for the company.
+
+        The returned schema will let the user know if additional details are required to submit the application and
+
+        provide the application ID to track the application status in subsequent API calls.
+
+        If an open embedded application already exists for the company, a 400 error is returned.'
+      tags:
+      - Embedded Application
+      security:
+      - CompanyToken: []
+    get:
+      operationId: wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_get_embedded_application
+      summary: Get an embedded application
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddedApplicationStatusResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+      description: 'Get the status of the open embedded application for the company.
+
+        The returned schema will let the user know if additional details are required to submit the application and
+
+        provide the application ID to track the application status in subsequent API calls.
+
+        If no open embedded application exists for the company, a 404 error is returned.'
+      tags:
+      - Embedded Application
+      security:
+      - CompanyToken: []
+  /company/embedded-application/submit/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_submit_embedded_application
+      summary: Submit embedded application
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorResponse'
+      description: 'Submit the open embedded application for review.
+
+
+        All required details must be provided before the application can be submitted. Once submitted, some details like
+
+        user details and company details can no longer be edited.
+
+
+        You must first call the start endpoint to create an embedded application before calling this submit endpoint.'
+      tags:
+      - Embedded Application
+      security:
+      - CompanyToken: []
+  /company/embedded-application/mark-ineligible/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_mark_ineligible
+      summary: Mark embedded application as ineligible
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '204':
+          description: No Content
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarkIneligibleErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarkIneligibleErrorResponse'
+      tags:
+      - Embedded Application
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarkIneligibleRequest'
+        required: true
+      security:
+      - CompanyToken: []
+components:
+  schemas:
+    IneligibleReason:
+      enum:
+      - unsupported_country
+      - no_eligible_business_model
+      title: IneligibleReason
+      type: string
+    EmbeddedApplicationStatusResponse:
+      example:
+        application_id: 550e8400-e29b-41d4-a716-446655440000
+        required_details:
+        - name: user_details
+          status: incomplete
+        - name: company_details
+          status: complete
+      properties:
+        application_id:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: The ID of the embedded application
+          title: Application Id
+        required_details:
+          description: A list of required details to submit the embedded application.
+          items:
+            $ref: '#/components/schemas/EmbeddedApplicationDetailStatus'
+          title: Required Details
+          type: array
+      required:
+      - application_id
+      - required_details
+      title: EmbeddedApplicationStatusResponse
+      type: object
+    EmbeddedApplicationDetailStatus:
+      properties:
+        name:
+          description: The name of the detail
+          enum:
+          - user_details
+          - company_details
+          title: Name
+          type: string
+        status:
+          description: The status of the detail, either complete or incomplete
+          enum:
+          - complete
+          - incomplete
+          title: Status
+          type: string
+      required:
+      - name
+      - status
+      title: EmbeddedApplicationDetailStatus
+      type: object
+    SubmitEmbeddedApplicationErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+        ineligible_reasons:
+          description: List of ineligibility reasons
+          items:
+            type: string
+          title: Ineligible Reasons
+          type: array
+      required:
+      - error_code
+      - detail
+      title: SubmitEmbeddedApplicationErrorResponse
+      type: object
+    SubmitEmbeddedApplicationErrorCode:
+      enum:
+      - details_incomplete
+      - no_open_application
+      - open_hosted_application_exists
+      - duplicate_company
+      - ineligible_application
+      - registration_or_documents_required
+      title: SubmitEmbeddedApplicationErrorCode
+      type: string
+    MarkIneligibleRequest:
+      properties:
+        ineligible_reasons:
+          description: One or more reasons the application is ineligible
+          items:
+            $ref: '#/components/schemas/IneligibleReason'
+          minItems: 1
+          title: Ineligible Reasons
+          type: array
+      required:
+      - ineligible_reasons
+      title: MarkIneligibleRequest
+      type: object
+    MarkIneligibleErrorCode:
+      enum:
+      - no_open_application
+      - not_started_by_user
+      title: MarkIneligibleErrorCode
+      type: string
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    MarkIneligibleErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/MarkIneligibleErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: MarkIneligibleErrorResponse
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

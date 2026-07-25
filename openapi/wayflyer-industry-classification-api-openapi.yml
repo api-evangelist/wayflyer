@@ -1,0 +1,99 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Industry Classification API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Industry Classification
+paths:
+  /company/industry-classification/search/:
+    get:
+      operationId: wf_embedded_finance_service_apps_web_core_views_industry_classification_search_industry_classifications
+      summary: Search industry classifications
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: query
+        name: query
+        schema:
+          description: Search query string
+          minLength: 1
+          title: Query
+          type: string
+        required: true
+        description: Search query string
+      - in: query
+        name: max_results
+        schema:
+          default: 10
+          description: Maximum number of results to return
+          maximum: 100
+          minimum: 1
+          title: Max Results
+          type: integer
+        required: false
+        description: Maximum number of results to return
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/IndustrySearchResultResponse'
+                title: Response
+                type: array
+      description: 'Search industry classifications by query string.
+
+
+        Returns a list of matching industries sorted by relevance score (highest first).'
+      tags:
+      - Industry Classification
+      security:
+      - CompanyToken: []
+components:
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  schemas:
+    IndustrySearchResultResponse:
+      properties:
+        code:
+          description: Industry classification code (e.g. '5010101010')
+          title: Code
+          type: string
+        activity:
+          description: Human-readable industry activity name
+          title: Activity
+          type: string
+        relevance_score:
+          description: Search relevance score (higher = better match)
+          title: Relevance Score
+          type: number
+        sub_text:
+          description: 'Hierarchy context: economic sector, business sector, industry group'
+          title: Sub Text
+          type: string
+      required:
+      - code
+      - activity
+      - relevance_score
+      - sub_text
+      title: IndustrySearchResultResponse
+      type: object
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

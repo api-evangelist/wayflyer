@@ -1,0 +1,182 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Simulation API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Simulation
+paths:
+  /company/hosted-application/simulation/:
+    get:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_status
+      summary: Get hosted application simulation status
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_'
+      description: Get and return the current simlation status for the customer and the valid actions that can be performed.
+      tags:
+      - Simulation
+      security:
+      - CompanyToken: []
+    post:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_action
+      summary: Perform a simulation action
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '500':
+          description: Internal Server Error
+      description: 'Perform a simulation action on company''s hosted application.
+
+
+        Returns HTTP 204 No Content on success.'
+      tags:
+      - Simulation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/SimpleActionRequest'
+              - $ref: '#/components/schemas/PassUWRequest'
+              title: Obj
+        required: true
+      security:
+      - CompanyToken: []
+components:
+  schemas:
+    HostedApplicationSimulationStatus:
+      enum:
+      - APPLICATION_IN_PROGRESS
+      - AWAITING_UW_DECISION
+      - AWAITING_ADDITIONAL_INFO
+      - AWAITING_OFFERS_DECISION
+      - KYC_IN_PROGRESS
+      - AWAITING_KYC_DECISION
+      - AWAITING_ADDITIONAL_KYC_INFO
+      - AWAITING_CONTRACT_SIGNING
+      - REJECTED
+      - COMPLETED
+      - CLOSED
+      title: HostedApplicationSimulationStatus
+      type: string
+    HostedApplicationSimulationAction:
+      enum:
+      - application-submitted
+      - discontinue-application
+      - pass-uw
+      - fail-uw
+      - request-additional-info
+      - provide-info
+      - accept-offer
+      - reject-offer
+      - complete-kyc
+      - pass-kyc
+      - fail-kyc
+      - sign-contract
+      - reject-contract
+      title: HostedApplicationSimulationAction
+      type: string
+    SimpleActionRequest:
+      additionalProperties: false
+      description: Schema for simple simulation actions without extra fields.
+      properties:
+        action:
+          enum:
+          - application-submitted
+          - discontinue-application
+          - fail-uw
+          - request-additional-info
+          - provide-info
+          - accept-offer
+          - reject-offer
+          - complete-kyc
+          - pass-kyc
+          - fail-kyc
+          - sign-contract
+          - reject-contract
+          title: Action
+          type: string
+      required:
+      - action
+      title: SimpleActionRequest
+      type: object
+    PassUWRequest:
+      additionalProperties: false
+      description: Schema for the `pass-uw` action, requires offer details.
+      properties:
+        action:
+          const: pass-uw
+          title: Action
+          type: string
+        approved_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Approved Amount
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+      required:
+      - action
+      title: PassUWRequest
+      type: object
+    SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
+      properties:
+        status:
+          $ref: '#/components/schemas/HostedApplicationSimulationStatus'
+        valid_actions:
+          items:
+            $ref: '#/components/schemas/HostedApplicationSimulationAction'
+          title: Valid Actions
+          type: array
+      required:
+      - status
+      - valid_actions
+      title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
+      type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

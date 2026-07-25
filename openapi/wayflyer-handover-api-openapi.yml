@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Handover API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Handover
+paths:
+  /company/handover/:
+    post:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_handover_handover
+      summary: Hand over a user to Wayflyer
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HandoverErrorResponse'
+      description: 'Generate a URL to redirect the user to Wayflyer where they can continue their funding application.
+
+
+        Requires the company to have an open hosted application.'
+      tags:
+      - Handover
+      security:
+      - CompanyToken: []
+components:
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  schemas:
+    HandoverErrorCode:
+      enum:
+      - company_not_bootstrapped
+      - no_open_hosted_application
+      - company_not_active
+      title: HandoverErrorCode
+      type: string
+    HandoverResponse:
+      properties:
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: HandoverResponse
+      type: object
+    HandoverErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/HandoverErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: HandoverErrorResponse
+      type: object
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer

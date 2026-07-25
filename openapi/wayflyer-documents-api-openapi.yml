@@ -1,0 +1,281 @@
+openapi: 3.1.0
+info:
+  title: Embedded Finance Auth Documents API
+  version: '1'
+  description: ''
+servers:
+- url: https://api.wayflyer.com/financing/
+  description: Production
+tags:
+- name: Documents
+paths:
+  /company/documents/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_document_upload_create_document_upload_url
+      summary: Create a document upload URL
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateDocumentUploadResponse'
+      description: 'Create a presigned URL for uploading a proof-of-registration document.
+
+
+        The response contains a URL and form fields. The client should upload the file directly
+
+        to the returned URL using a multipart POST request with the provided fields. After a
+
+        successful upload, call the confirm endpoint to mark the document as uploaded.'
+      tags:
+      - Documents
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDocumentUploadRequest'
+        required: true
+      security:
+      - CompanyToken: []
+    get:
+      operationId: wf_embedded_finance_service_apps_web_core_views_document_upload_list_document_uploads
+      summary: List documents
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: query
+        name: include_unconfirmed
+        schema:
+          default: false
+          description: Include unconfirmed documents in the response
+          title: Include Unconfirmed
+          type: boolean
+        required: false
+        description: Include unconfirmed documents in the response
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DocumentUploadResponse'
+                title: Response
+                type: array
+      description: List all documents uploaded by the company.
+      tags:
+      - Documents
+      security:
+      - CompanyToken: []
+  /company/documents/{document_id}/confirm/:
+    post:
+      operationId: wf_embedded_finance_service_apps_web_core_views_document_upload_confirm_document_upload
+      summary: Confirm a document upload
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: path
+        name: document_id
+        schema:
+          format: uuid
+          title: Document Id
+          type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentUploadResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentErrorResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentErrorResponse'
+      description: 'Confirm that a document has been successfully uploaded.
+
+
+        This must be called after the file has been uploaded to the URL returned by the create
+
+        endpoint. Documents that are not confirmed will not be included in an application
+
+        submission. This operation is idempotent.'
+      tags:
+      - Documents
+      security:
+      - CompanyToken: []
+  /company/documents/{document_id}/:
+    delete:
+      operationId: wf_embedded_finance_service_apps_web_core_views_document_upload_delete_document_upload
+      summary: Delete a document
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      - in: path
+        name: document_id
+        schema:
+          format: uuid
+          title: Document Id
+          type: string
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentErrorResponse'
+        '423':
+          description: Locked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentErrorResponse'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentErrorResponse'
+      description: 'Delete a document.
+
+
+        Documents that have been included in a submitted application are locked and cannot
+
+        be deleted. Returns 423 if the document is locked.'
+      tags:
+      - Documents
+      security:
+      - CompanyToken: []
+components:
+  schemas:
+    DocumentUploadResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        file_name:
+          title: File Name
+          type: string
+        file_type:
+          $ref: '#/components/schemas/ContentType'
+        confirmed:
+          title: Confirmed
+          type: boolean
+        locked:
+          title: Locked
+          type: boolean
+      required:
+      - id
+      - file_name
+      - file_type
+      - confirmed
+      - locked
+      title: DocumentUploadResponse
+      type: object
+    CreateDocumentUploadResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        url_options:
+          $ref: '#/components/schemas/UrlOptionsSchema'
+      required:
+      - id
+      - url_options
+      title: CreateDocumentUploadResponse
+      type: object
+    UrlOptionsSchema:
+      properties:
+        url:
+          title: Url
+          type: string
+        fields:
+          additionalProperties:
+            type: string
+          title: Fields
+          type: object
+      required:
+      - url
+      - fields
+      title: UrlOptionsSchema
+      type: object
+    ContentType:
+      enum:
+      - application/pdf
+      - image/png
+      - image/tiff
+      - image/jpeg
+      title: ContentType
+      type: string
+    DocumentErrorCode:
+      enum:
+      - not_found
+      - locked
+      - deletion_failed
+      - object_missing
+      title: DocumentErrorCode
+      type: string
+    DocumentErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/DocumentErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: DocumentErrorResponse
+      type: object
+    CreateDocumentUploadRequest:
+      properties:
+        file_name:
+          maxLength: 255
+          minLength: 1
+          title: File Name
+          type: string
+        file_type:
+          $ref: '#/components/schemas/ContentType'
+        file_size:
+          exclusiveMinimum: 0
+          maximum: 52428800
+          title: File Size
+          type: integer
+      required:
+      - file_name
+      - file_type
+      - file_size
+      title: CreateDocumentUploadRequest
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
+  securitySchemes:
+    CompanyToken:
+      type: http
+      scheme: bearer
+    PartnerToken:
+      type: http
+      scheme: bearer
