@@ -1,0 +1,25 @@
+# generated: 2026-07-21 | method: generated | source: API Evangelist enrichment pipeline
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Wayflyer Embedded Finance Sandbox
+  version: 1.0.0
+extends: openapi/wayflyer-embedded-finance-sandbox-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      description: >-
+        Sandbox twin of the Wayflyer Embedded Finance API at
+        sandbox-api.wayflyer.com — full production parity plus
+        simulation-only endpoints (GET/POST
+        /company/hosted-application/simulation/) for driving application
+        lifecycle states without real transactions. Sandbox client_id/secret
+        are issued during partner onboarding; SDKs switch over with
+        isSandbox: true.
+      contact:
+        name: Wayflyer Developer Portal
+        url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+      x-apievangelist:
+        provider: wayflyer
+        sandbox: sandbox/wayflyer-sandbox.yml
+        production_spec: openapi/wayflyer-embedded-finance-openapi-original.json
+        demo_app: https://demo.wayflyerhostedcapital.com/

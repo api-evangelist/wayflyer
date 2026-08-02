@@ -1,0 +1,4119 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Embedded Finance Sandbox",
+    "version": "1",
+    "description": ""
+  },
+  "paths": {
+    "/company/cta/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_cta_get_banner",
+        "summary": "Get CTA configuration",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BannerResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Retrieve the CTA configuration for a given company or responds with a 204 if no CTA should be shown.\n\nThe indicative offer CTA config will be returned if:\n- Data has been uploaded to the anon-data-upload service and an indicative offer is available.\n\nThe generic offer CTA config will be returned if:\n- No indicative offer available, the company is not marked ineligible and has not started an application.\n\nThe \"Continue\" CTA config will be returned if:\n- The company has started an application, had a user sign up, and has an open sales deal.\n\nNo CTA config will be returned if:\n- The company has started an application, had a user sign up, and doesn't have an open sales deal.\n- The company has been marked ineligible by the anon-data-upload service.",
+        "tags": [
+          "CTA"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/cta/dismiss/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_cta_dismiss_banner",
+        "summary": "Dismiss CTA",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Track state of banner dismissals from users.",
+        "tags": [
+          "CTA"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BannerDismissInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/hosted-application/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_hosted_application_start_hosted_application",
+        "summary": "Start a hosted application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartHostedApplicationResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Start a hosted application for the company i.e., one the user will complete on the Wayflyer app.\n\nIf the company hasn't already been onboarded with Wayflyer then a new company is created in the Wayflyer app with a\nfunding application pre-configured using any additional data supplied during the API call. The response contains a\n`next` url to redirect the user to which will typically be a co-branded landing page from which they can create\ntheir user account and complete the funding application.\n\nReturns a `next` url to redirect the company to.\n\n`next` url will default to a help center article if an error occurs starting the company's hosted application.",
+        "tags": [
+          "CTA"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HostedApplicationRequest_Any_"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/hosted-application/continue/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_hosted_application_continue_hosted_application",
+        "summary": "Continue a hosted application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContinueHostedApplicationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Continue an open hosted application.\n\nReturns a URL to redirect the user to where they can continue their open hosted application.\n\nRequires the company to have been onboarded with Wayflyer and have an open hosted application i.e., call this\nendpoint only after calling the start hosted application endpoint.",
+        "tags": [
+          "CTA"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/hosted-application/simulation/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_status",
+        "summary": "Get hosted application simulation status",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get and return the current simlation status for the customer and the valid actions that can be performed.",
+        "tags": [
+          "Simulation"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_action",
+        "summary": "Perform a simulation action",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Perform a simulation action on company's hosted application.\n\nReturns HTTP 204 No Content on success.",
+        "tags": [
+          "Simulation"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "anyOf": [
+                  {
+                    "$ref": "#/components/schemas/SimpleActionRequest"
+                  },
+                  {
+                    "$ref": "#/components/schemas/PassUWRequest"
+                  }
+                ],
+                "title": "Obj"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/embedded-application/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_embedded_application_start_embedded_application",
+        "summary": "Start an embedded application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddedApplicationStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "description": "Start an embedded application for the company.\nThe returned schema will let the user know if additional details are required to submit the application and\nprovide the application ID to track the application status in subsequent API calls.\nIf an open embedded application already exists for the company, a 400 error is returned.",
+        "tags": [
+          "User Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_embedded_application_get_embedded_application",
+        "summary": "Get an embedded application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddedApplicationStatusResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get the status of the open embedded application for the company.\nThe returned schema will let the user know if additional details are required to submit the application and\nprovide the application ID to track the application status in subsequent API calls.\nIf no open embedded application exists for the company, a 404 error is returned.",
+        "tags": [
+          "User Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/embedded-application/submit/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_embedded_application_submit_embedded_application",
+        "summary": "Submit embedded application",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitEmbeddedApplicationErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitEmbeddedApplicationErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubmitEmbeddedApplicationErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Submit the open embedded application for review.\n\nAll required details (user details and company details) must be provided\nbefore the application can be submitted. Once submitted, details can no\nlonger be edited.",
+        "tags": [
+          "User Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/embedded-application/mark-ineligible/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_embedded_application_mark_ineligible",
+        "summary": "Mark embedded application as ineligible",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkIneligibleErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MarkIneligibleErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "User Details"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkIneligibleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/handover/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_handover_handover",
+        "summary": "Hand over a user to Wayflyer",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandoverResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HandoverErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Generate a URL to redirect the user to Wayflyer where they can continue their funding application.\n\nRequires the company to have an open hosted application.",
+        "tags": [
+          "Handover"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/user-details/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_user_details_get_user_details",
+        "summary": "Get user details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get user details for the authenticated user.\n\nReturns the current user details including email and phone number.\nUser is extracted from the authentication token.",
+        "tags": [
+          "User Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_user_details_update_user_details",
+        "summary": "Update user details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDetailsResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserDetailsErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "423": {
+            "description": "Locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateUserDetailsErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Update user details for the authenticated user.\n\nUser details can only be updated a few times before any application is submitted to prevent abuse. User details\ncannot be updated after an application is submitted.",
+        "tags": [
+          "User Details"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserDetailsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/company-details/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_details_get_company_details",
+        "summary": "Get company details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyDetailsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get company details for the authenticated company.",
+        "tags": [
+          "Company Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_details_update_company_details",
+        "summary": "Update company details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyDetailsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCompanyDetailsErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "423": {
+            "description": "Locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateCompanyDetailsErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Replace company details for the authenticated company.\n\nCompany details can only be updated a limited number of times and cannot be updated after an application is\nsubmitted.",
+        "tags": [
+          "Company Details"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyDetailsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/company-details/business-types/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_details_get_business_types",
+        "summary": "List business types",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "List valid business types for company details.",
+        "tags": [
+          "Company Details"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/company-details/business-models/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_details_determine_business_models",
+        "summary": "Determine business models",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DetermineBusinessModelsResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Determine which business models a company is eligible for based on its attributes.\n\nReturns eligible and ineligible business models based on the provided customer\nsegments, sales channels, product offerings, and country of incorporation.",
+        "tags": [
+          "Company Details"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DetermineBusinessModelsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/company-details/search/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_details_search_search_company_details",
+        "summary": "Search for company registration details",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyDetailsSearchResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Search for company details by name and jurisdiction.\n\nReturns a list of companies that match the search criteria or an empty list if no matches are found.",
+        "tags": [
+          "Company Search"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyDetailsSearchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/tracked-login/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_tracked_login_create_tracked_login_token_view",
+        "summary": "Create a tracked login token",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrackedLoginTokenResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Generate a URL to redirect the user to log in to their Wayflyer account.\n\nUse this endpoint when you want to hand over a user with an existing Wayflyer account to Wayflyer.",
+        "tags": [
+          "Tracked Login"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/industry-classification/search/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_industry_classification_search_industry_classifications",
+        "summary": "Search industry classifications",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "query",
+            "name": "query",
+            "schema": {
+              "description": "Search query string",
+              "minLength": 1,
+              "title": "Query",
+              "type": "string"
+            },
+            "required": true,
+            "description": "Search query string"
+          },
+          {
+            "in": "query",
+            "name": "max_results",
+            "schema": {
+              "default": 10,
+              "description": "Maximum number of results to return",
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Max Results",
+              "type": "integer"
+            },
+            "required": false,
+            "description": "Maximum number of results to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/IndustrySearchResultResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Search industry classifications by query string.\n\nReturns a list of matching industries sorted by relevance score (highest first).",
+        "tags": [
+          "Industry Classification"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/documents/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_document_upload_create_document_upload_url",
+        "summary": "Create a document upload URL",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateDocumentUploadResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a presigned URL for uploading a proof-of-registration document.\n\nThe response contains a URL and form fields. The client should upload the file directly\nto the returned URL using a multipart POST request with the provided fields. After a\nsuccessful upload, call the confirm endpoint to mark the document as uploaded.",
+        "tags": [
+          "Documents"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDocumentUploadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_document_upload_list_document_uploads",
+        "summary": "List documents",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "query",
+            "name": "include_unconfirmed",
+            "schema": {
+              "default": false,
+              "description": "Include unconfirmed documents in the response",
+              "title": "Include Unconfirmed",
+              "type": "boolean"
+            },
+            "required": false,
+            "description": "Include unconfirmed documents in the response"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DocumentUploadResponse"
+                  },
+                  "title": "Response",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "List all documents uploaded by the company.",
+        "tags": [
+          "Documents"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/documents/{document_id}/confirm/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_document_upload_confirm_document_upload",
+        "summary": "Confirm a document upload",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "path",
+            "name": "document_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Document Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Confirm that a document has been successfully uploaded.\n\nThis must be called after the file has been uploaded to the URL returned by the create\nendpoint. Documents that are not confirmed will not be included in an application\nsubmission. This operation is idempotent.",
+        "tags": [
+          "Documents"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/company/documents/{document_id}/": {
+      "delete": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_document_upload_delete_document_upload",
+        "summary": "Delete a document",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "path",
+            "name": "document_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Document Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentErrorResponse"
+                }
+              }
+            }
+          },
+          "423": {
+            "description": "Locked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentErrorResponse"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Bad Gateway",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Delete a document.\n\nDocuments that have been included in a submitted application are locked and cannot\nbe deleted. Returns 423 if the document is locked.",
+        "tags": [
+          "Documents"
+        ],
+        "security": [
+          {
+            "CompanyToken": []
+          }
+        ]
+      }
+    },
+    "/partner/company-token/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_company_token_create_company_token",
+        "summary": "Create company token",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompanyTokenResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Create a company token to be used to authenticate requests to company scoped endpoints on behalf of a company.\n\nThis should be called server-side and the resulting company token passed to the front end.",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompanyTokenRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "PartnerToken": []
+          }
+        ]
+      }
+    },
+    "/partner/anon-data-upload/file/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_anonymous_upload_initiate_file_upload",
+        "summary": "Initiate file upload",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitiateFileUploadResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Initiate a file upload of anonymised company data.\n\nUse this endpoint when the amount of data exceeds the size of a single request. Otherwise, use the batch upload\nendpoint.\n\nThis allows sharing of anonymised data about companies ahead of time that Wayflyer can use to provide a better\nexperience by generating indicative offers, pre-screening, etc.\n\nDivide the file into the number of parts specified by `num_parts` in the response. There will be an equal number\nof `upload_urls`. For each file part, make a `PUT` request to one of the URLs provided in `upload_urls`. Ensure that\nthe same URL is not used for multiple parts. After all parts have been uploaded, call the complete upload endpoint.\nAt this point, Wayflyer will reassemble the parts into a single file and process it asynchronously.",
+        "tags": [
+          "Data Upload"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitiateFileUploadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "PartnerToken": []
+          }
+        ]
+      }
+    },
+    "/partner/anon-data-upload/batch/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_anonymous_upload_initiate_batch_upload",
+        "summary": "Initiate batch upload",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InitiateBatchUploadResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Initiate a batch upload of multiple companys revenue data.\nThe number of companies should not be more than 26.000.",
+        "tags": [
+          "Data Upload"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/CompanyData"
+                },
+                "title": "Payload",
+                "type": "array"
+              },
+              "example": [
+                {
+                  "company_id": "Company id",
+                  "currency": "GBP",
+                  "annual_revenue": 14000000,
+                  "revenue_in_period": 7000000,
+                  "shipping_in_period": 60000,
+                  "num_period_months": 6,
+                  "country": "AF",
+                  "state": "US-AL",
+                  "incorporation_date": "2020-01-15",
+                  "client_onboarding_date": "2020-06-30"
+                }
+              ]
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "PartnerToken": []
+          }
+        ]
+      }
+    },
+    "/partner/anon-data-upload/upload/{upload_id}/": {
+      "get": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_anonymous_upload_get_status",
+        "summary": "Get upload status",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "path",
+            "name": "upload_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Upload Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BatchStatusResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "description": "Get the status of a file as it is being processed asynchronously.",
+        "tags": [
+          "Data Upload"
+        ],
+        "security": [
+          {
+            "PartnerToken": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_anonymous_upload_complete_file_upload",
+        "summary": "Complete file upload",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          },
+          {
+            "in": "path",
+            "name": "upload_id",
+            "schema": {
+              "format": "uuid",
+              "title": "Upload Id",
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "description": "Once all parts of a file have been uploaded, call this endpoint to complete the upload and begin processing.\n\nThe status of the upload can be tracked using the `upload_id` from the initiate file upload endpoint with\nthe get upload status endpoint.",
+        "tags": [
+          "Data Upload"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteFileUploadRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "PartnerToken": []
+          }
+        ]
+      }
+    },
+    "/partner-token/": {
+      "post": {
+        "operationId": "wf_embedded_finance_service_apps_sandbox_views_partner_token_create_partner_token",
+        "summary": "Create partner token",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ApiVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PartnerTokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetail"
+                }
+              }
+            }
+          }
+        },
+        "description": "Create a partner token to be used to authenticate requests to partner scoped endpoints.\n\nThis should be called server-side. **Never** expose the `partner_id` or `partner_secret` or the resulting partner\ntoken to the front end.\n\nRequests are limited to 10 requests per IP per hour.",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PartnerTokenRequest"
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BannerData": {
+        "properties": {
+          "offer": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Offer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Offer data to display in the CTA"
+          },
+          "config": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContinueEmbeddedApplicationBannerConfig"
+              },
+              {
+                "$ref": "#/components/schemas/ContinueApplicationBannerConfig"
+              },
+              {
+                "$ref": "#/components/schemas/OfferBannerConfig"
+              }
+            ],
+            "description": "Configuration for the CTA",
+            "title": "Config"
+          }
+        },
+        "required": [
+          "config"
+        ],
+        "title": "BannerData",
+        "type": "object"
+      },
+      "BannerResponse": {
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/BannerState",
+            "description": "The type of CTA to display"
+          },
+          "data": {
+            "$ref": "#/components/schemas/BannerData",
+            "description": "Data to display in the CTA"
+          },
+          "dismissal_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Opaque key identifying this CTA instance. Use it when dismissing the banner.",
+            "title": "Dismissal Key"
+          }
+        },
+        "required": [
+          "state",
+          "data"
+        ],
+        "title": "BannerResponse",
+        "type": "object"
+      },
+      "BannerState": {
+        "enum": [
+          "continue_application",
+          "continue_embedded_application",
+          "indicative_offer",
+          "generic_offer"
+        ],
+        "title": "BannerState",
+        "type": "string"
+      },
+      "ContinueApplicationBannerConfig": {
+        "properties": {
+          "text": {
+            "description": "Display text for the CTA",
+            "title": "Text",
+            "type": "string"
+          },
+          "bullet_points": {
+            "description": "List of text bullet points to display in the CTA",
+            "items": {
+              "type": "string"
+            },
+            "title": "Bullet Points",
+            "type": "array"
+          },
+          "button_label": {
+            "description": "Label for the button",
+            "title": "Button Label",
+            "type": "string"
+          },
+          "required_action": {
+            "$ref": "#/components/schemas/RequiredAction",
+            "description": "Action the user is required to perform."
+          },
+          "application_uuid": {
+            "description": "UUID of the hosted application currently in progress, if any.",
+            "title": "Application Uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "button_label",
+          "required_action",
+          "application_uuid"
+        ],
+        "title": "ContinueApplicationBannerConfig",
+        "type": "object"
+      },
+      "ContinueEmbeddedApplicationBannerConfig": {
+        "properties": {
+          "text": {
+            "description": "Display text for the CTA",
+            "title": "Text",
+            "type": "string"
+          },
+          "bullet_points": {
+            "description": "List of text bullet points to display in the CTA",
+            "items": {
+              "type": "string"
+            },
+            "title": "Bullet Points",
+            "type": "array"
+          },
+          "button_label": {
+            "description": "Label for the button",
+            "title": "Button Label",
+            "type": "string"
+          },
+          "embedded_application_uuid": {
+            "description": "UUID of the embedded application currently in progress",
+            "title": "Embedded Application Uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "text",
+          "button_label",
+          "embedded_application_uuid"
+        ],
+        "title": "ContinueEmbeddedApplicationBannerConfig",
+        "type": "object"
+      },
+      "Offer": {
+        "properties": {
+          "amount": {
+            "description": "Amount of the offer in `currency`",
+            "title": "Amount",
+            "type": "integer"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/SupportedCurrencyCode",
+            "description": "ISO 4217 code for the currency of the offer"
+          }
+        },
+        "required": [
+          "amount",
+          "currency"
+        ],
+        "title": "Offer",
+        "type": "object"
+      },
+      "OfferBannerConfig": {
+        "properties": {
+          "text": {
+            "description": "Display text for the CTA",
+            "title": "Text",
+            "type": "string"
+          },
+          "bullet_points": {
+            "description": "List of text bullet points to display in the CTA",
+            "items": {
+              "type": "string"
+            },
+            "title": "Bullet Points",
+            "type": "array"
+          },
+          "button_label": {
+            "description": "Label for the button",
+            "title": "Button Label",
+            "type": "string"
+          },
+          "funding_cycle": {
+            "description": "Number of user funding cycles.",
+            "title": "Funding Cycle",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "text",
+          "button_label",
+          "funding_cycle"
+        ],
+        "title": "OfferBannerConfig",
+        "type": "object"
+      },
+      "RequiredAction": {
+        "enum": [
+          "complete_application",
+          "provide_additional_info",
+          "select_offer",
+          "complete_kyc",
+          "sign_contract"
+        ],
+        "title": "RequiredAction",
+        "type": "string"
+      },
+      "SupportedCurrencyCode": {
+        "enum": [
+          "USD",
+          "CAD",
+          "AUD",
+          "EUR",
+          "GBP",
+          "SEK",
+          "DKK"
+        ],
+        "title": "SupportedCurrencyCode",
+        "type": "string"
+      },
+      "BannerDismissInput": {
+        "properties": {
+          "banner_state": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BannerState"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Legacy field.  Will be removed in future updates."
+          },
+          "dismissal_key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Opaque key identifying which CTA was dismissed.",
+            "title": "Dismissal Key"
+          }
+        },
+        "title": "BannerDismissInput",
+        "type": "object"
+      },
+      "StartHostedApplicationResponse": {
+        "properties": {
+          "next": {
+            "description": "The URL to redirect to the user to after making this API call",
+            "title": "Next",
+            "type": "string"
+          },
+          "application_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The ID of the hosted application created by this API call",
+            "title": "Application Id"
+          }
+        },
+        "required": [
+          "next",
+          "application_id"
+        ],
+        "title": "StartHostedApplicationResponse",
+        "type": "object"
+      },
+      "CanadianProvinceCode": {
+        "enum": [
+          "CA-AB",
+          "CA-BC",
+          "CA-MB",
+          "CA-NB",
+          "CA-NL",
+          "CA-NS",
+          "CA-ON",
+          "CA-PE",
+          "CA-QC",
+          "CA-SK",
+          "CA-NT",
+          "CA-NU",
+          "CA-YT"
+        ],
+        "title": "CanadianProvinceCode",
+        "type": "string"
+      },
+      "CompanyType": {
+        "enum": [
+          "LP",
+          "LLP",
+          "LLC",
+          "INC",
+          "COOP"
+        ],
+        "title": "CompanyType",
+        "type": "string"
+      },
+      "HostedApplicationCompanyData": {
+        "properties": {
+          "company_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The name of the company",
+            "title": "Company Name"
+          },
+          "company_currency": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SupportedCurrencyCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "One of a supported subset of ISO 4217 codes for the currency the company uses primarily"
+          },
+          "primary_store_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The URL of the primary store",
+            "title": "Primary Store Url"
+          },
+          "company_annual_revenue": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company's annual revenue to the nearest whole number in `company_currency`",
+            "title": "Company Annual Revenue"
+          },
+          "company_onboarding_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The date the company onboarded to the partner",
+            "title": "Company Onboarding Date"
+          },
+          "company_incorporation_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The date the company was incorporated",
+            "title": "Company Incorporation Date"
+          },
+          "country": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SupportedCountryCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "One of a supported subset of ISO-3166-1 alpha-2 codes for the country the company is located in"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "$ref": "#/components/schemas/CanadianProvinceCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The state the company is located in",
+            "title": "State"
+          },
+          "company_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CompanyType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The type of company"
+          }
+        },
+        "title": "HostedApplicationCompanyData",
+        "type": "object"
+      },
+      "HostedApplicationRequest_Any_": {
+        "properties": {
+          "company_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HostedApplicationCompanyData"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data used to pre-fill the company's funding application"
+          },
+          "user_data": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HostedApplicationUserData"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Data about the user starting the hosted application"
+          },
+          "partner_data": {
+            "description": "During onboarding, Wayflyer may have agreed additional data unique to an individual partner that may be used to customise the funding application. This data is not required for the funding application to be processed, but may be used to provide a better experience. Consult with your Wayflyer representative for more information about what can be provided here.",
+            "title": "Partner Data"
+          }
+        },
+        "title": "HostedApplicationRequest[Any]",
+        "type": "object"
+      },
+      "HostedApplicationUserData": {
+        "properties": {
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The first name of the user",
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last name of the user",
+            "title": "Last Name"
+          },
+          "email_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The email of the user",
+            "title": "Email Address"
+          },
+          "phone_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The phone number of the user",
+            "title": "Phone Number"
+          }
+        },
+        "title": "HostedApplicationUserData",
+        "type": "object"
+      },
+      "SupportedCountryCode": {
+        "enum": [
+          "US",
+          "CA",
+          "GB",
+          "IE",
+          "BE",
+          "NL",
+          "ES",
+          "DE",
+          "SE",
+          "DK",
+          "AU"
+        ],
+        "title": "SupportedCountryCode",
+        "type": "string"
+      },
+      "USStateCode": {
+        "enum": [
+          "US-AL",
+          "US-AK",
+          "US-AZ",
+          "US-AR",
+          "US-CA",
+          "US-CO",
+          "US-CT",
+          "US-DE",
+          "US-FL",
+          "US-GA",
+          "US-HI",
+          "US-ID",
+          "US-IL",
+          "US-IN",
+          "US-IA",
+          "US-KS",
+          "US-KY",
+          "US-LA",
+          "US-ME",
+          "US-MD",
+          "US-MA",
+          "US-MI",
+          "US-MN",
+          "US-MS",
+          "US-MO",
+          "US-MT",
+          "US-NE",
+          "US-NV",
+          "US-NH",
+          "US-NJ",
+          "US-NM",
+          "US-NY",
+          "US-NC",
+          "US-ND",
+          "US-OH",
+          "US-OK",
+          "US-OR",
+          "US-PA",
+          "US-RI",
+          "US-SC",
+          "US-SD",
+          "US-TN",
+          "US-TX",
+          "US-UT",
+          "US-VT",
+          "US-VA",
+          "US-WA",
+          "US-WV",
+          "US-WI",
+          "US-WY",
+          "US-DC",
+          "US-AS",
+          "US-GU",
+          "US-MP",
+          "US-PR",
+          "US-VI"
+        ],
+        "title": "USStateCode",
+        "type": "string"
+      },
+      "ContinueHostedApplicationResponse": {
+        "properties": {
+          "next": {
+            "description": "The URL to redirect to the user to after making this API call",
+            "title": "Next",
+            "type": "string"
+          }
+        },
+        "required": [
+          "next"
+        ],
+        "title": "ContinueHostedApplicationResponse",
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorDetail",
+        "type": "object"
+      },
+      "HostedApplicationSimulationAction": {
+        "enum": [
+          "application-submitted",
+          "discontinue-application",
+          "pass-uw",
+          "fail-uw",
+          "request-additional-info",
+          "provide-info",
+          "accept-offer",
+          "reject-offer",
+          "complete-kyc",
+          "pass-kyc",
+          "fail-kyc",
+          "sign-contract",
+          "reject-contract"
+        ],
+        "title": "HostedApplicationSimulationAction",
+        "type": "string"
+      },
+      "HostedApplicationSimulationStatus": {
+        "enum": [
+          "APPLICATION_IN_PROGRESS",
+          "AWAITING_UW_DECISION",
+          "AWAITING_ADDITIONAL_INFO",
+          "AWAITING_OFFERS_DECISION",
+          "KYC_IN_PROGRESS",
+          "AWAITING_KYC_DECISION",
+          "AWAITING_ADDITIONAL_KYC_INFO",
+          "AWAITING_CONTRACT_SIGNING",
+          "REJECTED",
+          "COMPLETED",
+          "CLOSED"
+        ],
+        "title": "HostedApplicationSimulationStatus",
+        "type": "string"
+      },
+      "SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/HostedApplicationSimulationStatus"
+          },
+          "valid_actions": {
+            "items": {
+              "$ref": "#/components/schemas/HostedApplicationSimulationAction"
+            },
+            "title": "Valid Actions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "status",
+          "valid_actions"
+        ],
+        "title": "SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]",
+        "type": "object"
+      },
+      "PassUWRequest": {
+        "additionalProperties": false,
+        "description": "Schema for the `pass-uw` action, requires offer details.",
+        "properties": {
+          "action": {
+            "const": "pass-uw",
+            "title": "Action",
+            "type": "string"
+          },
+          "approved_amount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Approved Amount"
+          },
+          "currency": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Currency"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "PassUWRequest",
+        "type": "object"
+      },
+      "SimpleActionRequest": {
+        "additionalProperties": false,
+        "description": "Schema for simple simulation actions without extra fields.",
+        "properties": {
+          "action": {
+            "enum": [
+              "application-submitted",
+              "discontinue-application",
+              "fail-uw",
+              "request-additional-info",
+              "provide-info",
+              "accept-offer",
+              "reject-offer",
+              "complete-kyc",
+              "pass-kyc",
+              "fail-kyc",
+              "sign-contract",
+              "reject-contract"
+            ],
+            "title": "Action",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "SimpleActionRequest",
+        "type": "object"
+      },
+      "EmbeddedApplicationDetailStatus": {
+        "properties": {
+          "name": {
+            "description": "The name of the detail",
+            "enum": [
+              "user_details",
+              "company_details"
+            ],
+            "title": "Name",
+            "type": "string"
+          },
+          "status": {
+            "description": "The status of the detail, either complete or incomplete",
+            "enum": [
+              "complete",
+              "incomplete"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "status"
+        ],
+        "title": "EmbeddedApplicationDetailStatus",
+        "type": "object"
+      },
+      "EmbeddedApplicationStatusResponse": {
+        "example": {
+          "application_id": "550e8400-e29b-41d4-a716-446655440000",
+          "required_details": [
+            {
+              "name": "user_details",
+              "status": "incomplete"
+            },
+            {
+              "name": "company_details",
+              "status": "complete"
+            }
+          ]
+        },
+        "properties": {
+          "application_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The ID of the embedded application",
+            "title": "Application Id"
+          },
+          "required_details": {
+            "description": "A list of required details to submit the embedded application.",
+            "items": {
+              "$ref": "#/components/schemas/EmbeddedApplicationDetailStatus"
+            },
+            "title": "Required Details",
+            "type": "array"
+          }
+        },
+        "required": [
+          "application_id",
+          "required_details"
+        ],
+        "title": "EmbeddedApplicationStatusResponse",
+        "type": "object"
+      },
+      "SubmitEmbeddedApplicationErrorCode": {
+        "enum": [
+          "details_incomplete",
+          "no_open_application",
+          "open_hosted_application_exists",
+          "duplicate_company",
+          "ineligible_application",
+          "registration_or_documents_required"
+        ],
+        "title": "SubmitEmbeddedApplicationErrorCode",
+        "type": "string"
+      },
+      "SubmitEmbeddedApplicationErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/SubmitEmbeddedApplicationErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          },
+          "ineligible_reasons": {
+            "description": "List of ineligibility reasons",
+            "items": {
+              "type": "string"
+            },
+            "title": "Ineligible Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "SubmitEmbeddedApplicationErrorResponse",
+        "type": "object"
+      },
+      "MarkIneligibleErrorCode": {
+        "enum": [
+          "no_open_application",
+          "not_started_by_user"
+        ],
+        "title": "MarkIneligibleErrorCode",
+        "type": "string"
+      },
+      "MarkIneligibleErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/MarkIneligibleErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "MarkIneligibleErrorResponse",
+        "type": "object"
+      },
+      "IneligibleReason": {
+        "enum": [
+          "unsupported_country",
+          "no_eligible_business_model"
+        ],
+        "title": "IneligibleReason",
+        "type": "string"
+      },
+      "MarkIneligibleRequest": {
+        "properties": {
+          "ineligible_reasons": {
+            "description": "One or more reasons the application is ineligible",
+            "items": {
+              "$ref": "#/components/schemas/IneligibleReason"
+            },
+            "minItems": 1,
+            "title": "Ineligible Reasons",
+            "type": "array"
+          }
+        },
+        "required": [
+          "ineligible_reasons"
+        ],
+        "title": "MarkIneligibleRequest",
+        "type": "object"
+      },
+      "HandoverResponse": {
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "HandoverResponse",
+        "type": "object"
+      },
+      "HandoverErrorCode": {
+        "enum": [
+          "company_not_bootstrapped",
+          "no_open_hosted_application",
+          "company_not_active"
+        ],
+        "title": "HandoverErrorCode",
+        "type": "string"
+      },
+      "HandoverErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/HandoverErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "HandoverErrorResponse",
+        "type": "object"
+      },
+      "UserDetailsResponse": {
+        "properties": {
+          "email": {
+            "anyOf": [
+              {
+                "format": "email",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The email of the user",
+            "title": "Email"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The first name of the user",
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last name of the user",
+            "title": "Last Name"
+          },
+          "phone_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The phone number of the user in E.164 format",
+            "title": "Phone Number"
+          }
+        },
+        "title": "UserDetailsResponse",
+        "type": "object"
+      },
+      "UpdateUserDetailsErrorCode": {
+        "enum": [
+          "duplicate",
+          "too_many_revisions",
+          "application_already_submitted"
+        ],
+        "title": "UpdateUserDetailsErrorCode",
+        "type": "string"
+      },
+      "UpdateUserDetailsErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/UpdateUserDetailsErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "UpdateUserDetailsErrorResponse",
+        "type": "object"
+      },
+      "UserDetailsRequest": {
+        "properties": {
+          "email": {
+            "description": "The email of the user",
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "first_name": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The first name of the user",
+            "title": "First Name"
+          },
+          "last_name": {
+            "anyOf": [
+              {
+                "maxLength": 255,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The last name of the user",
+            "title": "Last Name"
+          },
+          "phone_number": {
+            "anyOf": [
+              {
+                "maxLength": 16,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "The user's phone number in E.164 format (e.g., +353861234567)",
+            "title": "Phone Number"
+          }
+        },
+        "required": [
+          "email"
+        ],
+        "title": "UserDetailsRequest",
+        "type": "object"
+      },
+      "BusinessType": {
+        "enum": [
+          "limited_partnership",
+          "limited_liability_partnership",
+          "limited_liability_company",
+          "corporation",
+          "cooperative",
+          "other"
+        ],
+        "title": "BusinessType",
+        "type": "string"
+      },
+      "CompanyDetailsResponse": {
+        "properties": {
+          "country_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountryCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          "state_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "$ref": "#/components/schemas/CanadianProvinceCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-2 code for US states or Canadian provinces",
+            "title": "State Code"
+          },
+          "principal_place_of_business": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "US state where the company primarily operates"
+          },
+          "legal_name": {
+            "description": "Legal name of the company",
+            "title": "Legal Name",
+            "type": "string"
+          },
+          "registration_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company registration number",
+            "title": "Registration Number"
+          },
+          "business_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BusinessType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Legal business type \u2014 null for non-US companies"
+          },
+          "revenue": {
+            "description": "Monthly revenue in the smallest whole currency unit",
+            "exclusiveMinimum": 0,
+            "title": "Revenue",
+            "type": "integer"
+          },
+          "revenue_currency": {
+            "$ref": "#/components/schemas/SupportedCurrencyCode",
+            "description": "ISO 4217 currency code"
+          },
+          "industry_code": {
+            "description": "TRBC industry classification code",
+            "title": "Industry Code",
+            "type": "string"
+          },
+          "industry_name": {
+            "description": "Human-readable industry name",
+            "title": "Industry Name",
+            "type": "string"
+          },
+          "date_of_incorporation": {
+            "description": "Date the company was incorporated",
+            "format": "date",
+            "title": "Date Of Incorporation",
+            "type": "string"
+          },
+          "customer_segments": {
+            "description": "Customer segments",
+            "items": {
+              "$ref": "#/components/schemas/CustomerSegment"
+            },
+            "title": "Customer Segments",
+            "type": "array"
+          },
+          "sales_channels": {
+            "description": "Sales channels",
+            "items": {
+              "$ref": "#/components/schemas/SalesChannel"
+            },
+            "title": "Sales Channels",
+            "type": "array"
+          },
+          "product_offerings": {
+            "description": "Product offerings",
+            "items": {
+              "$ref": "#/components/schemas/ProductOffering"
+            },
+            "title": "Product Offerings",
+            "type": "array"
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company website URL",
+            "title": "Website Url"
+          }
+        },
+        "required": [
+          "legal_name",
+          "revenue",
+          "revenue_currency",
+          "industry_code",
+          "industry_name",
+          "date_of_incorporation",
+          "customer_segments",
+          "sales_channels",
+          "product_offerings"
+        ],
+        "title": "CompanyDetailsResponse",
+        "type": "object"
+      },
+      "CountryCode": {
+        "enum": [
+          "AF",
+          "AX",
+          "AL",
+          "DZ",
+          "AS",
+          "AD",
+          "AO",
+          "AI",
+          "AQ",
+          "AG",
+          "AR",
+          "AM",
+          "AW",
+          "AU",
+          "AT",
+          "AZ",
+          "BS",
+          "BH",
+          "BD",
+          "BB",
+          "BY",
+          "BE",
+          "BZ",
+          "BJ",
+          "BM",
+          "BT",
+          "BO",
+          "BQ",
+          "BA",
+          "BW",
+          "BV",
+          "BR",
+          "IO",
+          "BN",
+          "BG",
+          "BF",
+          "BI",
+          "CV",
+          "KH",
+          "CM",
+          "CA",
+          "KY",
+          "CF",
+          "TD",
+          "CL",
+          "CN",
+          "CX",
+          "CC",
+          "CO",
+          "KM",
+          "CD",
+          "CG",
+          "CK",
+          "CR",
+          "CI",
+          "HR",
+          "CU",
+          "CW",
+          "CY",
+          "CZ",
+          "DK",
+          "DJ",
+          "DM",
+          "DO",
+          "EC",
+          "EG",
+          "SV",
+          "GQ",
+          "ER",
+          "EE",
+          "SZ",
+          "ET",
+          "FK",
+          "FO",
+          "FJ",
+          "FI",
+          "FR",
+          "GF",
+          "PF",
+          "TF",
+          "GA",
+          "GM",
+          "GE",
+          "DE",
+          "GH",
+          "GI",
+          "GR",
+          "GL",
+          "GD",
+          "GP",
+          "GU",
+          "GT",
+          "GG",
+          "GN",
+          "GW",
+          "GY",
+          "HT",
+          "HM",
+          "VA",
+          "HN",
+          "HK",
+          "HU",
+          "IS",
+          "IN",
+          "ID",
+          "IR",
+          "IQ",
+          "IE",
+          "IM",
+          "IL",
+          "IT",
+          "JM",
+          "JP",
+          "JE",
+          "JO",
+          "KZ",
+          "KE",
+          "KI",
+          "KP",
+          "KR",
+          "KW",
+          "KG",
+          "LA",
+          "LV",
+          "LB",
+          "LS",
+          "LR",
+          "LY",
+          "LI",
+          "LT",
+          "LU",
+          "MO",
+          "MG",
+          "MW",
+          "MY",
+          "MV",
+          "ML",
+          "MT",
+          "MH",
+          "MQ",
+          "MR",
+          "MU",
+          "YT",
+          "MX",
+          "FM",
+          "MD",
+          "MC",
+          "MN",
+          "ME",
+          "MS",
+          "MA",
+          "MZ",
+          "MM",
+          "NA",
+          "NR",
+          "NP",
+          "NL",
+          "NC",
+          "NZ",
+          "NI",
+          "NE",
+          "NG",
+          "NU",
+          "NF",
+          "MP",
+          "NO",
+          "OM",
+          "PK",
+          "PW",
+          "PS",
+          "PA",
+          "PG",
+          "PY",
+          "PE",
+          "PH",
+          "PN",
+          "PL",
+          "PT",
+          "PR",
+          "QA",
+          "MK",
+          "RO",
+          "RU",
+          "RW",
+          "RE",
+          "BL",
+          "SH",
+          "KN",
+          "LC",
+          "MF",
+          "PM",
+          "VC",
+          "WS",
+          "SM",
+          "ST",
+          "SA",
+          "SN",
+          "RS",
+          "SC",
+          "SL",
+          "SG",
+          "SX",
+          "SK",
+          "SI",
+          "SB",
+          "SO",
+          "ZA",
+          "GS",
+          "SS",
+          "ES",
+          "LK",
+          "SD",
+          "SR",
+          "SJ",
+          "SE",
+          "CH",
+          "SY",
+          "TW",
+          "TJ",
+          "TZ",
+          "TH",
+          "TL",
+          "TG",
+          "TK",
+          "TO",
+          "TT",
+          "TN",
+          "TR",
+          "TM",
+          "TC",
+          "TV",
+          "UG",
+          "UA",
+          "AE",
+          "GB",
+          "US",
+          "UM",
+          "UY",
+          "UZ",
+          "VU",
+          "VE",
+          "VN",
+          "VG",
+          "VI",
+          "WF",
+          "EH",
+          "YE",
+          "ZM",
+          "ZW"
+        ],
+        "title": "CountryCode",
+        "type": "string"
+      },
+      "CustomerSegment": {
+        "enum": [
+          "b2c",
+          "b2b"
+        ],
+        "title": "CustomerSegment",
+        "type": "string"
+      },
+      "ProductOffering": {
+        "enum": [
+          "physical",
+          "digital_products",
+          "services",
+          "subscriptions"
+        ],
+        "title": "ProductOffering",
+        "type": "string"
+      },
+      "SalesChannel": {
+        "enum": [
+          "online",
+          "offline"
+        ],
+        "title": "SalesChannel",
+        "type": "string"
+      },
+      "UpdateCompanyDetailsErrorCode": {
+        "enum": [
+          "too_many_revisions",
+          "application_already_submitted",
+          "invalid_industry_code"
+        ],
+        "title": "UpdateCompanyDetailsErrorCode",
+        "type": "string"
+      },
+      "UpdateCompanyDetailsErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/UpdateCompanyDetailsErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "UpdateCompanyDetailsErrorResponse",
+        "type": "object"
+      },
+      "CompanyDetailsRequest": {
+        "properties": {
+          "country_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountryCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          "state_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "$ref": "#/components/schemas/CanadianProvinceCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-2 code for US states or Canadian provinces",
+            "title": "State Code"
+          },
+          "principal_place_of_business": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required when country_code is US; must be omitted otherwise"
+          },
+          "legal_name": {
+            "description": "Legal name of the company",
+            "title": "Legal Name",
+            "type": "string"
+          },
+          "registration_number": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company registration number",
+            "title": "Registration Number"
+          },
+          "business_type": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BusinessType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Legal business type \u2014 required when country_code is US; must be null or omitted otherwise"
+          },
+          "revenue": {
+            "description": "Monthly revenue in the smallest whole currency unit",
+            "exclusiveMinimum": 0,
+            "title": "Revenue",
+            "type": "integer"
+          },
+          "revenue_currency": {
+            "$ref": "#/components/schemas/SupportedCurrencyCode",
+            "description": "ISO 4217 currency code"
+          },
+          "industry_code": {
+            "description": "TRBC industry classification code",
+            "maxLength": 10,
+            "minLength": 10,
+            "title": "Industry Code",
+            "type": "string"
+          },
+          "date_of_incorporation": {
+            "description": "Date the company was incorporated",
+            "format": "date",
+            "title": "Date Of Incorporation",
+            "type": "string"
+          },
+          "customer_segments": {
+            "$ref": "#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_",
+            "description": "Customer segments",
+            "minItems": 1
+          },
+          "sales_channels": {
+            "$ref": "#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_",
+            "description": "Sales channels",
+            "minItems": 1
+          },
+          "product_offerings": {
+            "$ref": "#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_",
+            "description": "Product offerings",
+            "minItems": 1
+          },
+          "website_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company website URL",
+            "title": "Website Url"
+          }
+        },
+        "required": [
+          "legal_name",
+          "revenue",
+          "revenue_currency",
+          "industry_code",
+          "date_of_incorporation",
+          "customer_segments",
+          "sales_channels",
+          "product_offerings"
+        ],
+        "title": "CompanyDetailsRequest",
+        "type": "object"
+      },
+      "UniqueList_CustomerSegment__MinLen_min_length_1_": {
+        "items": {
+          "$ref": "#/components/schemas/CustomerSegment"
+        },
+        "type": "array"
+      },
+      "UniqueList_ProductOffering__MinLen_min_length_1_": {
+        "items": {
+          "$ref": "#/components/schemas/ProductOffering"
+        },
+        "type": "array"
+      },
+      "UniqueList_SalesChannel__MinLen_min_length_1_": {
+        "items": {
+          "$ref": "#/components/schemas/SalesChannel"
+        },
+        "type": "array"
+      },
+      "BusinessModel": {
+        "enum": [
+          "ecommerce_dtc",
+          "wholesale",
+          "retail",
+          "saas_or_software",
+          "service_provider",
+          "other_rss",
+          "other",
+          "unknown"
+        ],
+        "title": "BusinessModel",
+        "type": "string"
+      },
+      "DetermineBusinessModelsResponse": {
+        "properties": {
+          "eligible": {
+            "description": "Business models the company is eligible for",
+            "items": {
+              "$ref": "#/components/schemas/BusinessModel"
+            },
+            "title": "Eligible",
+            "type": "array"
+          },
+          "ineligible": {
+            "description": "Business models the company is ineligible for",
+            "items": {
+              "$ref": "#/components/schemas/BusinessModel"
+            },
+            "title": "Ineligible",
+            "type": "array"
+          }
+        },
+        "required": [
+          "eligible",
+          "ineligible"
+        ],
+        "title": "DetermineBusinessModelsResponse",
+        "type": "object"
+      },
+      "DetermineBusinessModelsRequest": {
+        "properties": {
+          "customer_segments": {
+            "$ref": "#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_",
+            "description": "Customer segments",
+            "minItems": 1
+          },
+          "sales_channels": {
+            "$ref": "#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_",
+            "description": "Sales channels",
+            "minItems": 1
+          },
+          "product_offerings": {
+            "$ref": "#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_",
+            "description": "Product offerings",
+            "minItems": 1
+          },
+          "country_code": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CountryCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-1 alpha-2 country code"
+          }
+        },
+        "required": [
+          "customer_segments",
+          "sales_channels",
+          "product_offerings"
+        ],
+        "title": "DetermineBusinessModelsRequest",
+        "type": "object"
+      },
+      "CompanyDetailsSearchResponse": {
+        "example": {
+          "results": [
+            {
+              "incorporation_date": "2020-01-01",
+              "name": "Example Company",
+              "registered_address": "123 Example St, Example City, EX 12345",
+              "registration_number": "123456789"
+            }
+          ]
+        },
+        "properties": {
+          "results": {
+            "description": "List of matching companies",
+            "items": {
+              "$ref": "#/components/schemas/CompanyDetailsSearchResult"
+            },
+            "title": "Results",
+            "type": "array"
+          }
+        },
+        "required": [
+          "results"
+        ],
+        "title": "CompanyDetailsSearchResponse",
+        "type": "object"
+      },
+      "CompanyDetailsSearchResult": {
+        "properties": {
+          "name": {
+            "description": "Name of the company",
+            "title": "Name",
+            "type": "string"
+          },
+          "registration_number": {
+            "description": "Company registration number",
+            "title": "Registration Number",
+            "type": "string"
+          },
+          "registered_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company registered address",
+            "title": "Registered Address"
+          },
+          "incorporation_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Company incorporation date",
+            "title": "Incorporation Date"
+          }
+        },
+        "required": [
+          "name",
+          "registration_number",
+          "registered_address",
+          "incorporation_date"
+        ],
+        "title": "CompanyDetailsSearchResult",
+        "type": "object"
+      },
+      "CompanyDetailsSearchRequest": {
+        "properties": {
+          "business_name": {
+            "description": "Name of the company to search for",
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Business Name",
+            "type": "string"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryCode",
+            "description": "ISO 3166-1 alpha-2 country code"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "$ref": "#/components/schemas/CanadianProvinceCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-2 code for US states or Canadian provinces",
+            "title": "State"
+          }
+        },
+        "required": [
+          "business_name",
+          "country"
+        ],
+        "title": "CompanyDetailsSearchRequest",
+        "type": "object"
+      },
+      "TrackedLoginTokenResponse": {
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "TrackedLoginTokenResponse",
+        "type": "object"
+      },
+      "IndustrySearchParams": {
+        "properties": {
+          "query": {
+            "description": "Search query string",
+            "minLength": 1,
+            "title": "Query",
+            "type": "string"
+          },
+          "max_results": {
+            "default": 10,
+            "description": "Maximum number of results to return",
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Max Results",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "title": "IndustrySearchParams",
+        "type": "object"
+      },
+      "IndustrySearchResultResponse": {
+        "properties": {
+          "code": {
+            "description": "Industry classification code (e.g. '5010101010')",
+            "title": "Code",
+            "type": "string"
+          },
+          "activity": {
+            "description": "Human-readable industry activity name",
+            "title": "Activity",
+            "type": "string"
+          },
+          "relevance_score": {
+            "description": "Search relevance score (higher = better match)",
+            "title": "Relevance Score",
+            "type": "number"
+          },
+          "sub_text": {
+            "description": "Hierarchy context: economic sector, business sector, industry group",
+            "title": "Sub Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "activity",
+          "relevance_score",
+          "sub_text"
+        ],
+        "title": "IndustrySearchResultResponse",
+        "type": "object"
+      },
+      "CreateDocumentUploadResponse": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "url_options": {
+            "$ref": "#/components/schemas/UrlOptionsSchema"
+          }
+        },
+        "required": [
+          "id",
+          "url_options"
+        ],
+        "title": "CreateDocumentUploadResponse",
+        "type": "object"
+      },
+      "UrlOptionsSchema": {
+        "properties": {
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "fields": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Fields",
+            "type": "object"
+          }
+        },
+        "required": [
+          "url",
+          "fields"
+        ],
+        "title": "UrlOptionsSchema",
+        "type": "object"
+      },
+      "ContentType": {
+        "enum": [
+          "application/pdf",
+          "image/png",
+          "image/tiff",
+          "image/jpeg"
+        ],
+        "title": "ContentType",
+        "type": "string"
+      },
+      "CreateDocumentUploadRequest": {
+        "properties": {
+          "file_name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "File Name",
+            "type": "string"
+          },
+          "file_type": {
+            "$ref": "#/components/schemas/ContentType"
+          },
+          "file_size": {
+            "exclusiveMinimum": 0,
+            "maximum": 52428800,
+            "title": "File Size",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "file_name",
+          "file_type",
+          "file_size"
+        ],
+        "title": "CreateDocumentUploadRequest",
+        "type": "object"
+      },
+      "ListDocumentUploadsParams": {
+        "properties": {
+          "include_unconfirmed": {
+            "default": false,
+            "description": "Include unconfirmed documents in the response",
+            "title": "Include Unconfirmed",
+            "type": "boolean"
+          }
+        },
+        "title": "ListDocumentUploadsParams",
+        "type": "object"
+      },
+      "DocumentUploadResponse": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "file_name": {
+            "title": "File Name",
+            "type": "string"
+          },
+          "file_type": {
+            "$ref": "#/components/schemas/ContentType"
+          },
+          "confirmed": {
+            "title": "Confirmed",
+            "type": "boolean"
+          },
+          "locked": {
+            "title": "Locked",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "file_name",
+          "file_type",
+          "confirmed",
+          "locked"
+        ],
+        "title": "DocumentUploadResponse",
+        "type": "object"
+      },
+      "DocumentErrorCode": {
+        "enum": [
+          "not_found",
+          "locked",
+          "deletion_failed",
+          "object_missing"
+        ],
+        "title": "DocumentErrorCode",
+        "type": "string"
+      },
+      "DocumentErrorResponse": {
+        "properties": {
+          "error_code": {
+            "$ref": "#/components/schemas/DocumentErrorCode",
+            "description": "Machine-readable error code"
+          },
+          "detail": {
+            "description": "Human-readable error message",
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "error_code",
+          "detail"
+        ],
+        "title": "DocumentErrorResponse",
+        "type": "object"
+      },
+      "CompanyTokenResponse": {
+        "properties": {
+          "token": {
+            "description": "A token that can be used to authenticate requests to company scoped endpoints. Pass this to the front end",
+            "title": "Token",
+            "type": "string"
+          },
+          "expires_in": {
+            "description": "The number of seconds until the token expires",
+            "title": "Expires In",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "token",
+          "expires_in"
+        ],
+        "title": "CompanyTokenResponse",
+        "type": "object"
+      },
+      "CompanyTokenRequest": {
+        "properties": {
+          "company_id": {
+            "description": "An identifier in the partner's system that uniquely identifies the company to create a token for",
+            "title": "Company Id",
+            "type": "string"
+          },
+          "user_id": {
+            "description": "An identifier in the partner's system that uniquely identifies the specific user for the company",
+            "title": "User Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "company_id",
+          "user_id"
+        ],
+        "title": "CompanyTokenRequest",
+        "type": "object"
+      },
+      "InitiateFileUploadResponse": {
+        "properties": {
+          "upload_id": {
+            "description": "A UUID for the upload. This can be used to identify this file in other endpoints to e.g., track the status of the upload or complete the upload.",
+            "format": "uuid",
+            "title": "Upload Id",
+            "type": "string"
+          },
+          "upload_urls": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "URLs to upload each part of the file to. There will be exactly one URL for each part of the file.",
+            "title": "Upload Urls",
+            "type": "object"
+          },
+          "num_parts": {
+            "description": "The number of parts the file should be split into.",
+            "title": "Num Parts",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "upload_id",
+          "upload_urls",
+          "num_parts"
+        ],
+        "title": "InitiateFileUploadResponse",
+        "type": "object"
+      },
+      "InitiateFileUploadRequest": {
+        "properties": {
+          "file_size_bytes": {
+            "description": "The size of the file in bytes",
+            "title": "File Size Bytes",
+            "type": "integer"
+          },
+          "schema_code": {
+            "$ref": "#/components/schemas/SchemaCode",
+            "description": "One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer"
+          }
+        },
+        "required": [
+          "file_size_bytes",
+          "schema_code"
+        ],
+        "title": "InitiateFileUploadRequest",
+        "type": "object"
+      },
+      "SchemaCode": {
+        "enum": [
+          "JSON01"
+        ],
+        "title": "SchemaCode",
+        "type": "string"
+      },
+      "InitiateBatchUploadResponse": {
+        "properties": {
+          "upload_id": {
+            "description": "UUID of the upload",
+            "format": "uuid",
+            "title": "Upload Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "upload_id"
+        ],
+        "title": "InitiateBatchUploadResponse",
+        "type": "object"
+      },
+      "CompanyData": {
+        "properties": {
+          "company_id": {
+            "description": "An identifier in the partner's system that uniquely identifies the company to create a token for",
+            "title": "Company Id",
+            "type": "string"
+          },
+          "currency": {
+            "$ref": "#/components/schemas/CurrencyCode",
+            "description": "ISO 4217 code for currency the company uses primarily",
+            "examples": [
+              "GBP"
+            ]
+          },
+          "annual_revenue": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Companies annual revenue to the nearest whole number in `currency`",
+            "examples": [
+              14000000
+            ],
+            "title": "Annual Revenue"
+          },
+          "revenue_in_period": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Revenue for the company in the specified period to the nearest whole number in `currency`",
+            "examples": [
+              7000000
+            ],
+            "title": "Revenue In Period"
+          },
+          "shipping_in_period": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Shipping amount for the company in the specified period to the nearest whole number in `currency`",
+            "examples": [
+              60000
+            ],
+            "title": "Shipping In Period"
+          },
+          "num_period_months": {
+            "anyOf": [
+              {
+                "maximum": 12,
+                "minimum": 1,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Number of months the `revenue_in_period` and `shipping_in_period` cover",
+            "examples": [
+              6
+            ],
+            "title": "Num Period Months"
+          },
+          "country": {
+            "$ref": "#/components/schemas/CountryCode",
+            "description": "ISO 3166-1 alpha-2 code for the incorporation country of the company"
+          },
+          "state": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/USStateCode"
+              },
+              {
+                "$ref": "#/components/schemas/CanadianProvinceCode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "ISO 3166-2 code for the state of the company if applicable",
+            "title": "State"
+          },
+          "incorporation_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Date of incorporation of the company (YYYY-MM-DD). At least one of this or `client_onboarding_date`, with the former taking precedence",
+            "examples": [
+              "2020-01-15"
+            ],
+            "title": "Incorporation Date"
+          },
+          "client_onboarding_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Date of client onboarding (YYYY-MM-DD). At least one of this or `incorporation_date` must be provided, with the latter taking precedence",
+            "examples": [
+              "2020-06-30"
+            ],
+            "title": "Client Onboarding Date"
+          }
+        },
+        "required": [
+          "company_id",
+          "currency",
+          "country"
+        ],
+        "title": "CompanyData",
+        "type": "object"
+      },
+      "CurrencyCode": {
+        "enum": [
+          "USD",
+          "EUR",
+          "CAD",
+          "AUD",
+          "GBP",
+          "CHF",
+          "DKK",
+          "NZD",
+          "XCD",
+          "XAF",
+          "XOF",
+          "XPF",
+          "AED",
+          "AFN",
+          "ALL",
+          "AMD",
+          "ANG",
+          "AOA",
+          "ARS",
+          "AWG",
+          "AZN",
+          "BAM",
+          "BBD",
+          "BDT",
+          "BGN",
+          "BHD",
+          "BIF",
+          "BMD",
+          "BND",
+          "BOB",
+          "BOV",
+          "BRL",
+          "BSD",
+          "BTN",
+          "BWP",
+          "BYN",
+          "BZD",
+          "CDF",
+          "CLP",
+          "CLF",
+          "CNY",
+          "COP",
+          "COU",
+          "CRC",
+          "CUC",
+          "CUP",
+          "CVE",
+          "CZK",
+          "DJF",
+          "DOP",
+          "DZD",
+          "EGP",
+          "ERN",
+          "ETB",
+          "FJD",
+          "FKP",
+          "GEL",
+          "GHS",
+          "GIP",
+          "GMD",
+          "GNF",
+          "GTQ",
+          "GYD",
+          "HKD",
+          "HNL",
+          "HRK",
+          "HTG",
+          "HUF",
+          "IDR",
+          "ILS",
+          "INR",
+          "IQD",
+          "IRR",
+          "ISK",
+          "JMD",
+          "JOD",
+          "JPY",
+          "KES",
+          "KGS",
+          "KHR",
+          "KMF",
+          "KPW",
+          "KRW",
+          "KWD",
+          "KYD",
+          "KZT",
+          "LAK",
+          "LBP",
+          "LKR",
+          "LRD",
+          "LSL",
+          "LYD",
+          "MAD",
+          "MDL",
+          "MGA",
+          "MKD",
+          "MMK",
+          "MNT",
+          "MOP",
+          "MRO",
+          "MRU",
+          "MUR",
+          "MVR",
+          "MWK",
+          "MXN",
+          "MYR",
+          "MZN",
+          "NAD",
+          "NGN",
+          "NIO",
+          "NOK",
+          "NPR",
+          "OMR",
+          "PAB",
+          "PEN",
+          "PGK",
+          "PHP",
+          "PKR",
+          "PLN",
+          "PYG",
+          "QAR",
+          "RON",
+          "RSD",
+          "RUB",
+          "RWF",
+          "SAR",
+          "SBD",
+          "SCR",
+          "SDG",
+          "SEK",
+          "SGD",
+          "SLL",
+          "SOS",
+          "SRD",
+          "SSP",
+          "STN",
+          "SVC",
+          "SYP",
+          "SZL",
+          "THB",
+          "TJS",
+          "TMT",
+          "TND",
+          "TOP",
+          "TRY",
+          "TTD",
+          "TWD",
+          "TZS",
+          "UAH",
+          "UGX",
+          "UYU",
+          "UZS",
+          "VEF",
+          "VES",
+          "VND",
+          "VUV",
+          "WST",
+          "YER",
+          "ZAR",
+          "ZMW",
+          "ZWL",
+          "XDR"
+        ],
+        "title": "CurrencyCode",
+        "type": "string"
+      },
+      "BatchStatus": {
+        "enum": [
+          "PENDING_UPLOAD",
+          "PROCESSING",
+          "PROCESSED",
+          "ERROR"
+        ],
+        "title": "BatchStatus",
+        "type": "string"
+      },
+      "BatchStatusResponse": {
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/BatchStatus",
+            "description": "Status of the batch upload"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "BatchStatusResponse",
+        "type": "object"
+      },
+      "CompleteFileUploadRequest": {
+        "properties": {
+          "parts": {
+            "description": "List of parts to complete the upload",
+            "items": {
+              "$ref": "#/components/schemas/UploadPart"
+            },
+            "title": "Parts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "parts"
+        ],
+        "title": "CompleteFileUploadRequest",
+        "type": "object"
+      },
+      "UploadPart": {
+        "properties": {
+          "part_number": {
+            "description": "Part number of the upload",
+            "title": "Part Number",
+            "type": "integer"
+          },
+          "etag": {
+            "description": "ETag of the part",
+            "title": "Etag",
+            "type": "string"
+          }
+        },
+        "required": [
+          "part_number",
+          "etag"
+        ],
+        "title": "UploadPart",
+        "type": "object"
+      },
+      "PartnerTokenResponse": {
+        "properties": {
+          "token": {
+            "description": "A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end",
+            "title": "Token",
+            "type": "string"
+          },
+          "expires_in": {
+            "description": "The number of seconds until the token expires",
+            "title": "Expires In",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "token",
+          "expires_in"
+        ],
+        "title": "PartnerTokenResponse",
+        "type": "object"
+      },
+      "PartnerTokenRequest": {
+        "properties": {
+          "partner_id": {
+            "description": "An identifier for the partner created and shared with the partner by Wayflyer during onboarding. **Never** expose this to the front end.",
+            "title": "Partner Id",
+            "type": "string"
+          },
+          "partner_secret": {
+            "description": "A secret that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end.",
+            "format": "password",
+            "title": "Partner Secret",
+            "type": "string",
+            "writeOnly": true
+          }
+        },
+        "required": [
+          "partner_id",
+          "partner_secret"
+        ],
+        "title": "PartnerTokenRequest",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "CompanyToken": {
+        "type": "http",
+        "scheme": "bearer"
+      },
+      "PartnerToken": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "parameters": {
+      "ApiVersion": {
+        "in": "header",
+        "name": "API-Version",
+        "schema": {
+          "title": "API-Version",
+          "type": "string",
+          "enum": [
+            "1"
+          ]
+        },
+        "required": false
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://sandbox-api.wayflyer.com/financing/",
+      "description": "Production"
+    }
+  ]
+}

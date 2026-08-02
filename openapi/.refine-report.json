@@ -1,0 +1,36 @@
+{
+  "provider": "wayflyer",
+  "sources": [
+    "wayflyer-auth-api-openapi.yml",
+    "wayflyer-company-details-api-openapi.yml",
+    "wayflyer-company-search-api-openapi.yml",
+    "wayflyer-cta-api-openapi.yml",
+    "wayflyer-data-upload-api-openapi.yml",
+    "wayflyer-documents-api-openapi.yml",
+    "wayflyer-embedded-application-api-openapi.yml",
+    "wayflyer-handover-api-openapi.yml",
+    "wayflyer-industry-classification-api-openapi.yml",
+    "wayflyer-simulation-api-openapi.yml",
+    "wayflyer-tracked-login-api-openapi.yml",
+    "wayflyer-user-details-api-openapi.yml"
+  ],
+  "outputs": [
+    "wayflyer-auth-api-openapi.yml",
+    "wayflyer-company-details-api-openapi.yml",
+    "wayflyer-company-search-api-openapi.yml",
+    "wayflyer-cta-api-openapi.yml",
+    "wayflyer-data-upload-api-openapi.yml",
+    "wayflyer-documents-api-openapi.yml",
+    "wayflyer-embedded-application-api-openapi.yml",
+    "wayflyer-handover-api-openapi.yml",
+    "wayflyer-industry-classification-api-openapi.yml",
+    "wayflyer-simulation-api-openapi.yml",
+    "wayflyer-tracked-login-api-openapi.yml",
+    "wayflyer-user-details-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

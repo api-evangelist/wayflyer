@@ -1,0 +1,51 @@
+generated: '2026-07-21'
+method: searched
+source: live probe of /.well-known/* on Wayflyer hosts (2026-07-21)
+description: >-
+  Probe of the /.well-known/ discovery surface on Wayflyer's hosts. The API
+  hosts (api.wayflyer.com, sandbox-api.wayflyer.com) and the marketing site
+  return real 404s for every discovery document — Wayflyer publishes no
+  security.txt, OIDC discovery, api-catalog, or ai-plugin manifest. The
+  developer portal (docs.wayflyer.com, a Kong Konnect Dev Portal) serves its
+  SPA shell (HTTP 200, HTML) for most well-known paths — recorded below as
+  soft-404 fallback, not as real documents — but does publish one genuine
+  document: RFC 8414 OAuth authorization-server metadata for the portal's own
+  developer login (authorization-code + PKCE S256). That document describes
+  the docs portal's auth, not the Embedded Finance API's partner/company token
+  auth (see authentication/wayflyer-authentication.yml).
+hosts:
+  - host: https://wayflyer.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://api.wayflyer.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://sandbox-api.wayflyer.com
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+  - host: https://docs.wayflyer.com
+    documents:
+      - {path: /.well-known/security.txt, status: 200, note: SPA HTML fallback, not a security.txt}
+      - {path: /.well-known/openid-configuration, status: 200, note: SPA HTML fallback, not an OIDC document}
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: wayflyer-docs-oauth-authorization-server.json
+        note: >-
+          Real RFC 8414 metadata for the Kong Konnect developer-portal login
+          (issuer https://docs.wayflyer.com, authorization_code + PKCE S256).
+          Portal infrastructure — not the Embedded Finance API authorization
+          server.
+      - {path: /.well-known/api-catalog, status: 200, note: SPA HTML fallback, not an api-catalog}
+      - {path: /.well-known/ai-plugin.json, status: 200, note: SPA HTML fallback, not an ai-plugin manifest}

@@ -1,0 +1,38 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/wayflyer-embedded-finance-openapi-original.json (operationIds verified by grep)
+skills:
+  - file: wayflyer-offer-cta-and-embedded-application.md
+    name: Render a Wayflyer funding offer and run the embedded application
+    api: openapi/wayflyer-embedded-finance-openapi-original.json
+    operations:
+      - wf_embedded_finance_service_apps_web_core_views_partner_token_create_partner_token
+      - wf_embedded_finance_service_apps_web_core_views_company_token_create_company_token
+      - wf_embedded_finance_service_apps_web_cta_views_banner_get_banner
+      - wf_embedded_finance_service_apps_web_cta_views_banner_dismiss_banner
+      - wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_start_embedded_application
+      - wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_get_embedded_application
+      - wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_submit_embedded_application
+  - file: wayflyer-anonymized-data-upload.md
+    name: Upload anonymized revenue data for indicative offers
+    api: openapi/wayflyer-embedded-finance-openapi-original.json
+    operations:
+      - wf_embedded_finance_service_apps_web_core_views_partner_token_create_partner_token
+      - wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_batch_upload
+      - wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_file_upload
+      - wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_complete_file_upload
+      - wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_get_status
+  - file: wayflyer-application-details-and-documents.md
+    name: Complete application details and upload supporting documents
+    api: openapi/wayflyer-embedded-finance-openapi-original.json
+    operations:
+      - wf_embedded_finance_service_apps_web_core_views_user_details_get_user_details
+      - wf_embedded_finance_service_apps_web_core_views_user_details_update_user_details
+      - wf_embedded_finance_service_apps_web_core_views_company_details_get_company_details
+      - wf_embedded_finance_service_apps_web_core_views_company_details_update_company_details
+      - wf_embedded_finance_service_apps_web_core_views_company_details_get_business_types
+      - wf_embedded_finance_service_apps_web_core_views_industry_classification_search_industry_classifications
+      - wf_embedded_finance_service_apps_web_core_views_document_upload_create_document_upload_url
+      - wf_embedded_finance_service_apps_web_core_views_document_upload_confirm_document_upload
+      - wf_embedded_finance_service_apps_web_core_views_document_upload_list_document_uploads
+      - wf_embedded_finance_service_apps_web_core_views_document_upload_delete_document_upload

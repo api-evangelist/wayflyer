@@ -1,0 +1,14 @@
+{
+  "repo": "wayflyer",
+  "feeds": [
+    {
+      "source": "https://help-center.wayflyer.com/",
+      "feed_url": "https://help-center.wayflyer.com/feed.xml",
+      "title": "",
+      "saved": 0,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-01T15:49:00Z"
+}

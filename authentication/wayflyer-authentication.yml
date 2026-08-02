@@ -1,0 +1,48 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.wayflyer.com/embedded-journey-v5-overview/shared/authentication
+docs: https://docs.wayflyer.com/embedded-journey-v5-overview/shared/authentication
+description: >-
+  Authentication profile for the Wayflyer Embedded Finance (Hosted Capital)
+  API. Two-tier bearer-JWT model: partners exchange a backend-only
+  client_id/client_secret for a Partner Token, then mint per-merchant Company
+  Tokens that are forwarded to the frontend for SDK / API calls. Both token
+  classes appear in the OpenAPI as http bearer securitySchemes (PartnerToken,
+  CompanyToken). No OAuth2/OIDC flows and no API-key scheme; the sandbox
+  environment uses a separate sandbox client_id/secret.
+summary:
+  types: [http]
+  schemes: [bearer]
+  oauth2_flows: []
+credentials:
+  issued: client_id + client_secret at partner onboarding (backend-only; never expose in the frontend)
+token_model:
+  - name: PartnerToken
+    obtain: POST https://api.wayflyer.com/financing/v1/partner-token/
+    payload: '{"partner_id": "<client_id>", "partner_secret": "<client_secret>"}'
+    format: JWT
+    header: 'Authorization: Bearer <token>'
+    expires_in: 86000
+    caching: securely cache and re-use until expiry
+    used_for: partner-scope operations (company-token minting, anonymized data uploads)
+  - name: CompanyToken
+    obtain: POST https://api.wayflyer.com/financing/v1/partner/company-token/ (authenticated with PartnerToken)
+    payload: '{"company_id": "<anonymous-string-id>", "user_id": "<user-id>"}'
+    format: JWT
+    header: 'Authorization: Bearer <token>'
+    expires_in: 86000
+    used_for: all company-scope operations (CTA, applications, details, documents); forwarded to the frontend for the SDKs
+    company_id_rules: anonymous, consistent, unique per company, string < 255 chars, must not reveal identity without consent
+schemes:
+  - name: CompanyToken
+    type: http
+    scheme: bearer
+    sources:
+      - openapi/wayflyer-embedded-finance-openapi-original.json
+      - openapi/wayflyer-embedded-finance-sandbox-openapi-original.json
+  - name: PartnerToken
+    type: http
+    scheme: bearer
+    sources:
+      - openapi/wayflyer-embedded-finance-openapi-original.json
+      - openapi/wayflyer-embedded-finance-sandbox-openapi-original.json

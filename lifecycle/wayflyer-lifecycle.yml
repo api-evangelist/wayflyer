@@ -1,0 +1,28 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.wayflyer.com/ + https://status.wayflyer.com/ (probed 2026-07-21)
+description: >-
+  Lifecycle posture of the Wayflyer Embedded Finance API. Wayflyer runs a
+  public status page at status.wayflyer.com (HTTP 200 at probe time;
+  JS-rendered status-pages app). The API itself is version-pinned via the v1
+  URI prefix and an optional API-Version header (enum "1"); the embedded
+  partner journey is versioned as a product (v5 current), with the previous
+  v4 hosted journey explicitly designated legacy and a published v4-to-v5
+  migration guide. No formal deprecation-window policy, Sunset/Deprecation
+  header (RFC 8594) support, or SLA document was found, and no operation in
+  the harvested OpenAPI is marked deprecated.
+status_page: https://status.wayflyer.com/
+versioning:
+  scheme: URI prefix (v1) + optional API-Version header; journey versioned v4/v5
+  current_api_version: '1'
+  current_journey_version: v5
+  docs: https://docs.wayflyer.com/embedded-journey-v5-overview
+deprecation:
+  policy_url: null
+  sunset_header: false
+  legacy_surfaces:
+    - name: Embedded Journey v4 (hosted application)
+      status: legacy, documented for existing integrations
+      migration_guide: https://docs.wayflyer.com/embedded-journey-v5-overview/v4-legacy/migration-guide-v4-to-v5
+sla: null
+deprecated_operations: []

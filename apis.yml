@@ -1,23 +1,217 @@
 aid: wayflyer
 name: Wayflyer
-description: 'Wayflyer is a company surfaced as a portfolio company of qed-investors, speedinvest and
-  added to the API Evangelist network as a stub for enrichment. Sector: ecommerce. This profile is a lead
-  awaiting the enrichment pipeline.'
+description: >-
+  Wayflyer provides revenue-based financing and growth capital for e-commerce
+  businesses, and exposes its funding products to software platforms through
+  the Hosted Capital / Embedded Finance API. Partners upload anonymized
+  merchant revenue data to generate personalised indicative offers, render a
+  Wayflyer CTA banner in their own UI, and run the full funding application
+  as an embedded (v5) or hosted (v4 legacy) journey — with JavaScript UI and
+  headless SDKs on npm, a production-parity sandbox with application-state
+  simulation, and OpenAPI 3.1 contracts published on a Kong Konnect developer
+  portal at docs.wayflyer.com.
 url: https://raw.githubusercontent.com/api-evangelist/wayflyer/refs/heads/main/apis.yml
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://avatars.githubusercontent.com/u/56260407
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - qed-investors
 - speedinvest
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: profile
+x-tier-reason: real partner API surface (Embedded Finance) with published OpenAPI
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
 - Ecommerce
-apis: []
+- Fintech
+- Embedded Finance
+- Lending
+- Revenue-Based Financing
+- Financing
+apis:
+- aid: wayflyer:wayflyer-auth-api
+  name: Wayflyer Auth API
+  description: The Auth API from Wayflyer — 2 operation(s) for auth.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-auth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-company-details-api
+  name: Wayflyer Company Details API
+  description: The Company Details API from Wayflyer — 3 operation(s) for company details.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Company Details
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-company-details-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-company-search-api
+  name: Wayflyer Company Search API
+  description: The Company Search API from Wayflyer — 1 operation(s) for company search.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Company Search
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-company-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-cta-api
+  name: Wayflyer CTA API
+  description: The CTA API from Wayflyer — 4 operation(s) for cta.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - CTA
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-cta-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-data-upload-api
+  name: Wayflyer Data Upload API
+  description: The Data Upload API from Wayflyer — 3 operation(s) for data upload.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Data Upload
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-data-upload-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-documents-api
+  name: Wayflyer Documents API
+  description: The Documents API from Wayflyer — 3 operation(s) for documents.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-documents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-embedded-application-api
+  name: Wayflyer Embedded Application API
+  description: The Embedded Application API from Wayflyer — 3 operation(s) for embedded application.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Embedded Application
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-embedded-application-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-handover-api
+  name: Wayflyer Handover API
+  description: The Handover API from Wayflyer — 1 operation(s) for handover.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Handover
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-handover-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-industry-classification-api
+  name: Wayflyer Industry Classification API
+  description: >-
+    The Industry Classification API from Wayflyer — 1 operation(s) for industry classification.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Industry Classification
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-industry-classification-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-simulation-api
+  name: Wayflyer Simulation API
+  description: The Simulation API from Wayflyer — 1 operation(s) for simulation.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Simulation
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-simulation-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-tracked-login-api
+  name: Wayflyer Tracked Login API
+  description: The Tracked Login API from Wayflyer — 1 operation(s) for tracked login.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - Tracked Login
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-tracked-login-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+- aid: wayflyer:wayflyer-user-details-api
+  name: Wayflyer User Details API
+  description: The User Details API from Wayflyer — 4 operation(s) for user details.
+  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
+  baseURL: https://api.wayflyer.com/financing/
+  tags:
+  - User Details
+  properties:
+  - type: OpenAPI
+    url: openapi/wayflyer-user-details-api-openapi.yml
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview
+  - type: Documentation
+    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,4 +219,67 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: http://wayflyer.com
+  url: https://wayflyer.com
+- type: DeveloperPortal
+  url: https://docs.wayflyer.com/
+- type: Documentation
+  url: https://docs.wayflyer.com/embedded-journey-v5-overview
+- type: APIReference
+  url: https://docs.wayflyer.com/apis
+- type: GettingStarted
+  url: https://docs.wayflyer.com/embedded-journey-v5-overview
+- type: Authentication
+  url: authentication/wayflyer-authentication.yml
+- type: RateLimits
+  url: https://docs.wayflyer.com/embedded-journey-v5-overview/shared/rate-limiting
+- type: Sandbox
+  url: sandbox/wayflyer-sandbox.yml
+- type: Packages
+  url: packages/wayflyer-packages.yml
+- type: SDKs
+  url: packages/wayflyer-packages.yml
+- type: Components
+  url: components/wayflyer-components.yml
+- type: Conventions
+  url: conventions/wayflyer-conventions.yml
+- type: ErrorCatalog
+  url: errors/wayflyer-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/wayflyer-lifecycle.yml
+- type: StatusPage
+  url: https://status.wayflyer.com/
+- type: Conformance
+  url: conformance/wayflyer-conformance.yml
+- type: DataModel
+  url: data-model/wayflyer-data-model.yml
+- type: MCPServer
+  url: mcp/wayflyer-mcp.yml
+- type: LLMsTxt
+  url: llms/wayflyer-llms.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/wayflyer-domain-security.yml
+- type: TrustCenter
+  url: security/wayflyer-trust-center.yml
+- type: Support
+  url: https://help-center.wayflyer.com/
+- type: Blog
+  url: https://wayflyer.com/blog
+- type: GitHubOrganization
+  url: https://github.com/wayflyer
+- type: Pricing
+  url: https://wayflyer.com/how-our-financing-offers-work
+- type: SignUp
+  url: https://app.wayflyer.com/signup/
+- type: TermsOfService
+  url: https://wayflyer.com/terms
+- type: PrivacyPolicy
+  url: https://wayflyer.com/privacy-notice
+- type: PartnerProgram
+  url: https://wayflyer.com/hosted-capital
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1

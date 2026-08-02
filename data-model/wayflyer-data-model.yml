@@ -1,0 +1,56 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wayflyer-embedded-finance-openapi-original.json
+description: >-
+  Entity-relationship view of the Wayflyer Embedded Finance API, derived from
+  the schema $ref graph and the id-reference fields in the harvested OpenAPI
+  3.1 (75 component schemas). The domain is partner-embedded financing: a
+  Partner platform registers anonymous Companies, uploads anonymized revenue
+  data to generate Offers, renders a CTA Banner, and drives a funding
+  Application (embedded v5 or hosted v4 journey) with supporting
+  User/Company details and Document uploads.
+entities:
+  - name: Partner
+    description: the platform integrating Hosted Capital; authenticates with client_id/secret -> PartnerToken
+    key: partner_id (client_id)
+  - name: Company
+    description: an anonymous merchant on the partner platform; all company-scope calls are authorized by a CompanyToken minted for company_id (+ user_id)
+    key: company_id (partner-chosen anonymous string < 255 chars)
+  - name: AnonDataUpload
+    description: anonymized revenue dataset (file or batch) used to compute indicative offers
+    key: upload_id
+  - name: Offer
+    description: indicative funding offer (amount + SupportedCurrencyCode)
+  - name: Banner (CTA)
+    description: BannerResponse/BannerData; states continue_application, continue_embedded_application, indicative_offer, generic_offer
+  - name: EmbeddedApplication
+    description: the v5 in-platform funding application; status via EmbeddedApplicationStatusResponse; RequiredAction in [complete_application, provide_additional_info, select_offer, complete_kyc, sign_contract]
+  - name: HostedApplication
+    description: the v4 legacy co-branded application started/continued via redirect URL
+  - name: UserDetails
+    description: applicant user profile (UserDetailsResponse)
+  - name: CompanyDetails
+    description: merchant business profile (BusinessType, CountryCode, CustomerSegment, ProductOffering, SalesChannel, currency)
+  - name: DocumentUpload
+    description: KYC/supporting document (CreateDocumentUploadResponse / DocumentUploadResponse, ContentType)
+    key: document_id
+relationships:
+  - {from: Partner, to: Company, kind: has_many, via: company_id (POST /partner/company-token/)}
+  - {from: Partner, to: AnonDataUpload, kind: has_many, via: upload_id (POST /partner/anon-data-upload/*)}
+  - {from: AnonDataUpload, to: Company, kind: has_many, via: company_id rows in the uploaded dataset}
+  - {from: Company, to: Offer, kind: has_one, via: computed from uploaded revenue data}
+  - {from: Company, to: Banner, kind: has_one, via: GET /company/cta/ (CompanyToken)}
+  - {from: Banner, to: Offer, kind: has_one, via: BannerData.offer (indicative_offer state)}
+  - {from: Company, to: EmbeddedApplication, kind: has_one, via: POST/GET /company/embedded-application/}
+  - {from: Company, to: HostedApplication, kind: has_one, via: POST /company/hosted-application/ (v4 legacy)}
+  - {from: Company, to: UserDetails, kind: has_one, via: GET/PUT /company/user-details/}
+  - {from: Company, to: CompanyDetails, kind: has_one, via: GET/PUT /company/company-details/}
+  - {from: EmbeddedApplication, to: DocumentUpload, kind: has_many, via: document_id (POST/GET /company/documents/)}
+schema_ref_graph:
+  BannerResponse: [BannerData, BannerState]
+  BannerData: [ContinueApplicationBannerConfig, ContinueEmbeddedApplicationBannerConfig, Offer, OfferBannerConfig]
+  Offer: [SupportedCurrencyCode]
+  CompanyDetailsResponse: [BusinessType, CanadianProvinceCode, CountryCode, CustomerSegment, ProductOffering, SalesChannel, SupportedCurrencyCode, USStateCode]
+  EmbeddedApplicationStatusResponse: [EmbeddedApplicationDetailStatus]
+  DocumentUploadResponse: [ContentType]
+  HostedApplicationCompanyData: [CanadianProvinceCode, CompanyType, SupportedCountryCode, SupportedCurrencyCode, USStateCode]

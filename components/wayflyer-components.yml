@@ -1,0 +1,44 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk
+description: >-
+  Client-side / embeddable UI surfaces Wayflyer ships for partners embedding
+  Hosted Capital in their platform. Distinct from the server-side API: these
+  are the prebuilt components the UI SDK mounts into the partner's DOM, the
+  design-system packages behind them, and the sandbox helper UI. Loader
+  libraries are catalogued in packages/wayflyer-packages.yml.
+families:
+  - family: Embedded Journey (v5)
+    loader: "@wf-financing/ui-sdk (WayflyerUiSdk.loadSdk(companyToken, options))"
+    components:
+      - name: CTA banner
+        mount: mountCta(targetId, prefillCallback)
+        description: >-
+          Personalised call-to-action banner (indicative_offer, generic_offer,
+          continue_embedded_application states) with Wayflyer-managed,
+          localised copy (en, de, fr, nl, sv, es).
+      - name: Embedded application panel
+        description: >-
+          The full funding application journey opened as a panel directly
+          within the partner platform (v5), replacing the v4 redirect to a
+          co-branded hosted page.
+    options:
+      - 'isSandbox: boolean (default false) — sandbox mode'
+      - 'skipAnimations: boolean (default false)'
+      - 'language: en | de | fr | nl | sv | es (default en)'
+    theming: partner look-and-feel defined during onboarding per the UI Style Guide
+    docs: https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk/ui-sdk
+  - family: Headless (build-your-own UI)
+    loader: "@wf-financing/headless-sdk"
+    description: >-
+      Typesafe wrapper around the Embedded Finance API with caching and state
+      management (getCta(), dismissCta(), application flows); partner renders
+      its own UI.
+    docs: https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk/headless-sdk
+  - family: Sandbox helper UI
+    loader: "@wf-financing/sandbox-ui"
+    description: floating corner button + anchored popover for driving sandbox simulations during development
+  - family: FlyUI design system
+    packages: ["@wayflyer/flyui-tokens", "@wayflyer/flyui-icons"]
+    description: Wayflyer's published design tokens and SVG iconography underpinning the branded components.
+style_guide: https://docs.wayflyer.com/embedded-journey-v5-overview/ui-style-guide

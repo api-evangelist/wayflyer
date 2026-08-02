@@ -1,0 +1,45 @@
+# generated: 2026-07-21 | method: generated | source: API Evangelist enrichment pipeline
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Wayflyer Embedded Finance
+  version: 1.0.0
+extends: openapi/wayflyer-embedded-finance-openapi-original.json
+actions:
+  - target: $.info
+    update:
+      description: >-
+        Wayflyer's Embedded Finance (Hosted Capital) API lets partner platforms
+        offer Wayflyer revenue-based financing to their merchants: obtain
+        partner and company bearer tokens, upload anonymized revenue data to
+        generate indicative offers, render the CTA banner, and run the embedded
+        or hosted funding application.
+      contact:
+        name: Wayflyer Developer Portal
+        url: https://docs.wayflyer.com/
+      x-apievangelist:
+        provider: wayflyer
+        documentation: https://docs.wayflyer.com/embedded-journey-v5-overview
+        authentication: authentication/wayflyer-authentication.yml
+        conventions: conventions/wayflyer-conventions.yml
+        errors: errors/wayflyer-problem-types.yml
+        sandbox: sandbox/wayflyer-sandbox.yml
+  - target: $.info
+    update:
+      x-rate-limiting: >-
+        Sliding-window rate limits per endpoint; responses carry
+        RateLimit-Limit and RateLimit-Remaining, and 429 responses carry
+        Retry-After. See
+        https://docs.wayflyer.com/embedded-journey-v5-overview/shared/rate-limiting
+  - target: $.components.securitySchemes.PartnerToken
+    update:
+      description: >-
+        Backend-only JWT bearer token obtained from POST /partner-token/ with
+        the partner client_id/client_secret issued at onboarding; expires_in
+        86000 seconds (~24h) — cache and reuse until expiry.
+  - target: $.components.securitySchemes.CompanyToken
+    update:
+      description: >-
+        Per-company JWT bearer token obtained from POST /partner/company-token/
+        using the PartnerToken; scoped to an anonymous company_id (+ user_id);
+        expires_in 86000 seconds (~24h). Forwarded to the frontend to
+        authenticate SDK / Embedded Finance API calls.

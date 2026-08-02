@@ -1,0 +1,86 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wayflyer-embedded-finance-openapi-original.json
+format: custom
+description: >-
+  Error catalog for the Wayflyer Embedded Finance API, derived from the 4xx/5xx
+  responses declared in the harvested OpenAPI 3.1. Wayflyer does not use RFC
+  9457 application/problem+json; errors are plain application/json. The base
+  envelope is ErrorDetail ({detail: string}); domain operations extend it with
+  a machine-readable error_code enum ({error_code, detail}). 429 responses
+  carry no body but signal via Retry-After (see
+  conventions/wayflyer-conventions.yml).
+envelope:
+  base: '{detail: string}  # components/schemas/ErrorDetail'
+  extended: '{error_code: <enum>, detail: string}  # per-domain *ErrorResponse schemas'
+problems:
+  - status: 400
+    title: Bad Request
+    schema: ErrorDetail (or domain ErrorResponse on company-details / embedded-application submit)
+    occurs_on:
+      - POST /company/hosted-application/continue/
+      - PUT /company/company-details/ (UpdateCompanyDetailsErrorResponse)
+      - POST /company/embedded-application/
+      - POST /company/embedded-application/submit/ (SubmitEmbeddedApplicationErrorResponse)
+      - POST /company/documents/{document_id}/confirm/ (DocumentErrorResponse)
+      - PATCH /partner/anon-data-upload/upload/{upload_id}/
+      - POST /partner-token/
+  - status: 403
+    title: Forbidden
+    schema: MarkIneligibleErrorResponse
+    occurs_on:
+      - POST /company/embedded-application/mark-ineligible/
+  - status: 404
+    title: Not Found
+    schema: ErrorDetail (or domain ErrorResponse)
+    occurs_on:
+      - GET /company/user-details/
+      - GET /company/company-details/
+      - GET /company/embedded-application/
+      - POST /company/embedded-application/submit/
+      - POST /company/embedded-application/mark-ineligible/
+      - POST /company/documents/{document_id}/confirm/
+      - DELETE /company/documents/{document_id}/
+  - status: 409
+    title: Conflict
+    schema: UpdateUserDetailsErrorResponse / SubmitEmbeddedApplicationErrorResponse
+    occurs_on:
+      - PUT /company/user-details/
+      - POST /company/embedded-application/submit/
+  - status: 422
+    title: Unprocessable Entity (validation failure)
+    schema: ErrorDetail
+    occurs_on:
+      - PUT /company/user-details/
+      - PUT /company/company-details/
+  - status: 423
+    title: Locked (application state prevents modification)
+    schema: domain ErrorResponse
+    occurs_on:
+      - PUT /company/user-details/
+      - PUT /company/company-details/
+      - DELETE /company/documents/{document_id}/
+  - status: 429
+    title: Too Many Requests
+    schema: none (empty body)
+    remediation: >-
+      Respect the Retry-After header and pause requests to the affected
+      endpoint; limits are per-endpoint sliding windows
+      (docs.wayflyer.com/embedded-journey-v5-overview/shared/rate-limiting).
+    occurs_on:
+      - POST /partner-token/
+  - status: 500
+    title: Internal Server Error
+    schema: none (ErrorDetail on /partner-token/)
+  - status: 502
+    title: Bad Gateway
+    schema: DocumentErrorResponse
+    occurs_on:
+      - DELETE /company/documents/{document_id}/
+error_codes:
+  UpdateUserDetailsErrorCode: [duplicate, too_many_revisions, application_already_submitted]
+  UpdateCompanyDetailsErrorCode: [too_many_revisions, application_already_submitted, invalid_industry_code]
+  SubmitEmbeddedApplicationErrorCode: [details_incomplete, no_open_application, open_hosted_application_exists, duplicate_company, ineligible_application, registration_or_documents_required]
+  MarkIneligibleErrorCode: [no_open_application, not_started_by_user]
+  DocumentErrorCode: [not_found, locked, deletion_failed, object_missing]
+  IneligibleReason: [unsupported_country, no_eligible_business_model]

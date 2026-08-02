@@ -1,0 +1,53 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wayflyer-embedded-finance-openapi-original.json + docs.wayflyer.com shared docs
+description: >-
+  Standards-conformance assertions for the Wayflyer Embedded Finance API,
+  derived from the harvested OpenAPI 3.1 and the shared docs pages
+  (authentication, rate-limiting). Wayflyer publishes no formal compliance/
+  certification page that could be verified (the Vanta trust center at
+  trust.wayflyer.com is JS-rendered; see security/wayflyer-trust-center.yml),
+  so no Compliance pointer is emitted.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: both published specs declare openapi 3.1.0 (Kong Konnect dev portal, docs.wayflyer.com/apis)
+  - id: oauth2
+    conforms: false
+    evidence: no oauth2 securitySchemes; bespoke two-tier bearer-JWT partner/company token model
+  - id: oidc
+    conforms: false
+    evidence: no openIdConnect scheme; /.well-known/openid-configuration 404 on api hosts
+  - id: jwt-bearer-auth
+    conforms: true
+    evidence: PartnerToken/CompanyToken http bearer schemes; docs state both tokens are JWTs sent as Authorization Bearer
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: error responses are plain application/json ({detail} / {error_code, detail}); no application/problem+json
+  - id: ietf-ratelimit-headers
+    conforms: true
+    evidence: >-
+      rate-limited endpoints return RateLimit-Limit and RateLimit-Remaining
+      (IETF draft RateLimit header fields) plus Retry-After on 429
+      (docs.wayflyer.com/embedded-journey-v5-overview/shared/rate-limiting)
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: no Sunset/Deprecation header support documented
+  - id: idempotency-key
+    conforms: false
+    evidence: no idempotency-key header documented or declared in the OpenAPI
+  - id: cursor-pagination
+    conforms: false
+    evidence: no pagination surface; bounded list endpoints (max_results 1-100)
+  - id: iso-4217-currency
+    conforms: true
+    evidence: SupportedCurrencyCode schema + anon-data-upload currency field use ISO 4217 codes
+  - id: iso-3166-country
+    conforms: true
+    evidence: SupportedCountryCode/CountryCode schemas + country (ISO 3166-1 alpha-2) and state (ISO 3166-2) fields
+  - id: fapi
+    conforms: false
+    evidence: no FAPI profile claimed; not an open-banking data API
+  - id: psd2
+    conforms: false
+    evidence: revenue-based financing, not PSD2 account/payment access

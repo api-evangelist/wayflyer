@@ -1,0 +1,20 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+url: https://trust.wayflyer.com/
+platform: Vanta Trust Center
+description: >-
+  Wayflyer operates a public trust center at trust.wayflyer.com (HTTP 200 at
+  probe time), hosted on Vanta's trust-report platform (page title "Wayflyer
+  Trust Center"; page loads Vanta trust-report assets from assets.vanta.com).
+  The content is JavaScript-rendered, so the automated keyword probe
+  (probe-security-programs.py) could not extract the certification list —
+  named certifications are therefore NOT recorded here rather than guessed.
+  No Compliance rating pointer is emitted until a published certification
+  list is verified.
+certifications: []
+certifications_note: not extractable from the JS-rendered Vanta app at probe time; none asserted
+evidence:
+  - source: https://trust.wayflyer.com/
+    kind: trust-center
+    detail: 'HTTP 200; <title>Wayflyer Trust Center</title>; Vanta index-trust-report.* assets'

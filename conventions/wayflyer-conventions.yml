@@ -1,0 +1,79 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://docs.wayflyer.com/embedded-journey-v5-overview/shared/authentication +
+  /shared/rate-limiting + derived from
+  openapi/wayflyer-embedded-finance-openapi-original.json
+description: >-
+  Cross-cutting request/response semantics of the Wayflyer Embedded Finance
+  (Hosted Capital) API — the partner-facing REST API behind docs.wayflyer.com.
+  Captured from the shared docs pages and the harvested OpenAPI 3.1.
+
+base_url: https://api.wayflyer.com/financing/
+sandbox_base_url: https://sandbox-api.wayflyer.com/financing/
+api_style: REST over HTTPS, JSON requests and responses
+
+authentication:
+  scheme: Bearer JWT (two token classes)
+  detail: >-
+    Backend exchanges client_id/client_secret for a Partner Token (POST
+    /partner-token/), then mints per-merchant Company Tokens (POST
+    /partner/company-token/). Both are JWTs sent as Authorization: Bearer
+    <token> and expire in 86000 seconds (~24h). Credentials must never reach
+    the frontend; Company Tokens are forwarded to the frontend for SDK calls.
+  docs: https://docs.wayflyer.com/embedded-journey-v5-overview/shared/authentication
+  artifact: authentication/wayflyer-authentication.yml
+
+idempotency:
+  supported: false
+  notes: >-
+    No Idempotency-Key header or equivalent is documented or declared in the
+    OpenAPI. Application state transitions are guarded server-side instead
+    (409 Conflict / 423 Locked on already-submitted or locked applications).
+
+pagination:
+  style: none
+  notes: >-
+    No cursor/offset pagination surface. List-ish endpoints are bounded:
+    industry search takes query + max_results (1-100, default 10); document
+    listing takes an include_unconfirmed boolean.
+
+versioning:
+  scheme: URI prefix (v1) + optional API-Version request header (enum "1")
+  current: '1'
+  notes: >-
+    Token endpoints are documented under /financing/v1/. Every operation also
+    accepts an optional API-Version header pinned to "1". The embedded JOURNEY
+    (SDK + flow) is versioned separately (v5 current; v4 legacy with a
+    published migration guide).
+  docs: https://docs.wayflyer.com/embedded-journey-v5-overview/v4-legacy/migration-guide-v4-to-v5
+
+request_tracing:
+  documented: false
+
+error_envelope:
+  shape: '{detail: string} base; {error_code: <enum>, detail: string} on domain operations'
+  format: application/json (not RFC 9457 problem+json)
+  artifact: errors/wayflyer-problem-types.yml
+
+rate_limits:
+  strategy: sliding window, limits vary per endpoint
+  headers:
+    - 'RateLimit-Limit: max requests allowed within the sliding window'
+    - 'RateLimit-Remaining: requests remaining before the limit'
+    - 'Retry-After: seconds to wait (on 429 only)'
+  on_limit: HTTP 429 Too Many Requests; pause the affected endpoint for Retry-After seconds
+  docs: https://docs.wayflyer.com/embedded-journey-v5-overview/shared/rate-limiting
+
+data_privacy:
+  notes: >-
+    Partner-supplied company_id must be an anonymous, consistent string (<255
+    chars) that cannot reveal merchant identity without consent; revenue data
+    is uploaded anonymized (POST /partner/anon-data-upload/*) and joined to a
+    company only after the merchant starts an application.
+
+cross_links:
+  authentication: authentication/wayflyer-authentication.yml
+  errors: errors/wayflyer-problem-types.yml
+  lifecycle: lifecycle/wayflyer-lifecycle.yml
+  sandbox: sandbox/wayflyer-sandbox.yml

@@ -1,0 +1,149 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/wayflyer-embedded-finance-openapi-original.json
+description: Wayflyer publishes no official MCP server (none found in the docs portal, the wayflyer GitHub
+  org, npm @wf-financing/@wayflyer scopes, or the MCP registries at probe time). This is a CANDIDATE tool
+  list derived mechanically from the Embedded Finance OpenAPI — one tool per operation, grounded in real
+  operationIds — for a partner-side MCP server that would authenticate with the partner/company bearer
+  tokens described in authentication/wayflyer-authentication.yml.
+server:
+  name: wayflyer-embedded-finance
+  transport: http
+  base_url: https://api.wayflyer.com/financing/
+tools:
+- name: start_a_hosted_application
+  description: Start a hosted application
+  method: POST
+  path: /company/hosted-application/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_hosted_application_views_hosted_application_start_hosted_application
+- name: continue_a_hosted_application
+  description: Continue a hosted application
+  method: POST
+  path: /company/hosted-application/continue/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_hosted_application_views_hosted_application_continue_hosted_application
+- name: get_cta_configuration
+  description: Get CTA configuration
+  method: GET
+  path: /company/cta/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_cta_views_banner_get_banner
+- name: dismiss_cta
+  description: Dismiss CTA
+  method: POST
+  path: /company/cta/dismiss/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_cta_views_banner_dismiss_banner
+- name: get_user_details
+  description: Get user details
+  method: GET
+  path: /company/user-details/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_user_details_get_user_details
+- name: update_user_details
+  description: Update user details
+  method: PUT
+  path: /company/user-details/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_user_details_update_user_details
+- name: get_company_details
+  description: Get company details
+  method: GET
+  path: /company/company-details/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_details_get_company_details
+- name: update_company_details
+  description: Update company details
+  method: PUT
+  path: /company/company-details/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_details_update_company_details
+- name: list_business_types
+  description: List business types
+  method: GET
+  path: /company/company-details/business-types/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_details_get_business_types
+- name: determine_business_models
+  description: Determine business models
+  method: POST
+  path: /company/company-details/business-models/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_details_determine_business_models
+- name: search_for_company_registration_details
+  description: Search for company registration details
+  method: POST
+  path: /company/company-details/search/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_details_search_search_company_details
+- name: start_an_embedded_application
+  description: Start an embedded application
+  method: POST
+  path: /company/embedded-application/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_start_embedded_application
+- name: get_an_embedded_application
+  description: Get an embedded application
+  method: GET
+  path: /company/embedded-application/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_get_embedded_application
+- name: submit_embedded_application
+  description: Submit embedded application
+  method: POST
+  path: /company/embedded-application/submit/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_submit_embedded_application
+- name: mark_embedded_application_as_ineligible
+  description: Mark embedded application as ineligible
+  method: POST
+  path: /company/embedded-application/mark-ineligible/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_embedded_application_views_embedded_application_mark_ineligible
+- name: create_a_tracked_login_token
+  description: Create a tracked login token
+  method: POST
+  path: /company/tracked-login/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_tracked_login_create_tracked_login_token_view
+- name: search_industry_classifications
+  description: Search industry classifications
+  method: GET
+  path: /company/industry-classification/search/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_industry_classification_search_industry_classifications
+- name: create_a_document_upload_url
+  description: Create a document upload URL
+  method: POST
+  path: /company/documents/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_document_upload_create_document_upload_url
+- name: list_documents
+  description: List documents
+  method: GET
+  path: /company/documents/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_document_upload_list_document_uploads
+- name: confirm_a_document_upload
+  description: Confirm a document upload
+  method: POST
+  path: /company/documents/{document_id}/confirm/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_document_upload_confirm_document_upload
+- name: delete_a_document
+  description: Delete a document
+  method: DELETE
+  path: /company/documents/{document_id}/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_document_upload_delete_document_upload
+- name: initiate_file_upload
+  description: Initiate file upload
+  method: POST
+  path: /partner/anon-data-upload/file/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_file_upload
+- name: initiate_batch_upload
+  description: Initiate batch upload
+  method: POST
+  path: /partner/anon-data-upload/batch/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_initiate_batch_upload
+- name: get_upload_status
+  description: Get upload status
+  method: GET
+  path: /partner/anon-data-upload/upload/{upload_id}/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_get_status
+- name: complete_file_upload
+  description: Complete file upload
+  method: PATCH
+  path: /partner/anon-data-upload/upload/{upload_id}/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_anonymous_data_upload_views_anonymous_upload_complete_file_upload
+- name: create_company_token
+  description: Create company token
+  method: POST
+  path: /partner/company-token/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_company_token_create_company_token
+- name: create_partner_token
+  description: Create partner token
+  method: POST
+  path: /partner-token/
+  source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_partner_token_create_partner_token

@@ -1,0 +1,43 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+description: >-
+  Wayflyer's sandbox surface for the Embedded Finance (Hosted Capital) API — a
+  full parallel environment at sandbox-api.wayflyer.com with production
+  parity ("if their integration works correctly in the sandbox, their
+  integration will work correctly in production") plus simulation endpoints
+  for driving application lifecycle states without processing real
+  transactions. Captured from the sandbox docs and the separately published
+  Embedded Finance Sandbox OpenAPI. No magic test values (cards, IBANs) are
+  published — state is driven via the simulation endpoints instead.
+docs:
+  - https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
+  - https://docs.wayflyer.com/apis/embedded-finance-sandbox-api-1/docs
+environments:
+  - name: production
+    base_url: https://api.wayflyer.com/financing/
+    credentials: client_id + client_secret issued at partner onboarding
+  - name: sandbox
+    base_url: https://sandbox-api.wayflyer.com/financing/
+    credentials: separate sandbox client_id + client_secret issued during onboarding
+    spec: openapi/wayflyer-embedded-finance-sandbox-openapi-original.json
+sdk_switch: "pass isSandbox: true when loading @wf-financing/ui-sdk or @wf-financing/headless-sdk"
+simulation:
+  - endpoint: GET /company/hosted-application/simulation/
+    purpose: read current simulated hosted-application state
+    source_operation: openapi/wayflyer-embedded-finance-sandbox-openapi-original.json#wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_status
+  - endpoint: POST /company/hosted-application/simulation/
+    purpose: >-
+      advance/simulate application lifecycle stages (test all CTA states and
+      outcomes without submitting a real application)
+    source_operation: openapi/wayflyer-embedded-finance-sandbox-openapi-original.json#wf_embedded_finance_service_apps_sandbox_views_hosted_application_hosted_application_simulation_action
+capabilities:
+  - Simulate uploading anonymous data to generate indicative offers
+  - Test handling of all CTA states (indicative_offer, generic_offer, continue_embedded_application, dismissed/null)
+  - Simulated responses at each application step instead of full submission
+reference_app:
+  demo: https://demo.wayflyerhostedcapital.com/
+  source:
+    - https://github.com/wayflyer/hosted-capital-reference-app
+    - https://github.com/wayflyer/sdk-cta-reference-app
+access: sandbox credentials issued during partner onboarding; support@wayflyer.com can provision sandbox accounts

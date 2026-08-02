@@ -1,0 +1,101 @@
+generated: '2026-07-21'
+method: searched
+source: https://registry.npmjs.org/-/v1/search?text=wf-financing (npm registry, queried 2026-07-21)
+description: >-
+  First-party Wayflyer client packages, verified live against the npm registry.
+  Wayflyer publishes its Embedded Finance (Hosted Capital) client SDKs under the
+  @wf-financing npm scope (published via GitHub Actions) and its design-system
+  packages under the @wayflyer scope (publisher wayflyer-eng). The v5 packages
+  (@wf-financing/ui-sdk, @wf-financing/headless-sdk) are the current Embedded
+  Journey v5 SDKs documented at docs.wayflyer.com; @wf-financing/ui and
+  @wf-financing/headless are the v4-generation packages that remain published
+  for the legacy hosted journey. No PyPI, Maven, NuGet, RubyGems, Packagist,
+  crates.io, or pkg.go.dev first-party packages were found — the client surface
+  is JavaScript/TypeScript only (the partner backend calls the REST API
+  directly).
+docs: https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk
+packages:
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/ui-sdk"
+    url: https://www.npmjs.com/package/@wf-financing/ui-sdk
+    install: npm install @wf-financing/ui-sdk
+    official: true
+    version: 5.0.2
+    note: >-
+      Embedded Journey v5 UI SDK — mounts the CTA banner and embedded
+      application panel in the partner UI, with built-in theming, caching, and
+      sandbox mode (isSandbox: true). Docs:
+      https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk/ui-sdk
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/headless-sdk"
+    url: https://www.npmjs.com/package/@wf-financing/headless-sdk
+    install: npm install @wf-financing/headless-sdk
+    official: true
+    version: 5.0.2
+    note: >-
+      Embedded Journey v5 headless SDK — a typesafe wrapper around the Embedded
+      Finance API with caching and state management; partner supplies the UI.
+      Docs:
+      https://docs.wayflyer.com/embedded-journey-v5-overview/using-the-sdk/headless-sdk
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/ui"
+    url: https://www.npmjs.com/package/@wf-financing/ui
+    install: npm install @wf-financing/ui
+    official: true
+    version: 5.5.2
+    note: v4-generation (legacy) UI SDK for the hosted application journey.
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/headless"
+    url: https://www.npmjs.com/package/@wf-financing/headless
+    install: npm install @wf-financing/headless
+    official: true
+    version: 5.1.1
+    note: v4-generation (legacy) headless SDK.
+  - language: typescript
+    registry: npm
+    name: "@wf-financing/embedded-types"
+    url: https://www.npmjs.com/package/@wf-financing/embedded-types
+    install: npm install @wf-financing/embedded-types
+    official: true
+    version: 1.2.0
+    note: TypeScript types for the embedded application surfaces.
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/logger"
+    url: https://www.npmjs.com/package/@wf-financing/logger
+    install: npm install @wf-financing/logger
+    official: true
+    version: 2.2.5
+    note: Singleton logging utility used by the Wayflyer SDKs.
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/ui-assets"
+    url: https://www.npmjs.com/package/@wf-financing/ui-assets
+    official: true
+    version: 1.5.0
+    note: Shared UI asset bundle for the SDKs.
+  - language: javascript
+    registry: npm
+    name: "@wf-financing/sandbox-ui"
+    url: https://www.npmjs.com/package/@wf-financing/sandbox-ui
+    official: true
+    version: 0.7.13
+    note: Sandbox helper UI (floating corner button + anchored popover) for testing.
+  - language: javascript
+    registry: npm
+    name: "@wayflyer/flyui-tokens"
+    url: https://www.npmjs.com/package/@wayflyer/flyui-tokens
+    official: true
+    version: 13.4.1
+    note: Wayflyer FlyUI design tokens (publisher wayflyer-eng).
+  - language: javascript
+    registry: npm
+    name: "@wayflyer/flyui-icons"
+    url: https://www.npmjs.com/package/@wayflyer/flyui-icons
+    official: true
+    version: 1.4.0
+    note: Wayflyer FlyUI SVG iconography (publisher wayflyer-eng).
