@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Company Details API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Company Details",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get company details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/company-details/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get company details for the authenticated company."
+        },
+        {
+          "info": {
+            "name": "Update company details",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.wayflyer.com/financing/company/company-details/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Replace company details for the authenticated company.\n\nCompany details can only be updated a limited number of times and cannot be updated after an application is\nsubmitted."
+        },
+        {
+          "info": {
+            "name": "List business types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/company-details/business-types/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List valid business types for company details."
+        },
+        {
+          "info": {
+            "name": "Determine business models",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/company-details/business-models/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Determine which business models a company is eligible for based on its attributes.\n\nReturns eligible and ineligible business models based on the provided customer\nsegments, sales channels, product offerings, and country of incorporation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

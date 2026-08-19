@@ -1,0 +1,134 @@
+{
+  "item": [
+    {
+      "id": "eb1c477d-828b-448e-8e4a-53d83d63e589",
+      "name": "Tracked Login",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "8603a3b1-386f-4f79-8c54-e3d310235912",
+          "name": "Create a tracked login token",
+          "request": {
+            "name": "Create a tracked login token",
+            "description": {
+              "content": "Generate a URL to redirect the user to log in to their Wayflyer account.\n\nUse this endpoint when you want to hand over a user with an existing Wayflyer account to Wayflyer.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "company",
+                "tracked-login",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "API-Version",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "85f46bb3-4f0c-4666-9595-e27cb61aac1a",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "tracked-login",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wayflyer.com/financing/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "3f756119-61b9-435c-be44-461235b0424f",
+    "name": "Embedded Finance Auth Tracked Login API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

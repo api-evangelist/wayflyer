@@ -1,0 +1,128 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Documents API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List documents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/documents/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "include_unconfirmed",
+                "value": "",
+                "type": "query",
+                "description": "Include unconfirmed documents in the response"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "List all documents uploaded by the company."
+        },
+        {
+          "info": {
+            "name": "Create a document upload URL",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/documents/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a presigned URL for uploading a proof-of-registration document.\n\nThe response contains a URL and form fields. The client should upload the file directly\nto the returned URL using a multipart POST request with the provided fields. After a\nsuccessful upload, call the confirm endpoint to mark the document as uploaded."
+        },
+        {
+          "info": {
+            "name": "Confirm a document upload",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/documents/:document_id/confirm/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "document_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Confirm that a document has been successfully uploaded.\n\nThis must be called after the file has been uploaded to the URL returned by the create\nendpoint. Documents that are not confirmed will not be included in an application\nsubmission. This operation is idempotent."
+        },
+        {
+          "info": {
+            "name": "Delete a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.wayflyer.com/financing/company/documents/:document_id/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "document_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Delete a document.\n\nDocuments that have been included in a submitted application are locked and cannot\nbe deleted. Returns 423 if the document is locked."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

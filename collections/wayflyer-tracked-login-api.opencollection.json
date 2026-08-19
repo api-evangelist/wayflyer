@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Tracked Login API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tracked Login",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a tracked login token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/tracked-login/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a URL to redirect the user to log in to their Wayflyer account.\n\nUse this endpoint when you want to hand over a user with an existing Wayflyer account to Wayflyer."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

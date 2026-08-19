@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Company Search API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Company Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for company registration details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/company-details/search/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search for company details by name and jurisdiction.\n\nReturns a list of companies that match the search criteria or an empty list if no matches are found."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

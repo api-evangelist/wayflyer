@@ -1,0 +1,714 @@
+{
+  "item": [
+    {
+      "id": "475cf65e-a539-4ffc-b819-b184271ae1b0",
+      "name": "Company Details",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "97dcbbb6-4abe-40db-ae3b-5103eb888159",
+          "name": "Get company details",
+          "request": {
+            "name": "Get company details",
+            "description": {
+              "content": "Get company details for the authenticated company.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "company",
+                "company-details",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "API-Version",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a978a818-b3e3-4f1a-bbc3-e8c82b9c6806",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"legal_name\": \"string\",\n  \"revenue\": 2127,\n  \"revenue_currency\": \"EUR\",\n  \"industry_code\": \"string\",\n  \"industry_name\": \"string\",\n  \"date_of_incorporation\": \"1974-04-14\",\n  \"customer_segments\": [\n    \"b2b\",\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\",\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"subscriptions\",\n    \"physical\"\n  ],\n  \"country_code\": \"BD\",\n  \"state_code\": \"US-NH\",\n  \"principal_place_of_business\": \"US-MI\",\n  \"registration_number\": \"string\",\n  \"business_type\": \"corporation\",\n  \"website_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c8e380f9-59e5-4f1a-be56-cd58c61d8162",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f72e8442-dc8c-4a7f-9fc2-8c723e81c040",
+          "name": "Update company details",
+          "request": {
+            "name": "Update company details",
+            "description": {
+              "content": "Replace company details for the authenticated company.\n\nCompany details can only be updated a limited number of times and cannot be updated after an application is\nsubmitted.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "company",
+                "company-details",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "API-Version",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"legal_name\": \"<string>\",\n  \"revenue\": \"<integer>\",\n  \"revenue_currency\": \"<string>\",\n  \"industry_code\": \"<string>\",\n  \"date_of_incorporation\": \"<date>\",\n  \"customer_segments\": [\n    \"<string>\"\n  ],\n  \"sales_channels\": [\n    \"<string>\"\n  ],\n  \"product_offerings\": [\n    \"<string>\"\n  ],\n  \"country_code\": \"<string>\",\n  \"state_code\": \"<string>\",\n  \"principal_place_of_business\": \"<string>\",\n  \"registration_number\": \"<string>\",\n  \"business_type\": \"<string>\",\n  \"website_url\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "af6e7860-134b-4126-9f48-4daa4c09287e",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"legal_name\": \"<string>\",\n  \"revenue\": \"<integer>\",\n  \"revenue_currency\": \"DKK\",\n  \"industry_code\": \"<string>\",\n  \"date_of_incorporation\": \"<date>\",\n  \"customer_segments\": [\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"digital_products\"\n  ],\n  \"country_code\": \"AL\",\n  \"state_code\": \"US-AR\",\n  \"principal_place_of_business\": \"US-GA\",\n  \"registration_number\": \"<string>\",\n  \"business_type\": \"limited_liability_partnership\",\n  \"website_url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"legal_name\": \"string\",\n  \"revenue\": 2127,\n  \"revenue_currency\": \"EUR\",\n  \"industry_code\": \"string\",\n  \"industry_name\": \"string\",\n  \"date_of_incorporation\": \"1974-04-14\",\n  \"customer_segments\": [\n    \"b2b\",\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\",\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"subscriptions\",\n    \"physical\"\n  ],\n  \"country_code\": \"BD\",\n  \"state_code\": \"US-NH\",\n  \"principal_place_of_business\": \"US-MI\",\n  \"registration_number\": \"string\",\n  \"business_type\": \"corporation\",\n  \"website_url\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f88fea2-53d7-4bcb-9e0e-515151ea69bd",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"legal_name\": \"<string>\",\n  \"revenue\": \"<integer>\",\n  \"revenue_currency\": \"DKK\",\n  \"industry_code\": \"<string>\",\n  \"date_of_incorporation\": \"<date>\",\n  \"customer_segments\": [\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"digital_products\"\n  ],\n  \"country_code\": \"AL\",\n  \"state_code\": \"US-AR\",\n  \"principal_place_of_business\": \"US-GA\",\n  \"registration_number\": \"<string>\",\n  \"business_type\": \"limited_liability_partnership\",\n  \"website_url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"invalid_industry_code\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0bb75030-b418-4858-a994-4394aca74cbf",
+              "name": "Unprocessable Entity",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"legal_name\": \"<string>\",\n  \"revenue\": \"<integer>\",\n  \"revenue_currency\": \"DKK\",\n  \"industry_code\": \"<string>\",\n  \"date_of_incorporation\": \"<date>\",\n  \"customer_segments\": [\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"digital_products\"\n  ],\n  \"country_code\": \"AL\",\n  \"state_code\": \"US-AR\",\n  \"principal_place_of_business\": \"US-GA\",\n  \"registration_number\": \"<string>\",\n  \"business_type\": \"limited_liability_partnership\",\n  \"website_url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6fc12047-46f1-4827-b172-5dbb5f909c17",
+              "name": "Locked",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"legal_name\": \"<string>\",\n  \"revenue\": \"<integer>\",\n  \"revenue_currency\": \"DKK\",\n  \"industry_code\": \"<string>\",\n  \"date_of_incorporation\": \"<date>\",\n  \"customer_segments\": [\n    \"b2c\"\n  ],\n  \"sales_channels\": [\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"digital_products\"\n  ],\n  \"country_code\": \"AL\",\n  \"state_code\": \"US-AR\",\n  \"principal_place_of_business\": \"US-GA\",\n  \"registration_number\": \"<string>\",\n  \"business_type\": \"limited_liability_partnership\",\n  \"website_url\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Locked (WebDAV) (RFC 4918)",
+              "code": 423,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error_code\": \"invalid_industry_code\",\n  \"detail\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9278f5c4-55fc-4681-9358-0dfc93f63afe",
+          "name": "List business types",
+          "request": {
+            "name": "List business types",
+            "description": {
+              "content": "List valid business types for company details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "company",
+                "company-details",
+                "business-types",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "API-Version",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d6cf9231-4d7f-41ef-ac81-d4aab3b7e401",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    "business-types",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  \"string\",\n  \"string\"\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "81f87ec6-7dc6-4247-b084-ceacbe44ed3b",
+          "name": "Determine business models",
+          "request": {
+            "name": "Determine business models",
+            "description": {
+              "content": "Determine which business models a company is eligible for based on its attributes.\n\nReturns eligible and ineligible business models based on the provided customer\nsegments, sales channels, product offerings, and country of incorporation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "company",
+                "company-details",
+                "business-models",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "API-Version",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_segments\": [\n    \"<string>\"\n  ],\n  \"sales_channels\": [\n    \"<string>\"\n  ],\n  \"product_offerings\": [\n    \"<string>\"\n  ],\n  \"country_code\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4799d354-b4e8-41c7-b609-54c55a2b32d1",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "company",
+                    "company-details",
+                    "business-models",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "API-Version",
+                    "value": "<string>",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"customer_segments\": [\n    \"b2b\"\n  ],\n  \"sales_channels\": [\n    \"offline\"\n  ],\n  \"product_offerings\": [\n    \"services\"\n  ],\n  \"country_code\": \"LA\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"eligible\": [\n    \"other\",\n    \"saas_or_software\"\n  ],\n  \"ineligible\": [\n    \"retail\",\n    \"retail\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.wayflyer.com/financing/",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "130c53cc-49e9-43e5-9032-be9024e846cc",
+    "name": "Embedded Finance Auth Company Details API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

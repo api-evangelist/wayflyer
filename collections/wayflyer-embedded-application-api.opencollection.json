@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Embedded Application API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Embedded Application",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an embedded application",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/embedded-application/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Get the status of the open embedded application for the company.\nThe returned schema will let the user know if additional details are required to submit the application and\nprovide the application ID to track the application status in subsequent API calls.\nIf no open embedded application exists for the company, a 404 error is returned."
+        },
+        {
+          "info": {
+            "name": "Start an embedded application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/embedded-application/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Start an embedded application for the company.\nThe returned schema will let the user know if additional details are required to submit the application and\nprovide the application ID to track the application status in subsequent API calls.\nIf an open embedded application already exists for the company, a 400 error is returned."
+        },
+        {
+          "info": {
+            "name": "Submit embedded application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/embedded-application/submit/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit the open embedded application for review.\n\nAll required details must be provided before the application can be submitted. Once submitted, some details like\nuser details and company details can no longer be edited.\n\nYou must first call the start endpoint to create an embedded application before calling this submit endpoint."
+        },
+        {
+          "info": {
+            "name": "Mark embedded application as ineligible",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/embedded-application/mark-ineligible/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Mark embedded application as ineligible"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

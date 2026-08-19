@@ -147,3 +147,9 @@ tools:
   method: POST
   path: /partner-token/
   source_operation: openapi/wayflyer-embedded-finance-openapi-original.json#wf_embedded_finance_service_apps_web_core_views_partner_token_create_partner_token
+deployment:
+  mode: none
+  verified: derived
+  tools: 27
+  checked: '2026-08-12'
+  source: catalog MCP census

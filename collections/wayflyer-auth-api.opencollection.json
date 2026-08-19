@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create company token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/partner/company-token/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create a company token to be used to authenticate requests to company scoped endpoints on behalf of a company.\n\nThis should be called server-side and the resulting company token passed to the front end."
+        },
+        {
+          "info": {
+            "name": "Create partner token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/partner-token/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a partner token to be used to authenticate requests to partner scoped endpoints.\n\nThis should be called server-side. **Never** expose the `partner_id` or `partner_secret` or the resulting partner\ntoken to the front end.\n\nRequests are limited to 10 requests per IP per hour."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

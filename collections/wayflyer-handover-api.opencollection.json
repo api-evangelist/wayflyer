@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Handover API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Handover",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Hand over a user to Wayflyer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/handover/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generate a URL to redirect the user to Wayflyer where they can continue their funding application.\n\nRequires the company to have an open hosted application."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

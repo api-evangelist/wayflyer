@@ -1,0 +1,110 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth CTA API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CTA",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start a hosted application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/hosted-application/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Start a hosted application for the company i.e., one the user will complete on the Wayflyer app.\n\nIf the company hasn't already been onboarded with Wayflyer then a new company is created in the Wayflyer app with a\nfunding application pre-configured using any additional data supplied during the API call. The response contains a\n`next` url to redirect the user to which will typically be a co-branded landing page from which they can create\ntheir user account and complete the funding application.\n\nR"
+        },
+        {
+          "info": {
+            "name": "Continue a hosted application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/hosted-application/continue/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Continue an open hosted application.\n\nReturns a URL to redirect the user to where they can continue their open hosted application.\n\nRequires the company to have been onboarded with Wayflyer and have an open hosted application i.e., call this\nendpoint only after calling the start hosted application endpoint."
+        },
+        {
+          "info": {
+            "name": "Get CTA configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/cta/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieve the CTA configuration for a given company or responds with a 204 if no CTA should be shown.\n\nThe indicative offer CTA config will be returned if:\n- Data has been uploaded to the anon-data-upload service and an indicative offer is available.\n\nThe generic offer CTA config will be returned if:\n- No indicative offer available, the company is not marked ineligible and has not started an application.\n\nThe \"Continue\" CTA config will be returned if:\n- The company has started an application, had"
+        },
+        {
+          "info": {
+            "name": "Dismiss CTA",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.wayflyer.com/financing/company/cta/dismiss/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Track state of banner dismissals from users."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

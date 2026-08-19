@@ -1,0 +1,53 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Embedded Finance Auth Industry Classification API",
+    "version": "1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Industry Classification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search industry classifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.wayflyer.com/financing/company/industry-classification/search/",
+            "headers": [
+              {
+                "name": "API-Version",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search query string"
+              },
+              {
+                "name": "max_results",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Search industry classifications by query string.\n\nReturns a list of matching industries sorted by relevance score (highest first)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
