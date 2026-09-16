@@ -151,20 +151,6 @@ apis:
     url: https://docs.wayflyer.com/embedded-journey-v5-overview
   - type: Documentation
     url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
-- aid: wayflyer:wayflyer-embedded-application-api
-  name: Wayflyer Embedded Application API
-  description: The Embedded Application API from Wayflyer — 3 operation(s) for embedded application.
-  humanURL: https://docs.wayflyer.com/apis/embedded-finance-1-0-0/docs
-  baseURL: https://api.wayflyer.com/financing/
-  tags:
-  - Embedded Application
-  properties:
-  - type: OpenAPI
-    url: openapi/wayflyer-embedded-application-api-openapi.yml
-  - type: Documentation
-    url: https://docs.wayflyer.com/embedded-journey-v5-overview
-  - type: Documentation
-    url: https://docs.wayflyer.com/embedded-journey-v5-overview/sandbox
 - aid: wayflyer:wayflyer-handover-api
   name: Wayflyer Handover API
   description: The Handover API from Wayflyer — 1 operation(s) for handover.
