@@ -1,10 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Embedded Finance Auth Simulation API
+  title: Embedded Finance Sandbox Simulation API
   version: '1'
   description: ''
 servers:
-- url: https://api.wayflyer.com/financing/
+- url: https://sandbox-api.wayflyer.com/financing/
   description: Production
 tags:
 - name: Simulation
@@ -61,6 +61,16 @@ paths:
       security:
       - CompanyToken: []
 components:
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   schemas:
     HostedApplicationSimulationStatus:
       enum:
@@ -118,28 +128,6 @@ components:
       - action
       title: SimpleActionRequest
       type: object
-    PassUWRequest:
-      additionalProperties: false
-      description: Schema for the `pass-uw` action, requires offer details.
-      properties:
-        action:
-          const: pass-uw
-          title: Action
-          type: string
-        approved_amount:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Approved Amount
-        currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Currency
-      required:
-      - action
-      title: PassUWRequest
-      type: object
     SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
       properties:
         status:
@@ -163,16 +151,28 @@ components:
       - detail
       title: ErrorDetail
       type: object
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
+    PassUWRequest:
+      additionalProperties: false
+      description: Schema for the `pass-uw` action, requires offer details.
+      properties:
+        action:
+          const: pass-uw
+          title: Action
+          type: string
+        approved_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Approved Amount
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+      required:
+      - action
+      title: PassUWRequest
+      type: object
   securitySchemes:
     CompanyToken:
       type: http

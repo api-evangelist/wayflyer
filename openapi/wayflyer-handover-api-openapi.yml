@@ -1,10 +1,10 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Embedded Finance Auth Handover API
+  title: Embedded Finance Sandbox Handover API
   version: '1'
   description: ''
 servers:
-- url: https://api.wayflyer.com/financing/
+- url: https://sandbox-api.wayflyer.com/financing/
   description: Production
 tags:
 - name: Handover
@@ -37,33 +37,7 @@ paths:
       security:
       - CompanyToken: []
 components:
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
   schemas:
-    HandoverErrorCode:
-      enum:
-      - company_not_bootstrapped
-      - no_open_hosted_application
-      - company_not_active
-      title: HandoverErrorCode
-      type: string
-    HandoverResponse:
-      properties:
-        url:
-          title: Url
-          type: string
-      required:
-      - url
-      title: HandoverResponse
-      type: object
     HandoverErrorResponse:
       properties:
         error_code:
@@ -78,6 +52,32 @@ components:
       - detail
       title: HandoverErrorResponse
       type: object
+    HandoverResponse:
+      properties:
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: HandoverResponse
+      type: object
+    HandoverErrorCode:
+      enum:
+      - company_not_bootstrapped
+      - no_open_hosted_application
+      - company_not_active
+      title: HandoverErrorCode
+      type: string
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   securitySchemes:
     CompanyToken:
       type: http

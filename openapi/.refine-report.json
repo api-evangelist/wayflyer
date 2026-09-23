@@ -1,27 +1,15 @@
 {
   "provider": "wayflyer",
   "sources": [
-    "wayflyer-auth-api-openapi.yml",
-    "wayflyer-company-details-api-openapi.yml",
-    "wayflyer-company-search-api-openapi.yml",
-    "wayflyer-cta-api-openapi.yml",
-    "wayflyer-data-upload-api-openapi.yml",
-    "wayflyer-documents-api-openapi.yml",
-    "wayflyer-embedded-application-api-openapi.yml",
-    "wayflyer-handover-api-openapi.yml",
-    "wayflyer-industry-classification-api-openapi.yml",
-    "wayflyer-simulation-api-openapi.yml",
-    "wayflyer-tracked-login-api-openapi.yml",
-    "wayflyer-user-details-api-openapi.yml"
+    "_original/wayflyer-embedded-finance-sandbox-openapi-original.json"
   ],
   "outputs": [
     "wayflyer-auth-api-openapi.yml",
+    "wayflyer-cta-api-openapi.yml",
     "wayflyer-company-details-api-openapi.yml",
     "wayflyer-company-search-api-openapi.yml",
-    "wayflyer-cta-api-openapi.yml",
     "wayflyer-data-upload-api-openapi.yml",
     "wayflyer-documents-api-openapi.yml",
-    "wayflyer-embedded-application-api-openapi.yml",
     "wayflyer-handover-api-openapi.yml",
     "wayflyer-industry-classification-api-openapi.yml",
     "wayflyer-simulation-api-openapi.yml",
@@ -31,6 +19,35 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "1 archived document(s) dropped as subsets of other archived documents",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Auth",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: CTA",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Company Details",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Company Search",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Data Upload",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Documents",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Handover",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Industry Classification",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Simulation",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: Tracked Login",
+    "wayflyer-embedded-finance-sandbox-openapi-original.json: declared missing tag: User Details",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "_original/wayflyer-embedded-finance-openapi-original.json: archived document superseded by a larger archived document",
+    "wayflyer-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-company-details-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-company-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-cta-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-data-upload-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-documents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-handover-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-industry-classification-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-simulation-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-tracked-login-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "wayflyer-user-details-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,92 +1,17 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Embedded Finance Auth CTA API
+  title: Embedded Finance Sandbox CTA API
   version: '1'
   description: ''
 servers:
-- url: https://api.wayflyer.com/financing/
+- url: https://sandbox-api.wayflyer.com/financing/
   description: Production
 tags:
 - name: CTA
 paths:
-  /company/hosted-application/:
-    post:
-      operationId: wf_embedded_finance_service_apps_web_hosted_application_views_hosted_application_start_hosted_application
-      summary: Start a hosted application
-      parameters:
-      - $ref: '#/components/parameters/ApiVersion'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/StartHostedApplicationResponse'
-        '500':
-          description: Internal Server Error
-      description: 'Start a hosted application for the company i.e., one the user will complete on the Wayflyer app.
-
-
-        If the company hasn''t already been onboarded with Wayflyer then a new company is created in the Wayflyer app with a
-
-        funding application pre-configured using any additional data supplied during the API call. The response contains a
-
-        `next` url to redirect the user to which will typically be a co-branded landing page from which they can create
-
-        their user account and complete the funding application.
-
-
-        Returns a `next` url to redirect the company to.
-
-
-        `next` url will default to a help center article if an error occurs starting the company''s hosted application.'
-      tags:
-      - CTA
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/HostedApplicationRequest_Any_'
-        required: true
-      security:
-      - CompanyToken: []
-  /company/hosted-application/continue/:
-    post:
-      operationId: wf_embedded_finance_service_apps_web_hosted_application_views_hosted_application_continue_hosted_application
-      summary: Continue a hosted application
-      parameters:
-      - $ref: '#/components/parameters/ApiVersion'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ContinueHostedApplicationResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDetail'
-        '500':
-          description: Internal Server Error
-      description: 'Continue an open hosted application.
-
-
-        Returns a URL to redirect the user to where they can continue their open hosted application.
-
-
-        Requires the company to have been onboarded with Wayflyer and have an open hosted application i.e., call this
-
-        endpoint only after calling the start hosted application endpoint.'
-      tags:
-      - CTA
-      security:
-      - CompanyToken: []
   /company/cta/:
     get:
-      operationId: wf_embedded_finance_service_apps_web_cta_views_banner_get_banner
+      operationId: wf_embedded_finance_service_apps_sandbox_views_cta_get_banner
       summary: Get CTA configuration
       parameters:
       - $ref: '#/components/parameters/ApiVersion'
@@ -130,7 +55,7 @@ paths:
       - CompanyToken: []
   /company/cta/dismiss/:
     post:
-      operationId: wf_embedded_finance_service_apps_web_cta_views_banner_dismiss_banner
+      operationId: wf_embedded_finance_service_apps_sandbox_views_cta_dismiss_banner
       summary: Dismiss CTA
       parameters:
       - $ref: '#/components/parameters/ApiVersion'
@@ -150,83 +75,109 @@ paths:
         required: true
       security:
       - CompanyToken: []
+  /company/hosted-application/:
+    post:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_hosted_application_start_hosted_application
+      summary: Start a hosted application
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StartHostedApplicationResponse'
+        '500':
+          description: Internal Server Error
+      description: 'Start a hosted application for the company i.e., one the user will complete on the Wayflyer app.
+
+
+        If the company hasn''t already been onboarded with Wayflyer then a new company is created in the Wayflyer app with a
+
+        funding application pre-configured using any additional data supplied during the API call. The response contains a
+
+        `next` url to redirect the user to which will typically be a co-branded landing page from which they can create
+
+        their user account and complete the funding application.
+
+
+        Returns a `next` url to redirect the company to.
+
+
+        `next` url will default to a help center article if an error occurs starting the company''s hosted application.'
+      tags:
+      - CTA
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HostedApplicationRequest_Any_'
+        required: true
+      security:
+      - CompanyToken: []
+  /company/hosted-application/continue/:
+    post:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_hosted_application_continue_hosted_application
+      summary: Continue a hosted application
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContinueHostedApplicationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '500':
+          description: Internal Server Error
+      description: 'Continue an open hosted application.
+
+
+        Returns a URL to redirect the user to where they can continue their open hosted application.
+
+
+        Requires the company to have been onboarded with Wayflyer and have an open hosted application i.e., call this
+
+        endpoint only after calling the start hosted application endpoint.'
+      tags:
+      - CTA
+      security:
+      - CompanyToken: []
 components:
   schemas:
-    CompanyType:
+    BannerState:
       enum:
-      - LP
-      - LLP
-      - LLC
-      - INC
-      - COOP
-      title: CompanyType
+      - continue_application
+      - continue_embedded_application
+      - indicative_offer
+      - generic_offer
+      title: BannerState
       type: string
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
-    SupportedCountryCode:
-      enum:
-      - US
-      - CA
-      - GB
-      - IE
-      - BE
-      - NL
-      - ES
-      - DE
-      - SE
-      - DK
-      - AU
-      title: SupportedCountryCode
-      type: string
-    ContinueEmbeddedApplicationBannerConfig:
+    BannerResponse:
       properties:
-        text:
-          description: Display text for the CTA
-          title: Text
-          type: string
-        bullet_points:
-          description: List of text bullet points to display in the CTA
-          items:
-            type: string
-          title: Bullet Points
-          type: array
-        button_label:
-          description: Label for the button
-          title: Button Label
-          type: string
-        embedded_application_uuid:
-          description: UUID of the embedded application currently in progress
-          title: Embedded Application Uuid
-          type: string
+        state:
+          $ref: '#/components/schemas/BannerState'
+          description: The type of CTA to display
+        data:
+          $ref: '#/components/schemas/BannerData'
+          description: Data to display in the CTA
+        dismissal_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque key identifying this CTA instance. Use it when dismissing the banner.
+          title: Dismissal Key
       required:
-      - text
-      - button_label
-      - embedded_application_uuid
-      title: ContinueEmbeddedApplicationBannerConfig
-      type: object
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
+      - state
+      - data
+      title: BannerResponse
       type: object
     Offer:
       properties:
@@ -242,17 +193,6 @@ components:
       - currency
       title: Offer
       type: object
-    SupportedCurrencyCode:
-      enum:
-      - USD
-      - CAD
-      - AUD
-      - EUR
-      - GBP
-      - SEK
-      - DKK
-      title: SupportedCurrencyCode
-      type: string
     BannerDismissInput:
       properties:
         banner_state:
@@ -268,6 +208,84 @@ components:
           title: Dismissal Key
       title: BannerDismissInput
       type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    RequiredAction:
+      enum:
+      - complete_application
+      - provide_additional_info
+      - select_offer
+      - complete_kyc
+      - sign_contract
+      title: RequiredAction
+      type: string
+    BannerData:
+      properties:
+        offer:
+          anyOf:
+          - $ref: '#/components/schemas/Offer'
+          - type: 'null'
+          description: Offer data to display in the CTA
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/ContinueEmbeddedApplicationBannerConfig'
+          - $ref: '#/components/schemas/ContinueApplicationBannerConfig'
+          - $ref: '#/components/schemas/OfferBannerConfig'
+          description: Configuration for the CTA
+          title: Config
+      required:
+      - config
+      title: BannerData
+      type: object
+    StartHostedApplicationResponse:
+      properties:
+        next:
+          description: The URL to redirect to the user to after making this API call
+          title: Next
+          type: string
+        application_id:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: The ID of the hosted application created by this API call
+          title: Application Id
+      required:
+      - next
+      - application_id
+      title: StartHostedApplicationResponse
+      type: object
+    SupportedCountryCode:
+      enum:
+      - US
+      - CA
+      - GB
+      - IE
+      - BE
+      - NL
+      - ES
+      - DE
+      - SE
+      - DK
+      - AU
+      title: SupportedCountryCode
+      type: string
+    CompanyType:
+      enum:
+      - LP
+      - LLP
+      - LLC
+      - INC
+      - COOP
+      title: CompanyType
+      type: string
     HostedApplicationUserData:
       properties:
         first_name:
@@ -296,24 +314,6 @@ components:
           title: Phone Number
       title: HostedApplicationUserData
       type: object
-    StartHostedApplicationResponse:
-      properties:
-        next:
-          description: The URL to redirect to the user to after making this API call
-          title: Next
-          type: string
-        application_id:
-          anyOf:
-          - format: uuid
-            type: string
-          - type: 'null'
-          description: The ID of the hosted application created by this API call
-          title: Application Id
-      required:
-      - next
-      - application_id
-      title: StartHostedApplicationResponse
-      type: object
     HostedApplicationRequest_Any_:
       properties:
         company_data:
@@ -331,73 +331,16 @@ components:
           title: Partner Data
       title: HostedApplicationRequest[Any]
       type: object
-    USStateCode:
+    SupportedCurrencyCode:
       enum:
-      - US-AL
-      - US-AK
-      - US-AZ
-      - US-AR
-      - US-CA
-      - US-CO
-      - US-CT
-      - US-DE
-      - US-FL
-      - US-GA
-      - US-HI
-      - US-ID
-      - US-IL
-      - US-IN
-      - US-IA
-      - US-KS
-      - US-KY
-      - US-LA
-      - US-ME
-      - US-MD
-      - US-MA
-      - US-MI
-      - US-MN
-      - US-MS
-      - US-MO
-      - US-MT
-      - US-NE
-      - US-NV
-      - US-NH
-      - US-NJ
-      - US-NM
-      - US-NY
-      - US-NC
-      - US-ND
-      - US-OH
-      - US-OK
-      - US-OR
-      - US-PA
-      - US-RI
-      - US-SC
-      - US-SD
-      - US-TN
-      - US-TX
-      - US-UT
-      - US-VT
-      - US-VA
-      - US-WA
-      - US-WV
-      - US-WI
-      - US-WY
-      - US-DC
-      - US-AS
-      - US-GU
-      - US-MP
-      - US-PR
-      - US-VI
-      title: USStateCode
-      type: string
-    BannerState:
-      enum:
-      - continue_application
-      - continue_embedded_application
-      - indicative_offer
-      - generic_offer
-      title: BannerState
+      - USD
+      - CAD
+      - AUD
+      - EUR
+      - GBP
+      - SEK
+      - DKK
+      title: SupportedCurrencyCode
       type: string
     HostedApplicationCompanyData:
       properties:
@@ -467,6 +410,66 @@ components:
       - next
       title: ContinueHostedApplicationResponse
       type: object
+    USStateCode:
+      enum:
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
+      type: string
     ContinueApplicationBannerConfig:
       properties:
         text:
@@ -497,25 +500,6 @@ components:
       - application_uuid
       title: ContinueApplicationBannerConfig
       type: object
-    BannerResponse:
-      properties:
-        state:
-          $ref: '#/components/schemas/BannerState'
-          description: The type of CTA to display
-        data:
-          $ref: '#/components/schemas/BannerData'
-          description: Data to display in the CTA
-        dismissal_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Opaque key identifying this CTA instance. Use it when dismissing the banner.
-          title: Dismissal Key
-      required:
-      - state
-      - data
-      title: BannerResponse
-      type: object
     OfferBannerConfig:
       properties:
         text:
@@ -542,33 +526,49 @@ components:
       - funding_cycle
       title: OfferBannerConfig
       type: object
-    BannerData:
-      properties:
-        offer:
-          anyOf:
-          - $ref: '#/components/schemas/Offer'
-          - type: 'null'
-          description: Offer data to display in the CTA
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/ContinueEmbeddedApplicationBannerConfig'
-          - $ref: '#/components/schemas/ContinueApplicationBannerConfig'
-          - $ref: '#/components/schemas/OfferBannerConfig'
-          description: Configuration for the CTA
-          title: Config
-      required:
-      - config
-      title: BannerData
-      type: object
-    RequiredAction:
+    CanadianProvinceCode:
       enum:
-      - complete_application
-      - provide_additional_info
-      - select_offer
-      - complete_kyc
-      - sign_contract
-      title: RequiredAction
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
       type: string
+    ContinueEmbeddedApplicationBannerConfig:
+      properties:
+        text:
+          description: Display text for the CTA
+          title: Text
+          type: string
+        bullet_points:
+          description: List of text bullet points to display in the CTA
+          items:
+            type: string
+          title: Bullet Points
+          type: array
+        button_label:
+          description: Label for the button
+          title: Button Label
+          type: string
+        embedded_application_uuid:
+          description: UUID of the embedded application currently in progress
+          title: Embedded Application Uuid
+          type: string
+      required:
+      - text
+      - button_label
+      - embedded_application_uuid
+      title: ContinueEmbeddedApplicationBannerConfig
+      type: object
   parameters:
     ApiVersion:
       in: header

@@ -1,89 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Embedded Finance Auth User Details API
+  title: Embedded Finance Sandbox User Details API
   version: '1'
   description: ''
 servers:
-- url: https://api.wayflyer.com/financing/
+- url: https://sandbox-api.wayflyer.com/financing/
   description: Production
 tags:
 - name: User Details
 paths:
-  /company/user-details/:
-    get:
-      operationId: wf_embedded_finance_service_apps_web_core_views_user_details_get_user_details
-      summary: Get user details
-      parameters:
-      - $ref: '#/components/parameters/ApiVersion'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDetailsResponse'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDetail'
-      description: 'Get user details for the authenticated user.
-
-
-        Returns the current user details including email and phone number.
-
-        User is extracted from the authentication token.'
-      tags:
-      - User Details
-      security:
-      - CompanyToken: []
-    put:
-      operationId: wf_embedded_finance_service_apps_web_core_views_user_details_update_user_details
-      summary: Update user details
-      parameters:
-      - $ref: '#/components/parameters/ApiVersion'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserDetailsResponse'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateUserDetailsErrorResponse'
-        '422':
-          description: Unprocessable Entity
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorDetail'
-        '423':
-          description: Locked
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UpdateUserDetailsErrorResponse'
-      description: 'Update user details for the authenticated user.
-
-
-        User details can only be updated a few times before any application is submitted to prevent abuse. User details
-
-        cannot be updated after an application is submitted.'
-      tags:
-      - User Details
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserDetailsRequest'
-        required: true
-      security:
-      - CompanyToken: []
   /company/embedded-application/:
     post:
       operationId: wf_embedded_finance_service_apps_sandbox_views_embedded_application_start_embedded_application
@@ -213,41 +138,83 @@ paths:
         required: true
       security:
       - CompanyToken: []
+  /company/user-details/:
+    get:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_user_details_get_user_details
+      summary: Get user details
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsResponse'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+      description: 'Get user details for the authenticated user.
+
+
+        Returns the current user details including email and phone number.
+
+        User is extracted from the authentication token.'
+      tags:
+      - User Details
+      security:
+      - CompanyToken: []
+    put:
+      operationId: wf_embedded_finance_service_apps_sandbox_views_user_details_update_user_details
+      summary: Update user details
+      parameters:
+      - $ref: '#/components/parameters/ApiVersion'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserDetailsErrorResponse'
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetail'
+        '423':
+          description: Locked
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateUserDetailsErrorResponse'
+      description: 'Update user details for the authenticated user.
+
+
+        User details can only be updated a few times before any application is submitted to prevent abuse. User details
+
+        cannot be updated after an application is submitted.'
+      tags:
+      - User Details
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetailsRequest'
+        required: true
+      security:
+      - CompanyToken: []
 components:
   schemas:
-    IneligibleReason:
-      enum:
-      - unsupported_country
-      - no_eligible_business_model
-      title: IneligibleReason
-      type: string
-    EmbeddedApplicationStatusResponse:
-      example:
-        application_id: 550e8400-e29b-41d4-a716-446655440000
-        required_details:
-        - name: user_details
-          status: incomplete
-        - name: company_details
-          status: complete
-      properties:
-        application_id:
-          anyOf:
-          - format: uuid
-            type: string
-          - type: 'null'
-          description: The ID of the embedded application
-          title: Application Id
-        required_details:
-          description: A list of required details to submit the embedded application.
-          items:
-            $ref: '#/components/schemas/EmbeddedApplicationDetailStatus'
-          title: Required Details
-          type: array
-      required:
-      - application_id
-      - required_details
-      title: EmbeddedApplicationStatusResponse
-      type: object
     UserDetailsRequest:
       properties:
         email:
@@ -280,6 +247,12 @@ components:
       - email
       title: UserDetailsRequest
       type: object
+    IneligibleReason:
+      enum:
+      - unsupported_country
+      - no_eligible_business_model
+      title: IneligibleReason
+      type: string
     EmbeddedApplicationDetailStatus:
       properties:
         name:
@@ -301,6 +274,29 @@ components:
       - status
       title: EmbeddedApplicationDetailStatus
       type: object
+    SubmitEmbeddedApplicationErrorCode:
+      enum:
+      - details_incomplete
+      - no_open_application
+      - open_hosted_application_exists
+      - duplicate_company
+      - ineligible_application
+      - registration_or_documents_required
+      title: SubmitEmbeddedApplicationErrorCode
+      type: string
+    MarkIneligibleRequest:
+      properties:
+        ineligible_reasons:
+          description: One or more reasons the application is ineligible
+          items:
+            $ref: '#/components/schemas/IneligibleReason'
+          minItems: 1
+          title: Ineligible Reasons
+          type: array
+      required:
+      - ineligible_reasons
+      title: MarkIneligibleRequest
+      type: object
     SubmitEmbeddedApplicationErrorResponse:
       properties:
         error_code:
@@ -321,22 +317,38 @@ components:
       - detail
       title: SubmitEmbeddedApplicationErrorResponse
       type: object
-    SubmitEmbeddedApplicationErrorCode:
+    EmbeddedApplicationStatusResponse:
+      example:
+        application_id: 550e8400-e29b-41d4-a716-446655440000
+        required_details:
+        - name: user_details
+          status: incomplete
+        - name: company_details
+          status: complete
+      properties:
+        application_id:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: The ID of the embedded application
+          title: Application Id
+        required_details:
+          description: A list of required details to submit the embedded application.
+          items:
+            $ref: '#/components/schemas/EmbeddedApplicationDetailStatus'
+          title: Required Details
+          type: array
+      required:
+      - application_id
+      - required_details
+      title: EmbeddedApplicationStatusResponse
+      type: object
+    MarkIneligibleErrorCode:
       enum:
-      - details_incomplete
       - no_open_application
-      - open_hosted_application_exists
-      - duplicate_company
-      - ineligible_application
-      - registration_or_documents_required
-      title: SubmitEmbeddedApplicationErrorCode
-      type: string
-    UpdateUserDetailsErrorCode:
-      enum:
-      - duplicate
-      - too_many_revisions
-      - application_already_submitted
-      title: UpdateUserDetailsErrorCode
+      - not_started_by_user
+      title: MarkIneligibleErrorCode
       type: string
     UpdateUserDetailsErrorResponse:
       properties:
@@ -352,18 +364,35 @@ components:
       - detail
       title: UpdateUserDetailsErrorResponse
       type: object
-    MarkIneligibleRequest:
+    ErrorDetail:
       properties:
-        ineligible_reasons:
-          description: One or more reasons the application is ineligible
-          items:
-            $ref: '#/components/schemas/IneligibleReason'
-          minItems: 1
-          title: Ineligible Reasons
-          type: array
+        detail:
+          title: Detail
+          type: string
       required:
-      - ineligible_reasons
-      title: MarkIneligibleRequest
+      - detail
+      title: ErrorDetail
+      type: object
+    UpdateUserDetailsErrorCode:
+      enum:
+      - duplicate
+      - too_many_revisions
+      - application_already_submitted
+      title: UpdateUserDetailsErrorCode
+      type: string
+    MarkIneligibleErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/MarkIneligibleErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: MarkIneligibleErrorResponse
       type: object
     UserDetailsResponse:
       properties:
@@ -393,35 +422,6 @@ components:
           description: The phone number of the user in E.164 format
           title: Phone Number
       title: UserDetailsResponse
-      type: object
-    MarkIneligibleErrorCode:
-      enum:
-      - no_open_application
-      - not_started_by_user
-      title: MarkIneligibleErrorCode
-      type: string
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
-      type: object
-    MarkIneligibleErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/MarkIneligibleErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: MarkIneligibleErrorResponse
       type: object
   parameters:
     ApiVersion:
