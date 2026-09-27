@@ -37,7 +37,24 @@ paths:
       security:
       - CompanyToken: []
 components:
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   schemas:
+    HandoverErrorCode:
+      enum:
+      - company_not_bootstrapped
+      - no_open_hosted_application
+      - company_not_active
+      title: HandoverErrorCode
+      type: string
     HandoverErrorResponse:
       properties:
         error_code:
@@ -61,23 +78,6 @@ components:
       - url
       title: HandoverResponse
       type: object
-    HandoverErrorCode:
-      enum:
-      - company_not_bootstrapped
-      - no_open_hosted_application
-      - company_not_active
-      title: HandoverErrorCode
-      type: string
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
   securitySchemes:
     CompanyToken:
       type: http

@@ -167,6 +167,34 @@ components:
       - object_missing
       title: DocumentErrorCode
       type: string
+    CreateDocumentUploadRequest:
+      properties:
+        file_name:
+          maxLength: 255
+          minLength: 1
+          title: File Name
+          type: string
+        file_type:
+          $ref: '#/components/schemas/ContentType'
+        file_size:
+          exclusiveMinimum: 0
+          maximum: 52428800
+          title: File Size
+          type: integer
+      required:
+      - file_name
+      - file_type
+      - file_size
+      title: CreateDocumentUploadRequest
+      type: object
+    ContentType:
+      enum:
+      - application/pdf
+      - image/png
+      - image/tiff
+      - image/jpeg
+      title: ContentType
+      type: string
     DocumentErrorResponse:
       properties:
         error_code:
@@ -180,42 +208,6 @@ components:
       - error_code
       - detail
       title: DocumentErrorResponse
-      type: object
-    UrlOptionsSchema:
-      properties:
-        url:
-          title: Url
-          type: string
-        fields:
-          additionalProperties:
-            type: string
-          title: Fields
-          type: object
-      required:
-      - url
-      - fields
-      title: UrlOptionsSchema
-      type: object
-    ContentType:
-      enum:
-      - application/pdf
-      - image/png
-      - image/tiff
-      - image/jpeg
-      title: ContentType
-      type: string
-    CreateDocumentUploadResponse:
-      properties:
-        id:
-          format: uuid
-          title: Id
-          type: string
-        url_options:
-          $ref: '#/components/schemas/UrlOptionsSchema'
-      required:
-      - id
-      - url_options
-      title: CreateDocumentUploadResponse
       type: object
     DocumentUploadResponse:
       properties:
@@ -242,25 +234,33 @@ components:
       - locked
       title: DocumentUploadResponse
       type: object
-    CreateDocumentUploadRequest:
+    CreateDocumentUploadResponse:
       properties:
-        file_name:
-          maxLength: 255
-          minLength: 1
-          title: File Name
+        id:
+          format: uuid
+          title: Id
           type: string
-        file_type:
-          $ref: '#/components/schemas/ContentType'
-        file_size:
-          exclusiveMinimum: 0
-          maximum: 52428800
-          title: File Size
-          type: integer
+        url_options:
+          $ref: '#/components/schemas/UrlOptionsSchema'
       required:
-      - file_name
-      - file_type
-      - file_size
-      title: CreateDocumentUploadRequest
+      - id
+      - url_options
+      title: CreateDocumentUploadResponse
+      type: object
+    UrlOptionsSchema:
+      properties:
+        url:
+          title: Url
+          type: string
+        fields:
+          additionalProperties:
+            type: string
+          title: Fields
+          type: object
+      required:
+      - url
+      - fields
+      title: UrlOptionsSchema
       type: object
   parameters:
     ApiVersion:

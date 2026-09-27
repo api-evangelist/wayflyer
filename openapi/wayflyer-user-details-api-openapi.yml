@@ -215,6 +215,89 @@ paths:
       - CompanyToken: []
 components:
   schemas:
+    EmbeddedApplicationStatusResponse:
+      example:
+        application_id: 550e8400-e29b-41d4-a716-446655440000
+        required_details:
+        - name: user_details
+          status: incomplete
+        - name: company_details
+          status: complete
+      properties:
+        application_id:
+          anyOf:
+          - format: uuid
+            type: string
+          - type: 'null'
+          description: The ID of the embedded application
+          title: Application Id
+        required_details:
+          description: A list of required details to submit the embedded application.
+          items:
+            $ref: '#/components/schemas/EmbeddedApplicationDetailStatus'
+          title: Required Details
+          type: array
+      required:
+      - application_id
+      - required_details
+      title: EmbeddedApplicationStatusResponse
+      type: object
+    SubmitEmbeddedApplicationErrorCode:
+      enum:
+      - details_incomplete
+      - no_open_application
+      - open_hosted_application_exists
+      - duplicate_company
+      - ineligible_application
+      - registration_or_documents_required
+      title: SubmitEmbeddedApplicationErrorCode
+      type: string
+    SubmitEmbeddedApplicationErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+        ineligible_reasons:
+          description: List of ineligibility reasons
+          items:
+            type: string
+          title: Ineligible Reasons
+          type: array
+      required:
+      - error_code
+      - detail
+      title: SubmitEmbeddedApplicationErrorResponse
+      type: object
+    IneligibleReason:
+      enum:
+      - unsupported_country
+      - no_eligible_business_model
+      title: IneligibleReason
+      type: string
+    MarkIneligibleErrorCode:
+      enum:
+      - no_open_application
+      - not_started_by_user
+      title: MarkIneligibleErrorCode
+      type: string
+    MarkIneligibleErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/MarkIneligibleErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: MarkIneligibleErrorResponse
+      type: object
     UserDetailsRequest:
       properties:
         email:
@@ -247,12 +330,20 @@ components:
       - email
       title: UserDetailsRequest
       type: object
-    IneligibleReason:
-      enum:
-      - unsupported_country
-      - no_eligible_business_model
-      title: IneligibleReason
-      type: string
+    UpdateUserDetailsErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/UpdateUserDetailsErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: UpdateUserDetailsErrorResponse
+      type: object
     EmbeddedApplicationDetailStatus:
       properties:
         name:
@@ -273,126 +364,6 @@ components:
       - name
       - status
       title: EmbeddedApplicationDetailStatus
-      type: object
-    SubmitEmbeddedApplicationErrorCode:
-      enum:
-      - details_incomplete
-      - no_open_application
-      - open_hosted_application_exists
-      - duplicate_company
-      - ineligible_application
-      - registration_or_documents_required
-      title: SubmitEmbeddedApplicationErrorCode
-      type: string
-    MarkIneligibleRequest:
-      properties:
-        ineligible_reasons:
-          description: One or more reasons the application is ineligible
-          items:
-            $ref: '#/components/schemas/IneligibleReason'
-          minItems: 1
-          title: Ineligible Reasons
-          type: array
-      required:
-      - ineligible_reasons
-      title: MarkIneligibleRequest
-      type: object
-    SubmitEmbeddedApplicationErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-        ineligible_reasons:
-          description: List of ineligibility reasons
-          items:
-            type: string
-          title: Ineligible Reasons
-          type: array
-      required:
-      - error_code
-      - detail
-      title: SubmitEmbeddedApplicationErrorResponse
-      type: object
-    EmbeddedApplicationStatusResponse:
-      example:
-        application_id: 550e8400-e29b-41d4-a716-446655440000
-        required_details:
-        - name: user_details
-          status: incomplete
-        - name: company_details
-          status: complete
-      properties:
-        application_id:
-          anyOf:
-          - format: uuid
-            type: string
-          - type: 'null'
-          description: The ID of the embedded application
-          title: Application Id
-        required_details:
-          description: A list of required details to submit the embedded application.
-          items:
-            $ref: '#/components/schemas/EmbeddedApplicationDetailStatus'
-          title: Required Details
-          type: array
-      required:
-      - application_id
-      - required_details
-      title: EmbeddedApplicationStatusResponse
-      type: object
-    MarkIneligibleErrorCode:
-      enum:
-      - no_open_application
-      - not_started_by_user
-      title: MarkIneligibleErrorCode
-      type: string
-    UpdateUserDetailsErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/UpdateUserDetailsErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: UpdateUserDetailsErrorResponse
-      type: object
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
-      type: object
-    UpdateUserDetailsErrorCode:
-      enum:
-      - duplicate
-      - too_many_revisions
-      - application_already_submitted
-      title: UpdateUserDetailsErrorCode
-      type: string
-    MarkIneligibleErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/MarkIneligibleErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: MarkIneligibleErrorResponse
       type: object
     UserDetailsResponse:
       properties:
@@ -422,6 +393,35 @@ components:
           description: The phone number of the user in E.164 format
           title: Phone Number
       title: UserDetailsResponse
+      type: object
+    MarkIneligibleRequest:
+      properties:
+        ineligible_reasons:
+          description: One or more reasons the application is ineligible
+          items:
+            $ref: '#/components/schemas/IneligibleReason'
+          minItems: 1
+          title: Ineligible Reasons
+          type: array
+      required:
+      - ineligible_reasons
+      title: MarkIneligibleRequest
+      type: object
+    UpdateUserDetailsErrorCode:
+      enum:
+      - duplicate
+      - too_many_revisions
+      - application_already_submitted
+      title: UpdateUserDetailsErrorCode
+      type: string
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
       type: object
   parameters:
     ApiVersion:

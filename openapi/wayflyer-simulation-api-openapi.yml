@@ -61,16 +61,6 @@ paths:
       security:
       - CompanyToken: []
 components:
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
   schemas:
     HostedApplicationSimulationStatus:
       enum:
@@ -86,23 +76,6 @@ components:
       - COMPLETED
       - CLOSED
       title: HostedApplicationSimulationStatus
-      type: string
-    HostedApplicationSimulationAction:
-      enum:
-      - application-submitted
-      - discontinue-application
-      - pass-uw
-      - fail-uw
-      - request-additional-info
-      - provide-info
-      - accept-offer
-      - reject-offer
-      - complete-kyc
-      - pass-kyc
-      - fail-kyc
-      - sign-contract
-      - reject-contract
-      title: HostedApplicationSimulationAction
       type: string
     SimpleActionRequest:
       additionalProperties: false
@@ -142,15 +115,6 @@ components:
       - valid_actions
       title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
       type: object
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
-      type: object
     PassUWRequest:
       additionalProperties: false
       description: Schema for the `pass-uw` action, requires offer details.
@@ -173,6 +137,42 @@ components:
       - action
       title: PassUWRequest
       type: object
+    HostedApplicationSimulationAction:
+      enum:
+      - application-submitted
+      - discontinue-application
+      - pass-uw
+      - fail-uw
+      - request-additional-info
+      - provide-info
+      - accept-offer
+      - reject-offer
+      - complete-kyc
+      - pass-kyc
+      - fail-kyc
+      - sign-contract
+      - reject-contract
+      title: HostedApplicationSimulationAction
+      type: string
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   securitySchemes:
     CompanyToken:
       type: http

@@ -31,16 +31,6 @@ paths:
       security:
       - CompanyToken: []
 components:
-  schemas:
-    TrackedLoginTokenResponse:
-      properties:
-        url:
-          title: Url
-          type: string
-      required:
-      - url
-      title: TrackedLoginTokenResponse
-      type: object
   parameters:
     ApiVersion:
       in: header
@@ -51,6 +41,16 @@ components:
         enum:
         - '1'
       required: false
+  schemas:
+    TrackedLoginTokenResponse:
+      properties:
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: TrackedLoginTokenResponse
+      type: object
   securitySchemes:
     CompanyToken:
       type: http

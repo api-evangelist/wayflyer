@@ -245,145 +245,10 @@ components:
       - country
       title: CompanyData
       type: object
-    BatchStatusResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/BatchStatus'
-          description: Status of the batch upload
-      required:
-      - status
-      title: BatchStatusResponse
-      type: object
-    InitiateFileUploadResponse:
-      properties:
-        upload_id:
-          description: A UUID for the upload. This can be used to identify this file in other endpoints to e.g., track the status of the upload or complete the upload.
-          format: uuid
-          title: Upload Id
-          type: string
-        upload_urls:
-          additionalProperties:
-            type: string
-          description: URLs to upload each part of the file to. There will be exactly one URL for each part of the file.
-          title: Upload Urls
-          type: object
-        num_parts:
-          description: The number of parts the file should be split into.
-          title: Num Parts
-          type: integer
-      required:
-      - upload_id
-      - upload_urls
-      - num_parts
-      title: InitiateFileUploadResponse
-      type: object
-    USStateCode:
+    SchemaCode:
       enum:
-      - US-AL
-      - US-AK
-      - US-AZ
-      - US-AR
-      - US-CA
-      - US-CO
-      - US-CT
-      - US-DE
-      - US-FL
-      - US-GA
-      - US-HI
-      - US-ID
-      - US-IL
-      - US-IN
-      - US-IA
-      - US-KS
-      - US-KY
-      - US-LA
-      - US-ME
-      - US-MD
-      - US-MA
-      - US-MI
-      - US-MN
-      - US-MS
-      - US-MO
-      - US-MT
-      - US-NE
-      - US-NV
-      - US-NH
-      - US-NJ
-      - US-NM
-      - US-NY
-      - US-NC
-      - US-ND
-      - US-OH
-      - US-OK
-      - US-OR
-      - US-PA
-      - US-RI
-      - US-SC
-      - US-SD
-      - US-TN
-      - US-TX
-      - US-UT
-      - US-VT
-      - US-VA
-      - US-WA
-      - US-WV
-      - US-WI
-      - US-WY
-      - US-DC
-      - US-AS
-      - US-GU
-      - US-MP
-      - US-PR
-      - US-VI
-      title: USStateCode
-      type: string
-    InitiateBatchUploadResponse:
-      properties:
-        upload_id:
-          description: UUID of the upload
-          format: uuid
-          title: Upload Id
-          type: string
-      required:
-      - upload_id
-      title: InitiateBatchUploadResponse
-      type: object
-    InitiateFileUploadRequest:
-      properties:
-        file_size_bytes:
-          description: The size of the file in bytes
-          title: File Size Bytes
-          type: integer
-        schema_code:
-          $ref: '#/components/schemas/SchemaCode'
-          description: One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer
-      required:
-      - file_size_bytes
-      - schema_code
-      title: InitiateFileUploadRequest
-      type: object
-    UploadPart:
-      properties:
-        part_number:
-          description: Part number of the upload
-          title: Part Number
-          type: integer
-        etag:
-          description: ETag of the part
-          title: Etag
-          type: string
-      required:
-      - part_number
-      - etag
-      title: UploadPart
-      type: object
-    BatchStatus:
-      enum:
-      - PENDING_UPLOAD
-      - PROCESSING
-      - PROCESSED
-      - ERROR
-      title: BatchStatus
+      - JSON01
+      title: SchemaCode
       type: string
     CountryCode:
       enum:
@@ -638,6 +503,129 @@ components:
       - ZW
       title: CountryCode
       type: string
+    InitiateFileUploadRequest:
+      properties:
+        file_size_bytes:
+          description: The size of the file in bytes
+          title: File Size Bytes
+          type: integer
+        schema_code:
+          $ref: '#/components/schemas/SchemaCode'
+          description: One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer
+      required:
+      - file_size_bytes
+      - schema_code
+      title: InitiateFileUploadRequest
+      type: object
+    USStateCode:
+      enum:
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
+      type: string
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
+    BatchStatus:
+      enum:
+      - PENDING_UPLOAD
+      - PROCESSING
+      - PROCESSED
+      - ERROR
+      title: BatchStatus
+      type: string
+    UploadPart:
+      properties:
+        part_number:
+          description: Part number of the upload
+          title: Part Number
+          type: integer
+        etag:
+          description: ETag of the part
+          title: Etag
+          type: string
+      required:
+      - part_number
+      - etag
+      title: UploadPart
+      type: object
+    BatchStatusResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/BatchStatus'
+          description: Status of the batch upload
+      required:
+      - status
+      title: BatchStatusResponse
+      type: object
     CurrencyCode:
       enum:
       - USD
@@ -804,28 +792,29 @@ components:
       - XDR
       title: CurrencyCode
       type: string
-    SchemaCode:
-      enum:
-      - JSON01
-      title: SchemaCode
-      type: string
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
+    InitiateFileUploadResponse:
+      properties:
+        upload_id:
+          description: A UUID for the upload. This can be used to identify this file in other endpoints to e.g., track the status of the upload or complete the upload.
+          format: uuid
+          title: Upload Id
+          type: string
+        upload_urls:
+          additionalProperties:
+            type: string
+          description: URLs to upload each part of the file to. There will be exactly one URL for each part of the file.
+          title: Upload Urls
+          type: object
+        num_parts:
+          description: The number of parts the file should be split into.
+          title: Num Parts
+          type: integer
+      required:
+      - upload_id
+      - upload_urls
+      - num_parts
+      title: InitiateFileUploadResponse
+      type: object
     ErrorDetail:
       properties:
         detail:
@@ -846,6 +835,17 @@ components:
       required:
       - parts
       title: CompleteFileUploadRequest
+      type: object
+    InitiateBatchUploadResponse:
+      properties:
+        upload_id:
+          description: UUID of the upload
+          format: uuid
+          title: Upload Id
+          type: string
+      required:
+      - upload_id
+      title: InitiateBatchUploadResponse
       type: object
   parameters:
     ApiVersion:

@@ -83,47 +83,7 @@ paths:
               $ref: '#/components/schemas/PartnerTokenRequest'
         required: true
 components:
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
   schemas:
-    CompanyTokenRequest:
-      properties:
-        company_id:
-          description: An identifier in the partner's system that uniquely identifies the company to create a token for
-          title: Company Id
-          type: string
-        user_id:
-          description: An identifier in the partner's system that uniquely identifies the specific user for the company
-          title: User Id
-          type: string
-      required:
-      - company_id
-      - user_id
-      title: CompanyTokenRequest
-      type: object
-    PartnerTokenResponse:
-      properties:
-        token:
-          description: A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end
-          title: Token
-          type: string
-        expires_in:
-          description: The number of seconds until the token expires
-          title: Expires In
-          type: integer
-      required:
-      - token
-      - expires_in
-      title: PartnerTokenResponse
-      type: object
     PartnerTokenRequest:
       properties:
         partner_id:
@@ -141,14 +101,20 @@ components:
       - partner_secret
       title: PartnerTokenRequest
       type: object
-    ErrorDetail:
+    CompanyTokenRequest:
       properties:
-        detail:
-          title: Detail
+        company_id:
+          description: An identifier in the partner's system that uniquely identifies the company to create a token for
+          title: Company Id
+          type: string
+        user_id:
+          description: An identifier in the partner's system that uniquely identifies the specific user for the company
+          title: User Id
           type: string
       required:
-      - detail
-      title: ErrorDetail
+      - company_id
+      - user_id
+      title: CompanyTokenRequest
       type: object
     CompanyTokenResponse:
       properties:
@@ -165,6 +131,40 @@ components:
       - expires_in
       title: CompanyTokenResponse
       type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
+      type: object
+    PartnerTokenResponse:
+      properties:
+        token:
+          description: A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end
+          title: Token
+          type: string
+        expires_in:
+          description: The number of seconds until the token expires
+          title: Expires In
+          type: integer
+      required:
+      - token
+      - expires_in
+      title: PartnerTokenResponse
+      type: object
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   securitySchemes:
     CompanyToken:
       type: http
