@@ -62,21 +62,28 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    HostedApplicationSimulationStatus:
-      enum:
-      - APPLICATION_IN_PROGRESS
-      - AWAITING_UW_DECISION
-      - AWAITING_ADDITIONAL_INFO
-      - AWAITING_OFFERS_DECISION
-      - KYC_IN_PROGRESS
-      - AWAITING_KYC_DECISION
-      - AWAITING_ADDITIONAL_KYC_INFO
-      - AWAITING_CONTRACT_SIGNING
-      - REJECTED
-      - COMPLETED
-      - CLOSED
-      title: HostedApplicationSimulationStatus
-      type: string
+    PassUWRequest:
+      additionalProperties: false
+      description: Schema for the `pass-uw` action, requires offer details.
+      properties:
+        action:
+          const: pass-uw
+          title: Action
+          type: string
+        approved_amount:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Approved Amount
+        currency:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Currency
+      required:
+      - action
+      title: PassUWRequest
+      type: object
     SimpleActionRequest:
       additionalProperties: false
       description: Schema for simple simulation actions without extra fields.
@@ -115,28 +122,21 @@ components:
       - valid_actions
       title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
       type: object
-    PassUWRequest:
-      additionalProperties: false
-      description: Schema for the `pass-uw` action, requires offer details.
-      properties:
-        action:
-          const: pass-uw
-          title: Action
-          type: string
-        approved_amount:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Approved Amount
-        currency:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Currency
-      required:
-      - action
-      title: PassUWRequest
-      type: object
+    HostedApplicationSimulationStatus:
+      enum:
+      - APPLICATION_IN_PROGRESS
+      - AWAITING_UW_DECISION
+      - AWAITING_ADDITIONAL_INFO
+      - AWAITING_OFFERS_DECISION
+      - KYC_IN_PROGRESS
+      - AWAITING_KYC_DECISION
+      - AWAITING_ADDITIONAL_KYC_INFO
+      - AWAITING_CONTRACT_SIGNING
+      - REJECTED
+      - COMPLETED
+      - CLOSED
+      title: HostedApplicationSimulationStatus
+      type: string
     HostedApplicationSimulationAction:
       enum:
       - application-submitted

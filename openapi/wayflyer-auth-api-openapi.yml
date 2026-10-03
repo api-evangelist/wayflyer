@@ -101,20 +101,20 @@ components:
       - partner_secret
       title: PartnerTokenRequest
       type: object
-    CompanyTokenRequest:
+    PartnerTokenResponse:
       properties:
-        company_id:
-          description: An identifier in the partner's system that uniquely identifies the company to create a token for
-          title: Company Id
+        token:
+          description: A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end
+          title: Token
           type: string
-        user_id:
-          description: An identifier in the partner's system that uniquely identifies the specific user for the company
-          title: User Id
-          type: string
+        expires_in:
+          description: The number of seconds until the token expires
+          title: Expires In
+          type: integer
       required:
-      - company_id
-      - user_id
-      title: CompanyTokenRequest
+      - token
+      - expires_in
+      title: PartnerTokenResponse
       type: object
     CompanyTokenResponse:
       properties:
@@ -131,6 +131,21 @@ components:
       - expires_in
       title: CompanyTokenResponse
       type: object
+    CompanyTokenRequest:
+      properties:
+        company_id:
+          description: An identifier in the partner's system that uniquely identifies the company to create a token for
+          title: Company Id
+          type: string
+        user_id:
+          description: An identifier in the partner's system that uniquely identifies the specific user for the company
+          title: User Id
+          type: string
+      required:
+      - company_id
+      - user_id
+      title: CompanyTokenRequest
+      type: object
     ErrorDetail:
       properties:
         detail:
@@ -139,21 +154,6 @@ components:
       required:
       - detail
       title: ErrorDetail
-      type: object
-    PartnerTokenResponse:
-      properties:
-        token:
-          description: A token that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end
-          title: Token
-          type: string
-        expires_in:
-          description: The number of seconds until the token expires
-          title: Expires In
-          type: integer
-      required:
-      - token
-      - expires_in
-      title: PartnerTokenResponse
       type: object
   parameters:
     ApiVersion:

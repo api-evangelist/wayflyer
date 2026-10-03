@@ -152,17 +152,57 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    SupportedCurrencyCode:
-      enum:
-      - USD
-      - CAD
-      - AUD
-      - EUR
-      - GBP
-      - SEK
-      - DKK
-      title: SupportedCurrencyCode
-      type: string
+    BannerDismissInput:
+      properties:
+        banner_state:
+          anyOf:
+          - $ref: '#/components/schemas/BannerState'
+          - type: 'null'
+          description: Legacy field.  Will be removed in future updates.
+        dismissal_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque key identifying which CTA was dismissed.
+          title: Dismissal Key
+      title: BannerDismissInput
+      type: object
+    OfferBannerConfig:
+      properties:
+        text:
+          description: Display text for the CTA
+          title: Text
+          type: string
+        bullet_points:
+          description: List of text bullet points to display in the CTA
+          items:
+            type: string
+          title: Bullet Points
+          type: array
+        button_label:
+          description: Label for the button
+          title: Button Label
+          type: string
+        funding_cycle:
+          description: Number of user funding cycles.
+          title: Funding Cycle
+          type: integer
+      required:
+      - text
+      - button_label
+      - funding_cycle
+      title: OfferBannerConfig
+      type: object
+    ContinueHostedApplicationResponse:
+      properties:
+        next:
+          description: The URL to redirect to the user to after making this API call
+          title: Next
+          type: string
+      required:
+      - next
+      title: ContinueHostedApplicationResponse
+      type: object
     USStateCode:
       enum:
       - US-AL
@@ -223,25 +263,136 @@ components:
       - US-VI
       title: USStateCode
       type: string
-    ContinueHostedApplicationResponse:
-      properties:
-        next:
-          description: The URL to redirect to the user to after making this API call
-          title: Next
-          type: string
-      required:
-      - next
-      title: ContinueHostedApplicationResponse
-      type: object
-    CompanyType:
+    BannerState:
       enum:
-      - LP
-      - LLP
-      - LLC
-      - INC
-      - COOP
-      title: CompanyType
+      - continue_application
+      - continue_embedded_application
+      - indicative_offer
+      - generic_offer
+      title: BannerState
       type: string
+    BannerResponse:
+      properties:
+        state:
+          $ref: '#/components/schemas/BannerState'
+          description: The type of CTA to display
+        data:
+          $ref: '#/components/schemas/BannerData'
+          description: Data to display in the CTA
+        dismissal_key:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Opaque key identifying this CTA instance. Use it when dismissing the banner.
+          title: Dismissal Key
+      required:
+      - state
+      - data
+      title: BannerResponse
+      type: object
+    HostedApplicationRequest_Any_:
+      properties:
+        company_data:
+          anyOf:
+          - $ref: '#/components/schemas/HostedApplicationCompanyData'
+          - type: 'null'
+          description: Data used to pre-fill the company's funding application
+        user_data:
+          anyOf:
+          - $ref: '#/components/schemas/HostedApplicationUserData'
+          - type: 'null'
+          description: Data about the user starting the hosted application
+        partner_data:
+          description: During onboarding, Wayflyer may have agreed additional data unique to an individual partner that may be used to customise the funding application. This data is not required for the funding application to be processed, but may be used to provide a better experience. Consult with your Wayflyer representative for more information about what can be provided here.
+          title: Partner Data
+      title: HostedApplicationRequest[Any]
+      type: object
+    BannerData:
+      properties:
+        offer:
+          anyOf:
+          - $ref: '#/components/schemas/Offer'
+          - type: 'null'
+          description: Offer data to display in the CTA
+        config:
+          anyOf:
+          - $ref: '#/components/schemas/ContinueEmbeddedApplicationBannerConfig'
+          - $ref: '#/components/schemas/ContinueApplicationBannerConfig'
+          - $ref: '#/components/schemas/OfferBannerConfig'
+          description: Configuration for the CTA
+          title: Config
+      required:
+      - config
+      title: BannerData
+      type: object
+    Offer:
+      properties:
+        amount:
+          description: Amount of the offer in `currency`
+          title: Amount
+          type: integer
+        currency:
+          $ref: '#/components/schemas/SupportedCurrencyCode'
+          description: ISO 4217 code for the currency of the offer
+      required:
+      - amount
+      - currency
+      title: Offer
+      type: object
+    SupportedCurrencyCode:
+      enum:
+      - USD
+      - CAD
+      - AUD
+      - EUR
+      - GBP
+      - SEK
+      - DKK
+      title: SupportedCurrencyCode
+      type: string
+    SupportedCountryCode:
+      enum:
+      - US
+      - CA
+      - GB
+      - IE
+      - BE
+      - NL
+      - ES
+      - DE
+      - SE
+      - DK
+      - AU
+      title: SupportedCountryCode
+      type: string
+    HostedApplicationUserData:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The first name of the user
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The last name of the user
+          title: Last Name
+        email_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The email of the user
+          title: Email Address
+        phone_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The phone number of the user
+          title: Phone Number
+      title: HostedApplicationUserData
+      type: object
     HostedApplicationCompanyData:
       properties:
         company_name:
@@ -300,163 +451,6 @@ components:
           description: The type of company
       title: HostedApplicationCompanyData
       type: object
-    OfferBannerConfig:
-      properties:
-        text:
-          description: Display text for the CTA
-          title: Text
-          type: string
-        bullet_points:
-          description: List of text bullet points to display in the CTA
-          items:
-            type: string
-          title: Bullet Points
-          type: array
-        button_label:
-          description: Label for the button
-          title: Button Label
-          type: string
-        funding_cycle:
-          description: Number of user funding cycles.
-          title: Funding Cycle
-          type: integer
-      required:
-      - text
-      - button_label
-      - funding_cycle
-      title: OfferBannerConfig
-      type: object
-    BannerData:
-      properties:
-        offer:
-          anyOf:
-          - $ref: '#/components/schemas/Offer'
-          - type: 'null'
-          description: Offer data to display in the CTA
-        config:
-          anyOf:
-          - $ref: '#/components/schemas/ContinueEmbeddedApplicationBannerConfig'
-          - $ref: '#/components/schemas/ContinueApplicationBannerConfig'
-          - $ref: '#/components/schemas/OfferBannerConfig'
-          description: Configuration for the CTA
-          title: Config
-      required:
-      - config
-      title: BannerData
-      type: object
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
-    BannerState:
-      enum:
-      - continue_application
-      - continue_embedded_application
-      - indicative_offer
-      - generic_offer
-      title: BannerState
-      type: string
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
-      type: object
-    SupportedCountryCode:
-      enum:
-      - US
-      - CA
-      - GB
-      - IE
-      - BE
-      - NL
-      - ES
-      - DE
-      - SE
-      - DK
-      - AU
-      title: SupportedCountryCode
-      type: string
-    BannerResponse:
-      properties:
-        state:
-          $ref: '#/components/schemas/BannerState'
-          description: The type of CTA to display
-        data:
-          $ref: '#/components/schemas/BannerData'
-          description: Data to display in the CTA
-        dismissal_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Opaque key identifying this CTA instance. Use it when dismissing the banner.
-          title: Dismissal Key
-      required:
-      - state
-      - data
-      title: BannerResponse
-      type: object
-    HostedApplicationRequest_Any_:
-      properties:
-        company_data:
-          anyOf:
-          - $ref: '#/components/schemas/HostedApplicationCompanyData'
-          - type: 'null'
-          description: Data used to pre-fill the company's funding application
-        user_data:
-          anyOf:
-          - $ref: '#/components/schemas/HostedApplicationUserData'
-          - type: 'null'
-          description: Data about the user starting the hosted application
-        partner_data:
-          description: During onboarding, Wayflyer may have agreed additional data unique to an individual partner that may be used to customise the funding application. This data is not required for the funding application to be processed, but may be used to provide a better experience. Consult with your Wayflyer representative for more information about what can be provided here.
-          title: Partner Data
-      title: HostedApplicationRequest[Any]
-      type: object
-    HostedApplicationUserData:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The first name of the user
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The last name of the user
-          title: Last Name
-        email_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The email of the user
-          title: Email Address
-        phone_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The phone number of the user
-          title: Phone Number
-      title: HostedApplicationUserData
-      type: object
     StartHostedApplicationResponse:
       properties:
         next:
@@ -474,6 +468,41 @@ components:
       - next
       - application_id
       title: StartHostedApplicationResponse
+      type: object
+    CompanyType:
+      enum:
+      - LP
+      - LLP
+      - LLC
+      - INC
+      - COOP
+      title: CompanyType
+      type: string
+    ContinueEmbeddedApplicationBannerConfig:
+      properties:
+        text:
+          description: Display text for the CTA
+          title: Text
+          type: string
+        bullet_points:
+          description: List of text bullet points to display in the CTA
+          items:
+            type: string
+          title: Bullet Points
+          type: array
+        button_label:
+          description: Label for the button
+          title: Button Label
+          type: string
+        embedded_application_uuid:
+          description: UUID of the embedded application currently in progress
+          title: Embedded Application Uuid
+          type: string
+      required:
+      - text
+      - button_label
+      - embedded_application_uuid
+      title: ContinueEmbeddedApplicationBannerConfig
       type: object
     ContinueApplicationBannerConfig:
       properties:
@@ -514,60 +543,31 @@ components:
       - sign_contract
       title: RequiredAction
       type: string
-    Offer:
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
+    ErrorDetail:
       properties:
-        amount:
-          description: Amount of the offer in `currency`
-          title: Amount
-          type: integer
-        currency:
-          $ref: '#/components/schemas/SupportedCurrencyCode'
-          description: ISO 4217 code for the currency of the offer
-      required:
-      - amount
-      - currency
-      title: Offer
-      type: object
-    ContinueEmbeddedApplicationBannerConfig:
-      properties:
-        text:
-          description: Display text for the CTA
-          title: Text
-          type: string
-        bullet_points:
-          description: List of text bullet points to display in the CTA
-          items:
-            type: string
-          title: Bullet Points
-          type: array
-        button_label:
-          description: Label for the button
-          title: Button Label
-          type: string
-        embedded_application_uuid:
-          description: UUID of the embedded application currently in progress
-          title: Embedded Application Uuid
+        detail:
+          title: Detail
           type: string
       required:
-      - text
-      - button_label
-      - embedded_application_uuid
-      title: ContinueEmbeddedApplicationBannerConfig
-      type: object
-    BannerDismissInput:
-      properties:
-        banner_state:
-          anyOf:
-          - $ref: '#/components/schemas/BannerState'
-          - type: 'null'
-          description: Legacy field.  Will be removed in future updates.
-        dismissal_key:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Opaque key identifying which CTA was dismissed.
-          title: Dismissal Key
-      title: BannerDismissInput
+      - detail
+      title: ErrorDetail
       type: object
   parameters:
     ApiVersion:

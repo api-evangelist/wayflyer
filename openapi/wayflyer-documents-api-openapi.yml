@@ -159,6 +159,68 @@ paths:
       - CompanyToken: []
 components:
   schemas:
+    ContentType:
+      enum:
+      - application/pdf
+      - image/png
+      - image/tiff
+      - image/jpeg
+      title: ContentType
+      type: string
+    UrlOptionsSchema:
+      properties:
+        url:
+          title: Url
+          type: string
+        fields:
+          additionalProperties:
+            type: string
+          title: Fields
+          type: object
+      required:
+      - url
+      - fields
+      title: UrlOptionsSchema
+      type: object
+    DocumentUploadResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        file_name:
+          title: File Name
+          type: string
+        file_type:
+          $ref: '#/components/schemas/ContentType'
+        confirmed:
+          title: Confirmed
+          type: boolean
+        locked:
+          title: Locked
+          type: boolean
+      required:
+      - id
+      - file_name
+      - file_type
+      - confirmed
+      - locked
+      title: DocumentUploadResponse
+      type: object
+    DocumentErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/DocumentErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: DocumentErrorResponse
+      type: object
     DocumentErrorCode:
       enum:
       - not_found
@@ -187,53 +249,6 @@ components:
       - file_size
       title: CreateDocumentUploadRequest
       type: object
-    ContentType:
-      enum:
-      - application/pdf
-      - image/png
-      - image/tiff
-      - image/jpeg
-      title: ContentType
-      type: string
-    DocumentErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/DocumentErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: DocumentErrorResponse
-      type: object
-    DocumentUploadResponse:
-      properties:
-        id:
-          format: uuid
-          title: Id
-          type: string
-        file_name:
-          title: File Name
-          type: string
-        file_type:
-          $ref: '#/components/schemas/ContentType'
-        confirmed:
-          title: Confirmed
-          type: boolean
-        locked:
-          title: Locked
-          type: boolean
-      required:
-      - id
-      - file_name
-      - file_type
-      - confirmed
-      - locked
-      title: DocumentUploadResponse
-      type: object
     CreateDocumentUploadResponse:
       properties:
         id:
@@ -246,21 +261,6 @@ components:
       - id
       - url_options
       title: CreateDocumentUploadResponse
-      type: object
-    UrlOptionsSchema:
-      properties:
-        url:
-          title: Url
-          type: string
-        fields:
-          additionalProperties:
-            type: string
-          title: Fields
-          type: object
-      required:
-      - url
-      - fields
-      title: UrlOptionsSchema
       type: object
   parameters:
     ApiVersion:
