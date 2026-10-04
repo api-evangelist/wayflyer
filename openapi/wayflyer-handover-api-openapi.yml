@@ -38,6 +38,15 @@ paths:
       - CompanyToken: []
 components:
   schemas:
+    HandoverResponse:
+      properties:
+        url:
+          title: Url
+          type: string
+      required:
+      - url
+      title: HandoverResponse
+      type: object
     HandoverErrorResponse:
       properties:
         error_code:
@@ -59,15 +68,6 @@ components:
       - company_not_active
       title: HandoverErrorCode
       type: string
-    HandoverResponse:
-      properties:
-        url:
-          title: Url
-          type: string
-      required:
-      - url
-      title: HandoverResponse
-      type: object
   parameters:
     ApiVersion:
       in: header

@@ -84,6 +84,20 @@ components:
       - action
       title: PassUWRequest
       type: object
+    SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
+      properties:
+        status:
+          $ref: '#/components/schemas/HostedApplicationSimulationStatus'
+        valid_actions:
+          items:
+            $ref: '#/components/schemas/HostedApplicationSimulationAction'
+          title: Valid Actions
+          type: array
+      required:
+      - status
+      - valid_actions
+      title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
+      type: object
     SimpleActionRequest:
       additionalProperties: false
       description: Schema for simple simulation actions without extra fields.
@@ -107,20 +121,6 @@ components:
       required:
       - action
       title: SimpleActionRequest
-      type: object
-    SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
-      properties:
-        status:
-          $ref: '#/components/schemas/HostedApplicationSimulationStatus'
-        valid_actions:
-          items:
-            $ref: '#/components/schemas/HostedApplicationSimulationAction'
-          title: Valid Actions
-          type: array
-      required:
-      - status
-      - valid_actions
-      title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
       type: object
     HostedApplicationSimulationStatus:
       enum:

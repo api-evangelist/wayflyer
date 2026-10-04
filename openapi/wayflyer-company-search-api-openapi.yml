@@ -98,59 +98,23 @@ components:
       - US-VI
       title: USStateCode
       type: string
-    CompanyDetailsSearchRequest:
-      properties:
-        business_name:
-          description: Name of the company to search for
-          maxLength: 200
-          minLength: 3
-          title: Business Name
-          type: string
-        country:
-          $ref: '#/components/schemas/CountryCode'
-          description: ISO 3166-1 alpha-2 country code
-        state:
-          anyOf:
-          - $ref: '#/components/schemas/USStateCode'
-          - $ref: '#/components/schemas/CanadianProvinceCode'
-          - type: 'null'
-          description: ISO 3166-2 code for US states or Canadian provinces
-          title: State
-      required:
-      - business_name
-      - country
-      title: CompanyDetailsSearchRequest
-      type: object
-    CompanyDetailsSearchResult:
-      properties:
-        name:
-          description: Name of the company
-          title: Name
-          type: string
-        registration_number:
-          description: Company registration number
-          title: Registration Number
-          type: string
-        registered_address:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: Company registered address
-          title: Registered Address
-        incorporation_date:
-          anyOf:
-          - format: date
-            type: string
-          - type: 'null'
-          description: Company incorporation date
-          title: Incorporation Date
-      required:
-      - name
-      - registration_number
-      - registered_address
-      - incorporation_date
-      title: CompanyDetailsSearchResult
-      type: object
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
     CountryCode:
       enum:
       - AF
@@ -404,23 +368,29 @@ components:
       - ZW
       title: CountryCode
       type: string
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
+    CompanyDetailsSearchRequest:
+      properties:
+        business_name:
+          description: Name of the company to search for
+          maxLength: 200
+          minLength: 3
+          title: Business Name
+          type: string
+        country:
+          $ref: '#/components/schemas/CountryCode'
+          description: ISO 3166-1 alpha-2 country code
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for US states or Canadian provinces
+          title: State
+      required:
+      - business_name
+      - country
+      title: CompanyDetailsSearchRequest
+      type: object
     CompanyDetailsSearchResponse:
       example:
         results:
@@ -438,6 +408,36 @@ components:
       required:
       - results
       title: CompanyDetailsSearchResponse
+      type: object
+    CompanyDetailsSearchResult:
+      properties:
+        name:
+          description: Name of the company
+          title: Name
+          type: string
+        registration_number:
+          description: Company registration number
+          title: Registration Number
+          type: string
+        registered_address:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Company registered address
+          title: Registered Address
+        incorporation_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Company incorporation date
+          title: Incorporation Date
+      required:
+      - name
+      - registration_number
+      - registered_address
+      - incorporation_date
+      title: CompanyDetailsSearchResult
       type: object
   parameters:
     ApiVersion:

@@ -116,21 +116,6 @@ components:
       - expires_in
       title: PartnerTokenResponse
       type: object
-    CompanyTokenResponse:
-      properties:
-        token:
-          description: A token that can be used to authenticate requests to company scoped endpoints. Pass this to the front end
-          title: Token
-          type: string
-        expires_in:
-          description: The number of seconds until the token expires
-          title: Expires In
-          type: integer
-      required:
-      - token
-      - expires_in
-      title: CompanyTokenResponse
-      type: object
     CompanyTokenRequest:
       properties:
         company_id:
@@ -145,6 +130,21 @@ components:
       - company_id
       - user_id
       title: CompanyTokenRequest
+      type: object
+    CompanyTokenResponse:
+      properties:
+        token:
+          description: A token that can be used to authenticate requests to company scoped endpoints. Pass this to the front end
+          title: Token
+          type: string
+        expires_in:
+          description: The number of seconds until the token expires
+          title: Expires In
+          type: integer
+      required:
+      - token
+      - expires_in
+      title: CompanyTokenResponse
       type: object
     ErrorDetail:
       properties:

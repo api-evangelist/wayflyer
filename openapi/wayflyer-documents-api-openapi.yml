@@ -159,14 +159,6 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    ContentType:
-      enum:
-      - application/pdf
-      - image/png
-      - image/tiff
-      - image/jpeg
-      title: ContentType
-      type: string
     UrlOptionsSchema:
       properties:
         url:
@@ -207,6 +199,27 @@ components:
       - locked
       title: DocumentUploadResponse
       type: object
+    DocumentErrorCode:
+      enum:
+      - not_found
+      - locked
+      - deletion_failed
+      - object_missing
+      title: DocumentErrorCode
+      type: string
+    CreateDocumentUploadResponse:
+      properties:
+        id:
+          format: uuid
+          title: Id
+          type: string
+        url_options:
+          $ref: '#/components/schemas/UrlOptionsSchema'
+      required:
+      - id
+      - url_options
+      title: CreateDocumentUploadResponse
+      type: object
     DocumentErrorResponse:
       properties:
         error_code:
@@ -221,13 +234,13 @@ components:
       - detail
       title: DocumentErrorResponse
       type: object
-    DocumentErrorCode:
+    ContentType:
       enum:
-      - not_found
-      - locked
-      - deletion_failed
-      - object_missing
-      title: DocumentErrorCode
+      - application/pdf
+      - image/png
+      - image/tiff
+      - image/jpeg
+      title: ContentType
       type: string
     CreateDocumentUploadRequest:
       properties:
@@ -248,19 +261,6 @@ components:
       - file_type
       - file_size
       title: CreateDocumentUploadRequest
-      type: object
-    CreateDocumentUploadResponse:
-      properties:
-        id:
-          format: uuid
-          title: Id
-          type: string
-        url_options:
-          $ref: '#/components/schemas/UrlOptionsSchema'
-      required:
-      - id
-      - url_options
-      title: CreateDocumentUploadResponse
       type: object
   parameters:
     ApiVersion:

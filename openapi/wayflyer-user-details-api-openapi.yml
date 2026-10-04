@@ -215,39 +215,34 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    IneligibleReason:
-      enum:
-      - unsupported_country
-      - no_eligible_business_model
-      title: IneligibleReason
-      type: string
-    MarkIneligibleErrorResponse:
+    UserDetailsResponse:
       properties:
-        error_code:
-          $ref: '#/components/schemas/MarkIneligibleErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: MarkIneligibleErrorResponse
-      type: object
-    UpdateUserDetailsErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/UpdateUserDetailsErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: UpdateUserDetailsErrorResponse
+        email:
+          anyOf:
+          - format: email
+            type: string
+          - type: 'null'
+          description: The email of the user
+          title: Email
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The first name of the user
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The last name of the user
+          title: Last Name
+        phone_number:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: The phone number of the user in E.164 format
+          title: Phone Number
+      title: UserDetailsResponse
       type: object
     SubmitEmbeddedApplicationErrorCode:
       enum:
@@ -258,6 +253,12 @@ components:
       - ineligible_application
       - registration_or_documents_required
       title: SubmitEmbeddedApplicationErrorCode
+      type: string
+    IneligibleReason:
+      enum:
+      - unsupported_country
+      - no_eligible_business_model
+      title: IneligibleReason
       type: string
     UserDetailsRequest:
       properties:
@@ -291,26 +292,6 @@ components:
       - email
       title: UserDetailsRequest
       type: object
-    SubmitEmbeddedApplicationErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-        ineligible_reasons:
-          description: List of ineligibility reasons
-          items:
-            type: string
-          title: Ineligible Reasons
-          type: array
-      required:
-      - error_code
-      - detail
-      title: SubmitEmbeddedApplicationErrorResponse
-      type: object
     EmbeddedApplicationStatusResponse:
       example:
         application_id: 550e8400-e29b-41d4-a716-446655440000
@@ -338,48 +319,20 @@ components:
       - required_details
       title: EmbeddedApplicationStatusResponse
       type: object
-    UserDetailsResponse:
+    UpdateUserDetailsErrorResponse:
       properties:
-        email:
-          anyOf:
-          - format: email
-            type: string
-          - type: 'null'
-          description: The email of the user
-          title: Email
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The first name of the user
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The last name of the user
-          title: Last Name
-        phone_number:
-          anyOf:
-          - type: string
-          - type: 'null'
-          description: The phone number of the user in E.164 format
-          title: Phone Number
-      title: UserDetailsResponse
+        error_code:
+          $ref: '#/components/schemas/UpdateUserDetailsErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: UpdateUserDetailsErrorResponse
       type: object
-    UpdateUserDetailsErrorCode:
-      enum:
-      - duplicate
-      - too_many_revisions
-      - application_already_submitted
-      title: UpdateUserDetailsErrorCode
-      type: string
-    MarkIneligibleErrorCode:
-      enum:
-      - no_open_application
-      - not_started_by_user
-      title: MarkIneligibleErrorCode
-      type: string
     MarkIneligibleRequest:
       properties:
         ineligible_reasons:
@@ -392,6 +345,26 @@ components:
       required:
       - ineligible_reasons
       title: MarkIneligibleRequest
+      type: object
+    MarkIneligibleErrorCode:
+      enum:
+      - no_open_application
+      - not_started_by_user
+      title: MarkIneligibleErrorCode
+      type: string
+    MarkIneligibleErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/MarkIneligibleErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: MarkIneligibleErrorResponse
       type: object
     EmbeddedApplicationDetailStatus:
       properties:
@@ -414,6 +387,26 @@ components:
       - status
       title: EmbeddedApplicationDetailStatus
       type: object
+    SubmitEmbeddedApplicationErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/SubmitEmbeddedApplicationErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+        ineligible_reasons:
+          description: List of ineligibility reasons
+          items:
+            type: string
+          title: Ineligible Reasons
+          type: array
+      required:
+      - error_code
+      - detail
+      title: SubmitEmbeddedApplicationErrorResponse
+      type: object
     ErrorDetail:
       properties:
         detail:
@@ -423,6 +416,13 @@ components:
       - detail
       title: ErrorDetail
       type: object
+    UpdateUserDetailsErrorCode:
+      enum:
+      - duplicate
+      - too_many_revisions
+      - application_already_submitted
+      title: UpdateUserDetailsErrorCode
+      type: string
   parameters:
     ApiVersion:
       in: header

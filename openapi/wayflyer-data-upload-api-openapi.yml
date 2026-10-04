@@ -226,6 +226,85 @@ components:
       - US-VI
       title: USStateCode
       type: string
+    CompanyData:
+      properties:
+        company_id:
+          description: An identifier in the partner's system that uniquely identifies the company to create a token for
+          title: Company Id
+          type: string
+        currency:
+          $ref: '#/components/schemas/CurrencyCode'
+          description: ISO 4217 code for currency the company uses primarily
+          examples:
+          - GBP
+        annual_revenue:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Companies annual revenue to the nearest whole number in `currency`
+          examples:
+          - 14000000
+          title: Annual Revenue
+        revenue_in_period:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Revenue for the company in the specified period to the nearest whole number in `currency`
+          examples:
+          - 7000000
+          title: Revenue In Period
+        shipping_in_period:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          description: Shipping amount for the company in the specified period to the nearest whole number in `currency`
+          examples:
+          - 60000
+          title: Shipping In Period
+        num_period_months:
+          anyOf:
+          - maximum: 12
+            minimum: 1
+            type: integer
+          - type: 'null'
+          description: Number of months the `revenue_in_period` and `shipping_in_period` cover
+          examples:
+          - 6
+          title: Num Period Months
+        country:
+          $ref: '#/components/schemas/CountryCode'
+          description: ISO 3166-1 alpha-2 code for the incorporation country of the company
+        state:
+          anyOf:
+          - $ref: '#/components/schemas/USStateCode'
+          - $ref: '#/components/schemas/CanadianProvinceCode'
+          - type: 'null'
+          description: ISO 3166-2 code for the state of the company if applicable
+          title: State
+        incorporation_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Date of incorporation of the company (YYYY-MM-DD). At least one of this or `client_onboarding_date`, with the former taking precedence
+          examples:
+          - '2020-01-15'
+          title: Incorporation Date
+        client_onboarding_date:
+          anyOf:
+          - format: date
+            type: string
+          - type: 'null'
+          description: Date of client onboarding (YYYY-MM-DD). At least one of this or `incorporation_date` must be provided, with the latter taking precedence
+          examples:
+          - '2020-06-30'
+          title: Client Onboarding Date
+      required:
+      - company_id
+      - currency
+      - country
+      title: CompanyData
+      type: object
     BatchStatus:
       enum:
       - PENDING_UPLOAD
@@ -246,181 +325,28 @@ components:
       - parts
       title: CompleteFileUploadRequest
       type: object
-    CurrencyCode:
+    SchemaCode:
       enum:
-      - USD
-      - EUR
-      - CAD
-      - AUD
-      - GBP
-      - CHF
-      - DKK
-      - NZD
-      - XCD
-      - XAF
-      - XOF
-      - XPF
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BOV
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CDF
-      - CLP
-      - CLF
-      - CNY
-      - COP
-      - COU
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - FJD
-      - FKP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRO
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SEK
-      - SGD
-      - SLL
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - UYU
-      - UZS
-      - VEF
-      - VES
-      - VND
-      - VUV
-      - WST
-      - YER
-      - ZAR
-      - ZMW
-      - ZWL
-      - XDR
-      title: CurrencyCode
+      - JSON01
+      title: SchemaCode
       type: string
-    BatchStatusResponse:
-      properties:
-        status:
-          $ref: '#/components/schemas/BatchStatus'
-          description: Status of the batch upload
-      required:
-      - status
-      title: BatchStatusResponse
-      type: object
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
     CountryCode:
       enum:
       - AF
@@ -674,136 +600,6 @@ components:
       - ZW
       title: CountryCode
       type: string
-    SchemaCode:
-      enum:
-      - JSON01
-      title: SchemaCode
-      type: string
-    InitiateFileUploadRequest:
-      properties:
-        file_size_bytes:
-          description: The size of the file in bytes
-          title: File Size Bytes
-          type: integer
-        schema_code:
-          $ref: '#/components/schemas/SchemaCode'
-          description: One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer
-      required:
-      - file_size_bytes
-      - schema_code
-      title: InitiateFileUploadRequest
-      type: object
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
-    CompanyData:
-      properties:
-        company_id:
-          description: An identifier in the partner's system that uniquely identifies the company to create a token for
-          title: Company Id
-          type: string
-        currency:
-          $ref: '#/components/schemas/CurrencyCode'
-          description: ISO 4217 code for currency the company uses primarily
-          examples:
-          - GBP
-        annual_revenue:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          description: Companies annual revenue to the nearest whole number in `currency`
-          examples:
-          - 14000000
-          title: Annual Revenue
-        revenue_in_period:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          description: Revenue for the company in the specified period to the nearest whole number in `currency`
-          examples:
-          - 7000000
-          title: Revenue In Period
-        shipping_in_period:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          description: Shipping amount for the company in the specified period to the nearest whole number in `currency`
-          examples:
-          - 60000
-          title: Shipping In Period
-        num_period_months:
-          anyOf:
-          - maximum: 12
-            minimum: 1
-            type: integer
-          - type: 'null'
-          description: Number of months the `revenue_in_period` and `shipping_in_period` cover
-          examples:
-          - 6
-          title: Num Period Months
-        country:
-          $ref: '#/components/schemas/CountryCode'
-          description: ISO 3166-1 alpha-2 code for the incorporation country of the company
-        state:
-          anyOf:
-          - $ref: '#/components/schemas/USStateCode'
-          - $ref: '#/components/schemas/CanadianProvinceCode'
-          - type: 'null'
-          description: ISO 3166-2 code for the state of the company if applicable
-          title: State
-        incorporation_date:
-          anyOf:
-          - format: date
-            type: string
-          - type: 'null'
-          description: Date of incorporation of the company (YYYY-MM-DD). At least one of this or `client_onboarding_date`, with the former taking precedence
-          examples:
-          - '2020-01-15'
-          title: Incorporation Date
-        client_onboarding_date:
-          anyOf:
-          - format: date
-            type: string
-          - type: 'null'
-          description: Date of client onboarding (YYYY-MM-DD). At least one of this or `incorporation_date` must be provided, with the latter taking precedence
-          examples:
-          - '2020-06-30'
-          title: Client Onboarding Date
-      required:
-      - company_id
-      - currency
-      - country
-      title: CompanyData
-      type: object
-    UploadPart:
-      properties:
-        part_number:
-          description: Part number of the upload
-          title: Part Number
-          type: integer
-        etag:
-          description: ETag of the part
-          title: Etag
-          type: string
-      required:
-      - part_number
-      - etag
-      title: UploadPart
-      type: object
     InitiateFileUploadResponse:
       properties:
         upload_id:
@@ -827,15 +623,6 @@ components:
       - num_parts
       title: InitiateFileUploadResponse
       type: object
-    ErrorDetail:
-      properties:
-        detail:
-          title: Detail
-          type: string
-      required:
-      - detail
-      title: ErrorDetail
-      type: object
     InitiateBatchUploadResponse:
       properties:
         upload_id:
@@ -846,6 +633,219 @@ components:
       required:
       - upload_id
       title: InitiateBatchUploadResponse
+      type: object
+    BatchStatusResponse:
+      properties:
+        status:
+          $ref: '#/components/schemas/BatchStatus'
+          description: Status of the batch upload
+      required:
+      - status
+      title: BatchStatusResponse
+      type: object
+    UploadPart:
+      properties:
+        part_number:
+          description: Part number of the upload
+          title: Part Number
+          type: integer
+        etag:
+          description: ETag of the part
+          title: Etag
+          type: string
+      required:
+      - part_number
+      - etag
+      title: UploadPart
+      type: object
+    CurrencyCode:
+      enum:
+      - USD
+      - EUR
+      - CAD
+      - AUD
+      - GBP
+      - CHF
+      - DKK
+      - NZD
+      - XCD
+      - XAF
+      - XOF
+      - XPF
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BOV
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CDF
+      - CLP
+      - CLF
+      - CNY
+      - COP
+      - COU
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - FJD
+      - FKP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SLL
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      - XDR
+      title: CurrencyCode
+      type: string
+    InitiateFileUploadRequest:
+      properties:
+        file_size_bytes:
+          description: The size of the file in bytes
+          title: File Size Bytes
+          type: integer
+        schema_code:
+          $ref: '#/components/schemas/SchemaCode'
+          description: One of a predefined set of schemas that the file must conform to so that it can be processed by Wayflyer
+      required:
+      - file_size_bytes
+      - schema_code
+      title: InitiateFileUploadRequest
+      type: object
+    ErrorDetail:
+      properties:
+        detail:
+          title: Detail
+          type: string
+      required:
+      - detail
+      title: ErrorDetail
       type: object
   parameters:
     ApiVersion:
