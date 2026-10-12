@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/wayflyer/integrations
+- https://n8n.io/integrations/wayflyer/
+- https://composio.dev/toolkits/wayflyer
+- https://monid.ai/tools/wayflyer
+checked:
+- https://composio.dev/toolkits/wayflyer
+- https://monid.ai/tools/wayflyer
+- https://n8n.io/integrations/wayflyer/
+- https://zapier.com/apps/wayflyer/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
