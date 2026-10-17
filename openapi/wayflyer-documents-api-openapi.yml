@@ -159,21 +159,6 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    UrlOptionsSchema:
-      properties:
-        url:
-          title: Url
-          type: string
-        fields:
-          additionalProperties:
-            type: string
-          title: Fields
-          type: object
-      required:
-      - url
-      - fields
-      title: UrlOptionsSchema
-      type: object
     DocumentUploadResponse:
       properties:
         id:
@@ -199,6 +184,21 @@ components:
       - locked
       title: DocumentUploadResponse
       type: object
+    UrlOptionsSchema:
+      properties:
+        url:
+          title: Url
+          type: string
+        fields:
+          additionalProperties:
+            type: string
+          title: Fields
+          type: object
+      required:
+      - url
+      - fields
+      title: UrlOptionsSchema
+      type: object
     DocumentErrorCode:
       enum:
       - not_found
@@ -219,6 +219,26 @@ components:
       - id
       - url_options
       title: CreateDocumentUploadResponse
+      type: object
+    CreateDocumentUploadRequest:
+      properties:
+        file_name:
+          maxLength: 255
+          minLength: 1
+          title: File Name
+          type: string
+        file_type:
+          $ref: '#/components/schemas/ContentType'
+        file_size:
+          exclusiveMinimum: 0
+          maximum: 52428800
+          title: File Size
+          type: integer
+      required:
+      - file_name
+      - file_type
+      - file_size
+      title: CreateDocumentUploadRequest
       type: object
     DocumentErrorResponse:
       properties:
@@ -242,26 +262,6 @@ components:
       - image/jpeg
       title: ContentType
       type: string
-    CreateDocumentUploadRequest:
-      properties:
-        file_name:
-          maxLength: 255
-          minLength: 1
-          title: File Name
-          type: string
-        file_type:
-          $ref: '#/components/schemas/ContentType'
-        file_size:
-          exclusiveMinimum: 0
-          maximum: 52428800
-          title: File Size
-          type: integer
-      required:
-      - file_name
-      - file_type
-      - file_size
-      title: CreateDocumentUploadRequest
-      type: object
   parameters:
     ApiVersion:
       in: header

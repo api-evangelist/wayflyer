@@ -131,72 +131,34 @@ paths:
       - CompanyToken: []
 components:
   schemas:
-    USStateCode:
+    BusinessModel:
       enum:
-      - US-AL
-      - US-AK
-      - US-AZ
-      - US-AR
-      - US-CA
-      - US-CO
-      - US-CT
-      - US-DE
-      - US-FL
-      - US-GA
-      - US-HI
-      - US-ID
-      - US-IL
-      - US-IN
-      - US-IA
-      - US-KS
-      - US-KY
-      - US-LA
-      - US-ME
-      - US-MD
-      - US-MA
-      - US-MI
-      - US-MN
-      - US-MS
-      - US-MO
-      - US-MT
-      - US-NE
-      - US-NV
-      - US-NH
-      - US-NJ
-      - US-NM
-      - US-NY
-      - US-NC
-      - US-ND
-      - US-OH
-      - US-OK
-      - US-OR
-      - US-PA
-      - US-RI
-      - US-SC
-      - US-SD
-      - US-TN
-      - US-TX
-      - US-UT
-      - US-VT
-      - US-VA
-      - US-WA
-      - US-WV
-      - US-WI
-      - US-WY
-      - US-DC
-      - US-AS
-      - US-GU
-      - US-MP
-      - US-PR
-      - US-VI
-      title: USStateCode
+      - ecommerce_dtc
+      - wholesale
+      - retail
+      - saas_or_software
+      - service_provider
+      - other_rss
+      - other
+      - unknown
+      title: BusinessModel
       type: string
-    UpdateCompanyDetailsErrorCode:
+    SalesChannel:
       enum:
-      - too_many_revisions
-      - application_already_submitted
-      - invalid_industry_code
-      title: UpdateCompanyDetailsErrorCode
+      - online
+      - offline
+      title: SalesChannel
+      type: string
+    SupportedCurrencyCode:
+      enum:
+      - USD
+      - CAD
+      - AUD
+      - EUR
+      - GBP
+      - SEK
+      - DKK
+      title: SupportedCurrencyCode
       type: string
     CountryCode:
       enum:
@@ -451,55 +413,31 @@ components:
       - ZW
       title: CountryCode
       type: string
-    DetermineBusinessModelsResponse:
-      properties:
-        eligible:
-          description: Business models the company is eligible for
-          items:
-            $ref: '#/components/schemas/BusinessModel'
-          title: Eligible
-          type: array
-        ineligible:
-          description: Business models the company is ineligible for
-          items:
-            $ref: '#/components/schemas/BusinessModel'
-          title: Ineligible
-          type: array
-      required:
-      - eligible
-      - ineligible
-      title: DetermineBusinessModelsResponse
-      type: object
-    BusinessModel:
+    ProductOffering:
       enum:
-      - ecommerce_dtc
-      - wholesale
-      - retail
-      - saas_or_software
-      - service_provider
-      - other_rss
-      - other
-      - unknown
-      title: BusinessModel
+      - physical
+      - digital_products
+      - services
+      - subscriptions
+      title: ProductOffering
       type: string
-    UniqueList_ProductOffering__MinLen_min_length_1_:
-      items:
-        $ref: '#/components/schemas/ProductOffering'
-      type: array
-    UpdateCompanyDetailsErrorResponse:
-      properties:
-        error_code:
-          $ref: '#/components/schemas/UpdateCompanyDetailsErrorCode'
-          description: Machine-readable error code
-        detail:
-          description: Human-readable error message
-          title: Detail
-          type: string
-      required:
-      - error_code
-      - detail
-      title: UpdateCompanyDetailsErrorResponse
-      type: object
+    CanadianProvinceCode:
+      enum:
+      - CA-AB
+      - CA-BC
+      - CA-MB
+      - CA-NB
+      - CA-NL
+      - CA-NS
+      - CA-ON
+      - CA-PE
+      - CA-QC
+      - CA-SK
+      - CA-NT
+      - CA-NU
+      - CA-YT
+      title: CanadianProvinceCode
+      type: string
     ErrorDetail:
       properties:
         detail:
@@ -591,52 +529,155 @@ components:
       - product_offerings
       title: CompanyDetailsRequest
       type: object
-    ProductOffering:
+    DetermineBusinessModelsRequest:
+      properties:
+        customer_segments:
+          $ref: '#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_'
+          description: Customer segments
+          minItems: 1
+        sales_channels:
+          $ref: '#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_'
+          description: Sales channels
+          minItems: 1
+        product_offerings:
+          $ref: '#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_'
+          description: Product offerings
+          minItems: 1
+        country_code:
+          anyOf:
+          - $ref: '#/components/schemas/CountryCode'
+          - type: 'null'
+          description: ISO 3166-1 alpha-2 country code
+      required:
+      - customer_segments
+      - sales_channels
+      - product_offerings
+      title: DetermineBusinessModelsRequest
+      type: object
+    DetermineBusinessModelsResponse:
+      properties:
+        eligible:
+          description: Business models the company is eligible for
+          items:
+            $ref: '#/components/schemas/BusinessModel'
+          title: Eligible
+          type: array
+        ineligible:
+          description: Business models the company is ineligible for
+          items:
+            $ref: '#/components/schemas/BusinessModel'
+          title: Ineligible
+          type: array
+      required:
+      - eligible
+      - ineligible
+      title: DetermineBusinessModelsResponse
+      type: object
+    UpdateCompanyDetailsErrorCode:
       enum:
-      - physical
-      - digital_products
-      - services
-      - subscriptions
-      title: ProductOffering
+      - too_many_revisions
+      - application_already_submitted
+      - invalid_industry_code
+      title: UpdateCompanyDetailsErrorCode
       type: string
-    CanadianProvinceCode:
-      enum:
-      - CA-AB
-      - CA-BC
-      - CA-MB
-      - CA-NB
-      - CA-NL
-      - CA-NS
-      - CA-ON
-      - CA-PE
-      - CA-QC
-      - CA-SK
-      - CA-NT
-      - CA-NU
-      - CA-YT
-      title: CanadianProvinceCode
-      type: string
+    UniqueList_ProductOffering__MinLen_min_length_1_:
+      items:
+        $ref: '#/components/schemas/ProductOffering'
+      type: array
     UniqueList_CustomerSegment__MinLen_min_length_1_:
       items:
         $ref: '#/components/schemas/CustomerSegment'
       type: array
-    SupportedCurrencyCode:
+    BusinessType:
       enum:
-      - USD
-      - CAD
-      - AUD
-      - EUR
-      - GBP
-      - SEK
-      - DKK
-      title: SupportedCurrencyCode
+      - limited_partnership
+      - limited_liability_partnership
+      - limited_liability_company
+      - corporation
+      - cooperative
+      - other
+      title: BusinessType
       type: string
-    SalesChannel:
+    USStateCode:
       enum:
-      - online
-      - offline
-      title: SalesChannel
+      - US-AL
+      - US-AK
+      - US-AZ
+      - US-AR
+      - US-CA
+      - US-CO
+      - US-CT
+      - US-DE
+      - US-FL
+      - US-GA
+      - US-HI
+      - US-ID
+      - US-IL
+      - US-IN
+      - US-IA
+      - US-KS
+      - US-KY
+      - US-LA
+      - US-ME
+      - US-MD
+      - US-MA
+      - US-MI
+      - US-MN
+      - US-MS
+      - US-MO
+      - US-MT
+      - US-NE
+      - US-NV
+      - US-NH
+      - US-NJ
+      - US-NM
+      - US-NY
+      - US-NC
+      - US-ND
+      - US-OH
+      - US-OK
+      - US-OR
+      - US-PA
+      - US-RI
+      - US-SC
+      - US-SD
+      - US-TN
+      - US-TX
+      - US-UT
+      - US-VT
+      - US-VA
+      - US-WA
+      - US-WV
+      - US-WI
+      - US-WY
+      - US-DC
+      - US-AS
+      - US-GU
+      - US-MP
+      - US-PR
+      - US-VI
+      title: USStateCode
       type: string
+    CustomerSegment:
+      enum:
+      - b2c
+      - b2b
+      title: CustomerSegment
+      type: string
+    UpdateCompanyDetailsErrorResponse:
+      properties:
+        error_code:
+          $ref: '#/components/schemas/UpdateCompanyDetailsErrorCode'
+          description: Machine-readable error code
+        detail:
+          description: Human-readable error message
+          title: Detail
+          type: string
+      required:
+      - error_code
+      - detail
+      title: UpdateCompanyDetailsErrorResponse
+      type: object
     CompanyDetailsResponse:
       properties:
         country_code:
@@ -728,51 +769,10 @@ components:
       - product_offerings
       title: CompanyDetailsResponse
       type: object
-    CustomerSegment:
-      enum:
-      - b2c
-      - b2b
-      title: CustomerSegment
-      type: string
-    BusinessType:
-      enum:
-      - limited_partnership
-      - limited_liability_partnership
-      - limited_liability_company
-      - corporation
-      - cooperative
-      - other
-      title: BusinessType
-      type: string
     UniqueList_SalesChannel__MinLen_min_length_1_:
       items:
         $ref: '#/components/schemas/SalesChannel'
       type: array
-    DetermineBusinessModelsRequest:
-      properties:
-        customer_segments:
-          $ref: '#/components/schemas/UniqueList_CustomerSegment__MinLen_min_length_1_'
-          description: Customer segments
-          minItems: 1
-        sales_channels:
-          $ref: '#/components/schemas/UniqueList_SalesChannel__MinLen_min_length_1_'
-          description: Sales channels
-          minItems: 1
-        product_offerings:
-          $ref: '#/components/schemas/UniqueList_ProductOffering__MinLen_min_length_1_'
-          description: Product offerings
-          minItems: 1
-        country_code:
-          anyOf:
-          - $ref: '#/components/schemas/CountryCode'
-          - type: 'null'
-          description: ISO 3166-1 alpha-2 country code
-      required:
-      - customer_segments
-      - sales_channels
-      - product_offerings
-      title: DetermineBusinessModelsRequest
-      type: object
   parameters:
     ApiVersion:
       in: header

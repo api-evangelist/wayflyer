@@ -83,24 +83,17 @@ paths:
               $ref: '#/components/schemas/PartnerTokenRequest'
         required: true
 components:
+  parameters:
+    ApiVersion:
+      in: header
+      name: API-Version
+      schema:
+        title: API-Version
+        type: string
+        enum:
+        - '1'
+      required: false
   schemas:
-    PartnerTokenRequest:
-      properties:
-        partner_id:
-          description: An identifier for the partner created and shared with the partner by Wayflyer during onboarding. **Never** expose this to the front end.
-          title: Partner Id
-          type: string
-        partner_secret:
-          description: A secret that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end.
-          format: password
-          title: Partner Secret
-          type: string
-          writeOnly: true
-      required:
-      - partner_id
-      - partner_secret
-      title: PartnerTokenRequest
-      type: object
     PartnerTokenResponse:
       properties:
         token:
@@ -146,6 +139,23 @@ components:
       - expires_in
       title: CompanyTokenResponse
       type: object
+    PartnerTokenRequest:
+      properties:
+        partner_id:
+          description: An identifier for the partner created and shared with the partner by Wayflyer during onboarding. **Never** expose this to the front end.
+          title: Partner Id
+          type: string
+        partner_secret:
+          description: A secret that can be used to authenticate requests to partner scoped endpoints. **Never** expose this to the front end.
+          format: password
+          title: Partner Secret
+          type: string
+          writeOnly: true
+      required:
+      - partner_id
+      - partner_secret
+      title: PartnerTokenRequest
+      type: object
     ErrorDetail:
       properties:
         detail:
@@ -155,16 +165,6 @@ components:
       - detail
       title: ErrorDetail
       type: object
-  parameters:
-    ApiVersion:
-      in: header
-      name: API-Version
-      schema:
-        title: API-Version
-        type: string
-        enum:
-        - '1'
-      required: false
   securitySchemes:
     CompanyToken:
       type: http

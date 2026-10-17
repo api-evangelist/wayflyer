@@ -62,6 +62,20 @@ paths:
       - CompanyToken: []
 components:
   schemas:
+    SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
+      properties:
+        status:
+          $ref: '#/components/schemas/HostedApplicationSimulationStatus'
+        valid_actions:
+          items:
+            $ref: '#/components/schemas/HostedApplicationSimulationAction'
+          title: Valid Actions
+          type: array
+      required:
+      - status
+      - valid_actions
+      title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
+      type: object
     PassUWRequest:
       additionalProperties: false
       description: Schema for the `pass-uw` action, requires offer details.
@@ -84,20 +98,38 @@ components:
       - action
       title: PassUWRequest
       type: object
-    SimulationStatusResponse_HostedApplicationSimulationStatus_HostedApplicationSimulationAction_:
-      properties:
-        status:
-          $ref: '#/components/schemas/HostedApplicationSimulationStatus'
-        valid_actions:
-          items:
-            $ref: '#/components/schemas/HostedApplicationSimulationAction'
-          title: Valid Actions
-          type: array
-      required:
-      - status
-      - valid_actions
-      title: SimulationStatusResponse[HostedApplicationSimulationStatus, HostedApplicationSimulationAction]
-      type: object
+    HostedApplicationSimulationAction:
+      enum:
+      - application-submitted
+      - discontinue-application
+      - pass-uw
+      - fail-uw
+      - request-additional-info
+      - provide-info
+      - accept-offer
+      - reject-offer
+      - complete-kyc
+      - pass-kyc
+      - fail-kyc
+      - sign-contract
+      - reject-contract
+      title: HostedApplicationSimulationAction
+      type: string
+    HostedApplicationSimulationStatus:
+      enum:
+      - APPLICATION_IN_PROGRESS
+      - AWAITING_UW_DECISION
+      - AWAITING_ADDITIONAL_INFO
+      - AWAITING_OFFERS_DECISION
+      - KYC_IN_PROGRESS
+      - AWAITING_KYC_DECISION
+      - AWAITING_ADDITIONAL_KYC_INFO
+      - AWAITING_CONTRACT_SIGNING
+      - REJECTED
+      - COMPLETED
+      - CLOSED
+      title: HostedApplicationSimulationStatus
+      type: string
     SimpleActionRequest:
       additionalProperties: false
       description: Schema for simple simulation actions without extra fields.
@@ -122,38 +154,6 @@ components:
       - action
       title: SimpleActionRequest
       type: object
-    HostedApplicationSimulationStatus:
-      enum:
-      - APPLICATION_IN_PROGRESS
-      - AWAITING_UW_DECISION
-      - AWAITING_ADDITIONAL_INFO
-      - AWAITING_OFFERS_DECISION
-      - KYC_IN_PROGRESS
-      - AWAITING_KYC_DECISION
-      - AWAITING_ADDITIONAL_KYC_INFO
-      - AWAITING_CONTRACT_SIGNING
-      - REJECTED
-      - COMPLETED
-      - CLOSED
-      title: HostedApplicationSimulationStatus
-      type: string
-    HostedApplicationSimulationAction:
-      enum:
-      - application-submitted
-      - discontinue-application
-      - pass-uw
-      - fail-uw
-      - request-additional-info
-      - provide-info
-      - accept-offer
-      - reject-offer
-      - complete-kyc
-      - pass-kyc
-      - fail-kyc
-      - sign-contract
-      - reject-contract
-      title: HostedApplicationSimulationAction
-      type: string
     ErrorDetail:
       properties:
         detail:
