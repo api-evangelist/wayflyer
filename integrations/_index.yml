@@ -64,3 +64,16 @@
     detected: '2026-10-20'
   status: not-a-workflow
   arazzo: null
+- slug: wayflyer-bigcommerce-own
+  label: BigCommerce (own)
+  partner: bigcommerce
+  partner_name: BigCommerce (own)
+  category: Financing, Merchant Financing
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.bigcommerce.com/apps/wayflyer/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
